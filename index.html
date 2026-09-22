@@ -1602,15 +1602,15 @@ setInterval(()=>{
   .amc-report-kpi label{display:block;color:#7b8390;font-size:9px;margin-bottom:3mm}.amc-report-kpi strong{display:block;font-size:18px;color:#17294d;line-height:1.1;direction:ltr;text-align:right;unicode-bidi:plaintext}.amc-report-kpi.green strong{color:#1f8b3b}.amc-report-kpi.red strong{color:#d7262e}.amc-report-kpi.gold strong{color:#9c7721}
   .amc-report-kpi small{display:block;color:#89919d;font-size:8px;margin-top:2mm}
   /* Daily report only: compact KPI strip. Global KPI classes remain unchanged. */
-  .amc-daily-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:3mm 0 0;justify-items:center}
-  .amc-daily-kpi{border:1px solid #dde3ea;border-radius:7px;min-height:16mm;width:75%;padding:2mm 2.5mm 1.5mm;box-sizing:border-box;background:#fff;position:relative;overflow:hidden}
-  .amc-daily-kpi:before{content:"";position:absolute;top:0;right:0;left:0;height:0.9mm;background:var(--accent,#17294d)}
+  .amc-daily-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin:4mm 0 6mm}
+  .amc-daily-kpi{border:1px solid #dde3ea;border-radius:9px;min-height:29mm;padding:4mm 4mm 3mm;box-sizing:border-box;background:#fff;position:relative;overflow:hidden}
+  .amc-daily-kpi:before{content:"";position:absolute;top:0;right:0;left:0;height:1.3mm;background:var(--accent,#17294d)}
   .amc-daily-kpi.green{--accent:#1f8b3b}.amc-daily-kpi.red{--accent:#d7262e}.amc-daily-kpi.gold{--accent:#c79a28}.amc-daily-kpi.navy{--accent:#17294d}
-  .amc-daily-kpi label{display:block;color:#7b8390;font-size:7.5px;margin-bottom:1mm}
-  .amc-daily-kpi strong{display:block;font-size:12.5px;color:#17294d;line-height:1.05;direction:ltr;text-align:right;unicode-bidi:plaintext;white-space:nowrap}
+  .amc-daily-kpi label{display:block;color:#7b8390;font-size:9px;margin-bottom:3mm}
+  .amc-daily-kpi strong{display:block;font-size:18px;color:#17294d;line-height:1.1;direction:ltr;text-align:right;unicode-bidi:plaintext}
   .amc-daily-kpi.green strong{color:#1f8b3b}.amc-daily-kpi.red strong{color:#d7262e}.amc-daily-kpi.gold strong{color:#9c7721}
-  .amc-daily-kpi small{display:block;color:#89919d;font-size:6.5px;margin-top:.8mm}
-  @media(max-width:900px){.amc-daily-kpis{grid-template-columns:1fr 1fr}}
+  .amc-daily-kpi small{display:block;color:#89919d;font-size:8px;margin-top:2mm}
+  @media screen and (max-width:900px){.amc-daily-kpis{grid-template-columns:1fr 1fr}}
   .amc-report-note{border:1px solid #dfe4eb;background:#f7f8fa;border-radius:8px;padding:3.5mm 4mm;margin:4mm 0;color:#43506a;font-size:10px;line-height:1.7}
   .amc-report-table-wrap{margin-top:3mm;overflow:visible}
   .amc-report-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:#243451}
@@ -1634,7 +1634,7 @@ setInterval(()=>{
   .amc-report-callout{border:1px solid #dfe4eb;border-right:3px solid #c79a28;border-radius:7px;padding:3.5mm 4mm;margin-top:4mm;background:#fff;font-size:9.5px;line-height:1.8;break-inside:avoid}
   .amc-report-callout strong{color:#17294d}.amc-report-callout.red{border-right-color:#d7262e}.amc-report-callout.green{border-right-color:#1f8b3b}
   .amc-report-cover .amc-report-footer{display:none}
-  @media(max-width:900px){.amc-report-page{transform-origin:top center;transform:scale(.78);margin-bottom:-65mm}.amc-report-toolbar{position:sticky}.amc-report-kpis{grid-template-columns:1fr 1fr}}
+  @media screen and (max-width:900px){.amc-report-page{transform-origin:top center;transform:scale(.78);margin-bottom:-65mm}.amc-report-toolbar{position:sticky}.amc-report-kpis{grid-template-columns:1fr 1fr}}
   @media print{
     html,body{margin:0!important;padding:0!important;background:#fff!important}
     body>*:not(#${OVERLAY_ID}){display:none!important}
@@ -1643,6 +1643,8 @@ setInterval(()=>{
     .amc-report-toolbar{display:none!important}
     .amc-report-stage{padding:0!important;display:block!important}
     .amc-report-page{box-shadow:none!important;margin:0!important;width:210mm!important;height:297mm!important;min-height:297mm!important;transform:none!important;overflow:hidden!important}
+    .amc-report-kpis{grid-template-columns:repeat(4,1fr)!important}
+    .amc-daily-kpis{grid-template-columns:repeat(4,1fr)!important}
     @page{size:A4 portrait;margin:0}
   }
   `;
