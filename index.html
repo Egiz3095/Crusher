@@ -128,6 +128,13 @@ select,.date,input[type="date"]{font-family:Arial,"Segoe UI",Tahoma,sans-serif;d
   width:100%;height:38px;padding:0 11px;border-radius:9px;border:1px solid var(--border);
   background:var(--surface-soft);color:var(--text);outline:none;font-size:11px;transition:border-color .18s,box-shadow .18s;
 }
+.dashboard-date-range{width:100%;height:38px;padding:3px 7px;border-radius:9px;border:1px solid var(--border);background:var(--surface-soft);display:flex;align-items:center;gap:6px;direction:rtl;transition:border-color .18s,box-shadow .18s}
+.dashboard-date-range:focus-within{border-color:#8fb6d7;box-shadow:0 0 0 3px rgba(44,107,164,.10)}
+.dashboard-date-part{min-width:0;flex:1;display:flex;align-items:center;gap:4px;direction:rtl}
+.dashboard-date-part>span{font-size:8px;color:var(--muted);font-weight:800;flex:none}
+.dashboard-date-input{height:30px!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0 2px!important;border-radius:6px!important;min-width:0!important;font-size:10px!important}
+.dashboard-date-separator{color:#8b99a7;font-weight:800;font-size:10px;flex:none}
+@media(max-width:600px){.dashboard-date-range{gap:3px;padding:3px 5px}.dashboard-date-part>span{display:none}.dashboard-date-input{font-size:9px!important}}
 select:focus,.date:focus{border-color:#8fb6d7;box-shadow:0 0 0 3px rgba(44,107,164,.10)}
 .btn{height:38px;border:0;border-radius:9px;padding:0 18px;background:var(--primary);color:#fff;font-weight:800;font-size:11px;cursor:pointer;transition:transform .18s,filter .18s,box-shadow .18s;white-space:nowrap}
 .btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 5px 12px rgba(44,107,164,.18)}
@@ -644,6 +651,134 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
   .page-shell.reports-collapsed .report-collapsed-rail-label{top:70px !important;font-size:16px !important;}
 }
 </style>
+<style id="dashboard-filter-font-size-final">
+/* Match the main filter values/buttons to the report title font size. */
+.filters select,
+.filters .date,
+.filters input[type="date"],
+.filters .dashboard-date-range,
+.filters .btn{
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif !important;
+  font-size:12.5px !important;
+}
+</style>
+<style id="dashboard-filter-font-size-exact">
+/* Exact size match with the "التقرير التنفيذي الشامل" report-item title (12.5px). */
+#dashboardFilters select,
+#dashboardFilters .btn,
+#dashboardFilters .dashboard-date-input,
+#dashboardFilters .dashboard-date-separator{
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif !important;
+  font-size:12.5px !important;
+}
+</style>
+
+<style id="dashboard-filter-executive-compact">
+/* Executive Compact filter bar — visual/layout only. */
+/* Period order: من → تاريخ البداية — تاريخ النهاية → إلى (RTL). */
+
+#dashboardFilters{
+  margin:16px 0;
+  display:grid;
+  grid-template-columns:1.42fr 1fr 1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+  padding:12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+}
+#dashboardFilters .filter-field{min-width:0}
+#dashboardFilters .filter-label{
+  display:block;
+  margin:0 0 5px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:700;
+  line-height:1.2;
+  text-align:right;
+}
+#dashboardFilters select,
+#dashboardFilters .dashboard-date-range{
+  height:38px;
+  box-sizing:border-box;
+  border-radius:10px;
+  background:var(--surface-soft);
+  border:1px solid var(--border);
+}
+#dashboardFilters select{
+  padding:0 12px;
+  text-align:center;
+}
+#dashboardFilters .dashboard-date-range{
+  padding:3px 8px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  direction:rtl;
+}
+#dashboardFilters .dashboard-date-part{
+  min-width:0;
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  direction:rtl;
+}
+#dashboardFilters .dashboard-date-part>span{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+  flex:none;
+}
+#dashboardFilters .dashboard-date-input{
+  width:100%;
+  min-width:0!important;
+  height:30px!important;
+  padding:0 2px!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:6px!important;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif!important;
+  font-size:12.5px!important;
+  color:var(--text)!important;
+}
+#dashboardFilters .dashboard-date-separator{
+  flex:none;
+  color:#8b99a7;
+  font-size:12px;
+  font-weight:800;
+}
+#dashboardFilters .btn{
+  height:38px;
+  min-width:112px;
+  padding:0 18px;
+  border-radius:10px;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif!important;
+  font-size:12.5px!important;
+  font-weight:800;
+}
+#dashboardFilters select:focus,
+#dashboardFilters .dashboard-date-range:focus-within{
+  border-color:#8fb6d7;
+  box-shadow:0 0 0 3px rgba(44,107,164,.10);
+}
+@media(max-width:900px){
+  #dashboardFilters{grid-template-columns:1fr 1fr;align-items:end}
+  #dashboardFilters .dashboard-period-field{grid-column:1 / -1}
+  #dashboardFilters .btn{grid-column:1 / -1;width:100%}
+}
+@media(max-width:600px){
+  #dashboardFilters{grid-template-columns:1fr;padding:10px}
+  #dashboardFilters .dashboard-period-field,
+  #dashboardFilters .btn{grid-column:auto}
+  #dashboardFilters .btn{width:100%}
+}
+
+
+</style>
 </head>
 <body>
 <header class="top-header">
@@ -726,12 +861,19 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
     </div>
   </section>
 
-  <section class="filters" aria-label="فلاتر البيانات">
-    <div class="filter-field"><label class="filter-label">الفترة</label><input class="date" type="text" value="01/01/2026 — 30/06/2026" aria-label="الفترة"></div>
-    <div class="filter-field"><label class="filter-label">العميل</label><select aria-label="العميل"><option>جميع العملاء</option><option>التضامنية</option><option>زحل</option><option>آل سليمان</option></select></div>
-    <div class="filter-field"><label class="filter-label">نوع التحميل</label><select aria-label="نوع التحميل"><option>جميع أنواع التحميل</option><option>تريلا 3/8</option><option>تريلا 3/4</option><option>عايدي بناء</option></select></div>
-    <div class="filter-field"><label class="filter-label">التصنيف</label><select aria-label="التصنيف"><option>جميع التصنيفات</option><option>وقود وزيوت</option><option>رواتب وأجور</option><option>مشتريات وقطع غيار</option></select></div>
-    <button class="btn" type="button">تطبيق التصفية</button>
+  <section class="filters" id="dashboardFilters" aria-label="فلاتر البيانات">
+    <div class="filter-field dashboard-period-field">
+      <label class="filter-label">الفترة</label>
+      <div class="dashboard-date-range" id="dashboardDateRange" aria-label="الفترة">
+        <div class="dashboard-date-part"><span>من</span><input id="dashboardFromDate" class="date dashboard-date-input" type="date" value="" aria-label="من تاريخ"></div>
+        <span class="dashboard-date-separator">—</span>
+        <div class="dashboard-date-part"><span>إلى</span><input id="dashboardToDate" class="date dashboard-date-input" type="date" value="" aria-label="إلى تاريخ"></div>
+      </div>
+    </div>
+    <div class="filter-field"><label class="filter-label">العميل</label><select id="dashboardCustomerFilter" aria-label="العميل"><option value="">جميع العملاء</option></select></div>
+    <div class="filter-field"><label class="filter-label">نوع التحميل</label><select id="dashboardLoadingFilter" aria-label="نوع التحميل"><option value="">جميع أنواع التحميل</option></select></div>
+    <div class="filter-field"><label class="filter-label">التصنيف</label><select id="dashboardCategoryFilter" aria-label="التصنيف"><option value="">جميع التصنيفات</option></select></div>
+    <button id="dashboardApplyFilters" class="btn" type="button">تطبيق التصفية</button>
   </section>
 
   <section class="kpis" aria-label="المؤشرات التنفيذية الرئيسية">
@@ -770,7 +912,7 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 
   <section class="analytics-main">
     <div class="card panel chart-panel">
-      <div class="panel-head"><div><h3>الأداء المالي الشهري</h3><div class="panel-meta">اتجاه الإيرادات والمصروفات</div></div><div class="panel-meta">يناير — يونيو 2026</div></div>
+      <div class="panel-head"><div><h3>الأداء المالي الشهري</h3><div class="panel-meta">اتجاه الإيرادات والمصروفات</div></div><div class="panel-meta" id="monthlyChartPeriod">—</div></div>
       <div class="chart" id="monthlyChart"></div>
       <div class="legend"><span><b class="dot" style="background:#5ea8ff"></b>الإيرادات</span><span><b class="dot" style="background:#ef6b73"></b>المصروفات</span></div>
     </div>
@@ -801,8 +943,8 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 
   <section class="lower-grid">
     <div class="card panel monthly-panel">
-      <div class="panel-head"><h3>الأداء الشهري</h3><span class="panel-meta">الإيرادات • المصروفات • الصافي</span></div>
-      <div class="table-wrap"><table><thead><tr><th>الشهر</th><th>الإيرادات</th><th>المصروفات</th><th>الصافي</th></tr></thead><tbody id="monthlyTable"></tbody></table></div>
+      <div class="panel-head"><h3>الأداء الشهري</h3><span class="panel-meta">الإيرادات • المصروفات • الصافي • التراكمي</span></div>
+      <div class="table-wrap"><table><thead><tr><th>الشهر</th><th>الإيرادات</th><th>المصروفات</th><th>الصافي</th><th>التراكمي</th></tr></thead><tbody id="monthlyTable"></tbody></table></div>
     </div>
 
     <div class="card panel actions-panel">
@@ -1479,9 +1621,136 @@ document.querySelectorAll(".report-item").forEach((btn)=>btn.addEventListener("c
 }));
 document.getElementById("reportBack")?.addEventListener("click",openDashboard);
 
+let dashboardFiltersApplied=false;
+let dashboardPeriodManuallyChanged=false;
+
+function setDashboardCurrentYearPeriod(){
+  if(dashboardPeriodManuallyChanged) return;
+  const now=new Date();
+  const year=now.getFullYear();
+  const today=`${year}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const fromInput=document.getElementById('dashboardFromDate');
+  const toInput=document.getElementById('dashboardToDate');
+  if(fromInput) fromInput.value=`${year}-01-01`;
+  if(toInput) toInput.value=today;
+}
+
+function cleanFilterValue(v){
+  return String(v??'').trim().replace(/\s+/g,' ');
+}
+
+function uniqueFilterValues(rows,key){
+  return [...new Set((Array.isArray(rows)?rows:[]).map(r=>cleanFilterValue(r?.[key])).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b,'ar'));
+}
+
+function setSelectOptions(id,values,allLabel,currentValue){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const current=cleanFilterValue(currentValue);
+  el.innerHTML=`<option value="">${esc(allLabel)}</option>` + values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  if(values.includes(current)) el.value=current;
+  else el.value='';
+}
+
+function dashboardDateBounds(rows){
+  const dates=(Array.isArray(rows)?rows:[]).map(r=>parseDate(r?.['التاريخ'])).filter(d=>d&&!isNaN(d)).sort((a,b)=>a-b);
+  if(!dates.length) return null;
+  return {from:dateValue(dates[0]),to:dateValue(dates[dates.length-1])};
+}
+
+function parseDashboardDateRange(value,rows){
+  const fromInput=document.getElementById('dashboardFromDate')?.value||'';
+  const toInput=document.getElementById('dashboardToDate')?.value||'';
+  if(fromInput||toInput){
+    return {from:fromInput,to:toInput};
+  }
+  const raw=String(value||'').trim();
+  if(!raw){
+    const bounds=dashboardDateBounds(rows);
+    return bounds||{from:'',to:''};
+  }
+  const parts=raw.split(/\s*(?:—|–|-)\s*/).filter(Boolean);
+  const fromDate=parseDate(parts[0]||raw);
+  const toDate=parseDate(parts[1]||parts[0]||raw);
+  return {
+    from:fromDate&&!isNaN(fromDate)?dateValue(fromDate):'',
+    to:toDate&&!isNaN(toDate)?dateValue(toDate):''
+  };
+}
+
+function populateDashboardFilters(rev,exp){
+  const customer=document.getElementById('dashboardCustomerFilter');
+  const loading=document.getElementById('dashboardLoadingFilter');
+  const category=document.getElementById('dashboardCategoryFilter');
+  const currentCustomer=customer?.value||'';
+  const currentLoading=loading?.value||'';
+  const currentCategory=category?.value||'';
+  setSelectOptions('dashboardCustomerFilter',uniqueFilterValues(rev,'اسم العميل'),'جميع العملاء',currentCustomer);
+  setSelectOptions('dashboardLoadingFilter',uniqueFilterValues(rev,'نوع التحميل'),'جميع أنواع التحميل',currentLoading);
+  setSelectOptions('dashboardCategoryFilter',uniqueFilterValues(exp,'التصنيف'),'جميع التصنيفات',currentCategory);
+  setDashboardCurrentYearPeriod();
+}
+
+function dashboardFilterRows(rows,kind,filters){
+  return (Array.isArray(rows)?rows:[]).filter(r=>{
+    const d=parseDate(r?.['التاريخ']);
+    if(!d) return false;
+    const x=dateValue(d);
+    if(filters.from && x<filters.from) return false;
+    if(filters.to && x>filters.to) return false;
+    if(kind==='rev'){
+      if(filters.customer && cleanFilterValue(r?.['اسم العميل'])!==filters.customer) return false;
+      if(filters.loading && cleanFilterValue(r?.['نوع التحميل'])!==filters.loading) return false;
+    }
+    if(kind==='exp' && filters.category && cleanFilterValue(r?.['التصنيف'])!==filters.category) return false;
+    return true;
+  });
+}
+
+function getDashboardFilters(){
+  const range=parseDashboardDateRange(document.getElementById('dashboardDateRange')?.value,reportData.rev.concat(reportData.exp));
+  let from=range.from,to=range.to;
+  if(from && to && from>to) [from,to]=[to,from];
+  return {
+    from,to,
+    customer:cleanFilterValue(document.getElementById('dashboardCustomerFilter')?.value),
+    loading:cleanFilterValue(document.getElementById('dashboardLoadingFilter')?.value),
+    category:cleanFilterValue(document.getElementById('dashboardCategoryFilter')?.value)
+  };
+}
+
+function formatDashboardFilterRange(from,to){
+  if(!from&&!to) return '';
+  return `${from?fmtDate(from):'—'} — ${to?fmtDate(to):'—'}`;
+}
+
+function applyDashboardFilters(){
+  const filters=getDashboardFilters();
+  dashboardFiltersApplied=true;
+  const filteredRev=dashboardFilterRows(reportData.rev,'rev',filters);
+  const filteredExp=dashboardFilterRows(reportData.exp,'exp',filters);
+  renderDashboardData(filteredRev,filteredExp,filters);
+  const btn=document.getElementById('dashboardApplyFilters');
+  if(btn){
+    btn.textContent='تم تطبيق التصفية';
+    clearTimeout(window.__dashboardFilterButtonTimer);
+    window.__dashboardFilterButtonTimer=setTimeout(()=>{btn.textContent='تطبيق التصفية';},1600);
+  }
+}
+
 function render(data){
   reportData = { rev: Array.isArray(data.rev) ? data.rev : [], exp: Array.isArray(data.exp) ? data.exp : [], col: Array.isArray(data.col) ? data.col : [], receivables: Array.isArray(data.receivables) ? data.receivables : [] };
-  const rev=reportData.rev, exp=reportData.exp;
+  populateDashboardFilters(reportData.rev,reportData.exp);
+  if(dashboardFiltersApplied){
+    const filters=getDashboardFilters();
+    renderDashboardData(dashboardFilterRows(reportData.rev,'rev',filters),dashboardFilterRows(reportData.exp,'exp',filters),filters);
+    return;
+  }
+  renderDashboardData(reportData.rev,reportData.exp,null);
+}
+
+function renderDashboardData(rev,exp,filters=null){
   const revenue=rev.reduce((a,r)=>a+parseNum(r["المبلغ"]),0);
   const expenses=exp.reduce((a,r)=>a+parseNum(r["المبلغ"]),0);
   const qty=rev.reduce((a,r)=>a+parseNum(r["الكمية"]),0);
@@ -1502,12 +1771,19 @@ function render(data){
   rev.forEach(r=>{const d=parseDate(r["التاريخ"]); if(!d)return; const k=monthKey(d); (months[k]??={revenue:0,expenses:0,qty:0,idx:d.getMonth()}).revenue+=parseNum(r["المبلغ"]); months[k].qty+=parseNum(r["الكمية"]);});
   exp.forEach(r=>{const d=parseDate(r["التاريخ"]); if(!d)return; const k=monthKey(d); (months[k]??={revenue:0,expenses:0,qty:0,idx:d.getMonth()}).expenses+=parseNum(r["المبلغ"]);});
   const ms=Object.entries(months).sort((a,b)=>a[0].localeCompare(b[0]));
+  const chartFilters=filters||getDashboardFilters();
+  const chartFrom=chartFilters.from||'';
+  const chartTo=chartFilters.to||'';
+  const chartPeriod=document.getElementById('monthlyChartPeriod');
+  if(chartPeriod) chartPeriod.textContent=formatDashboardFilterRange(chartFrom,chartTo)||'كامل البيانات';
   const max=Math.max(1,...ms.flatMap(([k,v])=>[v.revenue,v.expenses]));
   document.getElementById("monthlyChart").innerHTML=ms.map(([k,v])=>`<div class="month"><i class="bar rev" style="height:${Math.max(3,v.revenue/max*100)}%"></i><i class="bar exp" style="height:${Math.max(3,v.expenses/max*100)}%"></i><span>${monthNames[v.idx]}</span></div>`).join("");
 
+  let cumulativeNet=0;
   document.getElementById("monthlyTable").innerHTML=ms.map(([k,v])=>{
     const n=v.revenue-v.expenses;
-    return `<tr><td>${monthNames[v.idx]}</td><td>${money(v.revenue)}</td><td>${money(v.expenses)}</td><td class="${n>=0?"green":"red"}">${money(n)}</td></tr>`;
+    cumulativeNet+=n;
+    return `<tr><td>${monthNames[v.idx]}</td><td>${money(v.revenue)}</td><td>${money(v.expenses)}</td><td class="${n>=0?"green":"red"}">${money(n)}</td><td class="${cumulativeNet>=0?"green":"red"}">${money(cumulativeNet)}</td></tr>`;
   }).join("");
 
   const customers={};
@@ -1539,12 +1815,32 @@ function render(data){
     (topCat?`<div class="alert"><strong class="gold">● أعلى بند مصروفات</strong><p>${esc(topCat[0])} يمثل ${((topCat[1]/totalCat)*100).toFixed(1)}% من إجمالي المصروفات.</p></div>`:"")+
     `<div class="alert"><strong class="blue">● مصدر البيانات</strong><p>البيانات الحالية تُقرأ مباشرة من أوراق Google Sheets: إيرادات ومصروفات.</p></div>`;
 
-  document.getElementById("unitProfit").textContent=`${(qty?net/qty:0).toFixed(2)}`;
+  const unitProfitValue=qty?net/qty:0;
+  const unitProfitEl=document.getElementById("unitProfit");
+  const marginMetricEl=document.getElementById("marginMetric");
+  unitProfitEl.textContent=`${unitProfitValue.toFixed(2)}`;
+  unitProfitEl.classList.remove("green","red");
+  unitProfitEl.classList.add(unitProfitValue>=0?"green":"red");
   document.getElementById("unitCost").textContent=`${(qty?expenses/qty:0).toFixed(2)}`;
   document.getElementById("unitPrice").textContent=`${avg.toFixed(2)}`;
-  document.getElementById("marginMetric").textContent=`${margin.toFixed(2)}%`;
+  marginMetricEl.textContent=`${margin.toFixed(2)}%`;
+  marginMetricEl.classList.remove("green","red","blue");
+  marginMetricEl.classList.add(margin>=0?"green":"red");
 }
 
+document.getElementById("dashboardApplyFilters")?.addEventListener("click",applyDashboardFilters);
+document.getElementById("dashboardFromDate")?.addEventListener("change",()=>{
+  dashboardPeriodManuallyChanged=true;
+  const from=document.getElementById("dashboardFromDate")?.value||"";
+  const to=document.getElementById("dashboardToDate")?.value||"";
+  if(from && to && from>to) document.getElementById("dashboardToDate").value=from;
+});
+document.getElementById("dashboardToDate")?.addEventListener("change",()=>{
+  dashboardPeriodManuallyChanged=true;
+  const from=document.getElementById("dashboardFromDate")?.value||"";
+  const to=document.getElementById("dashboardToDate")?.value||"";
+  if(from && to && to<from) document.getElementById("dashboardFromDate").value=to;
+});
 document.getElementById("refreshData").addEventListener("click",()=>refresh({force:true,forceFresh:true}));
 bootstrapData();
 
