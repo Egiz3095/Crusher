@@ -1475,178 +1475,18 @@ function renderDailyReport(){
   setTimeout(build,0);
 }
 /* ================================================================
-   ADDITIVE ONLY — STANDALONE COMPARISON ENGINE
+   COMPARISON ROUTING BRIDGE
+   The live comparison implementation is AMCComparisonModule below.
+   This bridge exists only because the shared report click handler is
+   declared earlier in the file and must continue resolving safely.
    ================================================================ */
-const AMCComparisonEngine={
-  monthBounds(month){
-    if(!/^\d{4}-\d{2}$/.test(month||"")) return {from:"",to:""};
-    const [y,m]=month.split("-").map(Number); const last=new Date(y,m,0).getDate();
-    return {from:`${y}-${String(m).padStart(2,"0")}-01`,to:`${y}-${String(m).padStart(2,"0")}-${String(last).padStart(2,"0")}`};
-  },
-  monthLabel(month){
-    if(!/^\d{4}-\d{2}$/.test(month||"")) return "—";
-    const [y,m]=month.split("-").map(Number); return `${monthNames[m-1]||String(m)} ${y}`;
-  },
-  latestMonths(){
-    const months=[...(reportData.rev||[]),...(reportData.exp||[])].map(r=>dateValue(r["التاريخ"])).filter(Boolean).map(x=>x.slice(0,7));
-    return [...new Set(months)].sort().slice(-2);
-  },
-  sum(rows,key){return rows.reduce((a,r)=>a+parseNum(r[key]),0)},
-  aggregate(rows,keyFn,valueFn){
-    const out={};
-    rows.forEach(r=>{
-      const k=String(keyFn(r)||"غير محدد").trim()||"غير محدد";
-      out[k]=(out[k]||0)+Number(valueFn(r)||0);
-    });
-    return out;
-  },
-  compareRow(label,prev,current,prevTotal,currentTotal,kind){
-    const diff=current-prev;
-    const pctChange=prev!==0?(diff/Math.abs(prev))*100:(current!==0?null:0);
-    const prevShare=prevTotal!==0?prev/prevTotal*100:0;
-    const currentShare=currentTotal!==0?current/currentTotal*100:0;
-    const direction=diff>0?"↑":diff<0?"↓":"→";
-    let transition="";
-    if(kind==="profit"){
-      if(prev<0&&current>=0)transition="انتقال من خسارة إلى ربح";
-      else if(prev>=0&&current<0)transition="انتقال من ربح إلى خسارة";
-      else if(prev===0&&current>0)transition="بداية ربح";
-      else if(prev===0&&current<0)transition="بداية خسارة";
-    }else if(prev===0&&current!==0){
-      transition="لا توجد قيمة في الفترة السابقة";
-    }
-    return {label,prev,current,diff,pctChange,prevShare,currentShare,direction,transition,kind};
-  },
-  unionCompare(prevMap,currMap,prevTotal,currTotal,kind){
-    const keys=[...new Set([...Object.keys(prevMap),...Object.keys(currMap)])];
-    keys.sort((a,b)=>Number(currMap[b]??0)-Number(currMap[a]??0)||a.localeCompare(b,"ar"));
-    return keys.map(k=>this.compareRow(k,Number(prevMap[k]??0),Number(currMap[k]??0),prevTotal,currTotal,kind));
-  },
-  dimension(rows,keyFn,valueFn,kind){return this.aggregate(rows,keyFn,valueFn);},
-  metricRows(a,b){
-    const ar=this.sum(a.rev,"المبلغ"),br=this.sum(b.rev,"المبلغ"),ae=this.sum(a.exp,"المبلغ"),be=this.sum(b.exp,"المبلغ");
-    const aq=this.sum(a.rev,"الكمية"),bq=this.sum(b.rev,"الكمية"),al=a.rev.length,bl=b.rev.length;
-    const activeA=new Set(a.rev.map(r=>dateValue(r["التاريخ"])).filter(Boolean)).size;
-    const activeB=new Set(b.rev.map(r=>dateValue(r["التاريخ"])).filter(Boolean)).size;
-    const expDaysA=new Set(a.exp.map(r=>dateValue(r["التاريخ"])).filter(Boolean)).size;
-    const expDaysB=new Set(b.exp.map(r=>dateValue(r["التاريخ"])).filter(Boolean)).size;
-    const raw=[
-      ["الإيرادات",ar,br,"money"],["المصروفات",ae,be,"expense"],["صافي الربح / الخسارة",ar-ae,br-be,"profit"],
-      ["هامش التشغيل %",ar?(ar-ae)/ar*100:0,br?(br-be)/br*100:0,"percent"],
-      ["نسبة المصروفات إلى الإيرادات %",ar?ae/ar*100:0,br?be/br*100:0,"percent"],
-      ["عدد الحمولات / العمليات",al,bl,"count"],["إجمالي الكمية",aq,bq,"qty"],
-      ["متوسط قيمة الحمولة",al?ar/al:0,bl?br/bl:0,"money"],["الإيراد لكل رد",aq?ar/aq:0,bq?br/bq:0,"money"],
-      ["المصروف لكل رد",aq?ae/aq:0,bq?be/bq:0,"expense"],["الربح لكل رد",aq?(ar-ae)/aq:0,bq?(br-be)/bq:0,"profit"],
-      ["أيام النشاط",activeA,activeB,"count"],["متوسط الإيراد اليومي",activeA?ar/activeA:0,activeB?br/activeB:0,"money"],["متوسط المصروف اليومي",expDaysA?ae/expDaysA:0,expDaysB?be/expDaysB:0,"expense"]
-    ];
-    return raw.map(([l,p,c,k])=>this.compareRow(l,p,c,0,0,k));
-  },
-  build(monthA,monthB){
-    if(!monthA||!monthB)throw new Error("يرجى اختيار شهرين صالحين للمقارنة.");
-    if(monthA===monthB)throw new Error("يرجى اختيار شهرين مختلفين للمقارنة.");
-    const A=this.monthBounds(monthA),B=this.monthBounds(monthB);
-    const a={rev:filterRows(reportData.rev,A.from,A.to),exp:filterRows(reportData.exp,A.from,A.to)};
-    const b={rev:filterRows(reportData.rev,B.from,B.to),exp:filterRows(reportData.exp,B.from,B.to)};
-    const ar=this.sum(a.rev,"المبلغ"),br=this.sum(b.rev,"المبلغ"),ae=this.sum(a.exp,"المبلغ"),be=this.sum(b.exp,"المبلغ");
-    const aq=this.sum(a.rev,"الكمية"),bq=this.sum(b.rev,"الكمية");
-    const customerPrev=this.aggregate(a.rev,r=>(r["اسم العميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["المبلغ"]));
-    const customerCurr=this.aggregate(b.rev,r=>(r["اسم العميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["المبلغ"]));
-    const customerQtyPrev=this.aggregate(a.rev,r=>(r["اسم العميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["الكمية"]));
-    const customerQtyCurr=this.aggregate(b.rev,r=>(r["اسم العميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["الكمية"]));
-    const typePrev=this.aggregate(a.rev,r=>(r["نوع التحميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["المبلغ"]));
-    const typeCurr=this.aggregate(b.rev,r=>(r["نوع التحميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["المبلغ"]));
-    const typeQtyPrev=this.aggregate(a.rev,r=>(r["نوع التحميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["الكمية"]));
-    const typeQtyCurr=this.aggregate(b.rev,r=>(r["نوع التحميل"]||"غير محدد").trim()||"غير محدد",r=>parseNum(r["الكمية"]));
-    return {
-      monthA,monthB,a,b,labels:{a:this.monthLabel(monthA),b:this.monthLabel(monthB)},
-      revenue:ar,bRevenue:br,expenses:ae,bExpenses:be,net:ar-ae,bNet:br-be,quantity:aq,bQuantity:bq,loads:a.rev.length,bLoads:b.rev.length,
-      metrics:this.metricRows(a,b),
-      expenseCategories:this.unionCompare(
-        this.aggregate(a.exp,r=>(r["التصنيف"]||"غير مصنف").trim()||"غير مصنف",r=>parseNum(r["المبلغ"])),
-        this.aggregate(b.exp,r=>(r["التصنيف"]||"غير مصنف").trim()||"غير مصنف",r=>parseNum(r["المبلغ"])),ae,be,"expense"
-      ),
-      customers:this.unionCompare(customerPrev,customerCurr,ar,br,"revenue"),
-      customerQuantities:this.unionCompare(customerQtyPrev,customerQtyCurr,aq,bq,"qty"),
-      loadTypes:this.unionCompare(typePrev,typeCurr,ar,br,"revenue"),
-      loadTypeQuantities:this.unionCompare(typeQtyPrev,typeQtyCurr,aq,bq,"qty"),
-      receivables:{available:false,reason:"لا توجد بيانات تحصيلات أو أرصدة عملاء تاريخية في مصدر البيانات الحالي؛ لذلك لم يتم اختراع رقم للمديونية."}
-    };
-  },
-  cell(v,k){
-    if(k==="percent")return `${Number(v).toFixed(2)}%`;
-    if(k==="count"||k==="qty")return qty(v);
-    return money(v);
-  },
-  pct(v){return v===null?"جديد":`${Number(v).toFixed(2)}%`;},
-  dirClass(r){
-    if(r.diff===0)return "neutral";
-    if(r.kind==="expense")return r.diff>0?"bad":"good";
-    if(r.kind==="profit")return (r.prev<0&&r.current>=0)||r.diff>0?"good":"bad";
-    if(r.label==="نسبة المصروفات إلى الإيرادات %"||r.label==="المصروف لكل رد"||r.label==="متوسط المصروف اليومي")return r.diff>0?"bad":"good";
-    return r.diff>0?"good":"bad";
-  },
-  rowHtml(r){return `<tr><td>${escHtml(r.label)}</td><td class="num">${this.cell(r.prev,r.kind)}</td><td class="num">${this.cell(r.current,r.kind)}</td><td class="num">${this.cell(r.diff,r.kind)}</td><td class="num">${this.pct(r.pctChange)}</td><td class="num">${Number(r.prevShare).toFixed(2)}%</td><td class="num">${Number(r.currentShare).toFixed(2)}%</td><td class="${this.dirClass(r)}"><b>${r.direction}</b>${r.transition?`<small> ${escHtml(r.transition)}</small>`:""}</td></tr>`;},
-  rowsHtml(rows){return rows.map(r=>this.rowHtml(r)).join("");},
-  table(rows){return table(["البند","الفترة السابقة","الفترة الحالية","الفرق","% التغير","حصة السابقة","حصة الحالية","الاتجاه"],this.rowsHtml(rows));}
-};
-window.AMCComparisonEngine=AMCComparisonEngine;
-
-function comparisonDefaultMonths(){
-  const m=(window.AMCComparisonEngine||AMCComparisonEngine).latestMonths();
-  if(m.length>=2) return {a:m[m.length-2],b:m[m.length-1]};
-  if(m.length===1) return {a:m[0],b:m[0]};
-  return {a:"",b:""};
-}
 function renderComparisonReport(){
-  activeReport="comparison";
-  window.AMC_CURRENT_REPORT_INDEX="comparison";
-  const title=document.getElementById("reportTitle"), desc=document.getElementById("reportDescription");
-  const ws=document.getElementById("reportWorkspace");
-  if(title) title.textContent="تقرير المقارنات";
-  if(desc) desc.textContent="مقارنة مستقلة بين فترتين تشمل الإيرادات والمصروفات والعملاء وأنواع التحميل والكميات والربحية والمؤشرات التشغيلية.";
-  if(ws) ws.hidden=false;
-  document.querySelectorAll(".dashboard-content > *:not(#reportWorkspace)").forEach(x=>x.style.display="none");
-  document.querySelectorAll(".report-item").forEach(x=>x.classList.toggle("active",x.classList.contains("comparison-report-item")));
-
-  const d=comparisonDefaultMonths();
-  const toolbar=document.getElementById("reportToolbar");
-  const body=document.getElementById("reportBody");
-  if(!toolbar || !body) return;
-  toolbar.innerHTML=`<div class="report-filter"><label>الفترة السابقة</label><input id="rCompA" type="month" value="${d.a}"></div><div class="report-filter"><label>الفترة الحالية</label><input id="rCompB" type="month" value="${d.b}"></div><div class="report-filter"><label>&nbsp;</label><button id="rCompApply" type="button">تطبيق المقارنة</button></div>`;
-
-  const build=()=>{
-    try{
-      const a=document.getElementById("rCompA")?.value||"";
-      const b=document.getElementById("rCompB")?.value||"";
-      if(!a || !b){ body.innerHTML='<div class="report-empty">اختر الفترتين المطلوب مقارنتهما.</div>'; return; }
-      if(a===b){ body.innerHTML='<div class="alert"><strong class="red">⚠ يجب اختيار فترتين مختلفتين.</strong></div>'; return; }
-      const engine=window.AMCComparisonEngine||AMCComparisonEngine;
-      const x=engine.build(a,b);
-      body.innerHTML=
-        kpis([
-          ["إيرادات الفترة السابقة",money(x.revenue)+" SAR"],
-          ["إيرادات الفترة الحالية",money(x.bRevenue)+" SAR"],
-          ["مصروفات الفترة السابقة",money(x.expenses)+" SAR"],
-          ["مصروفات الفترة الحالية",money(x.bExpenses)+" SAR"],
-          ["صافي الفترة السابقة",money(x.net)+" SAR",x.net>=0?"green":"red"],
-          ["صافي الفترة الحالية",money(x.bNet)+" SAR",x.bNet>=0?"green":"red"],
-          ["الكمية السابقة",qty(x.quantity)+" رد"],
-          ["الكمية الحالية",qty(x.bQuantity)+" رد"]
-        ])+
-        card(`الملخص والمؤشرات التشغيلية — ${x.labels.a} مقابل ${x.labels.b}`,engine.table(x.metrics))+
-        card("المصروفات حسب التصنيف — UNION",engine.table(x.expenseCategories))+
-        card("العملاء حسب الإيرادات — UNION",engine.table(x.customers))+
-        card("العملاء حسب الكمية — UNION",engine.table(x.customerQuantities))+
-        card("أنواع التحميل حسب الإيرادات — UNION",engine.table(x.loadTypes))+
-        card("أنواع التحميل حسب الكمية — UNION",engine.table(x.loadTypeQuantities))+
-        card("المديونية / الذمم المدينة",`<div class="report-empty">${escHtml(x.receivables.reason)}</div>`);
-    }catch(e){
-      console.error("Comparison Engine Error",e);
-      body.innerHTML=`<div class="alert"><strong class="red">⚠ تعذر بناء تقرير المقارنات</strong><p>${escHtml(e?.message||String(e))}</p></div>`;
-    }
-  };
-  document.getElementById("rCompApply")?.addEventListener("click",build);
-  build();
+  if(typeof window.AMCComparisonModule?.render==='function') return window.AMCComparisonModule.render();
+}
+function comparisonMonthLabel(month){
+  if(!/^\d{4}-\d{2}$/.test(month||'')) return '—';
+  const [y,m]=month.split('-').map(Number);
+  return `${monthNames[m-1]||String(m)} ${y}`;
 }
 
 function normalizeCustomerKey(v){
@@ -2687,21 +2527,11 @@ setInterval(()=>{
     ComparisonTemplate(ctx){
       return composeReport(ctx,[ReportSections.ComparisonSection],ctx.title||'مقارنة الأداء المالي');
     },
-    /* ADDITIVE ONLY — independent month-vs-month PDF. */
+    /* COMPARISON PDF BRIDGE — uses the same model rendered by AMCComparisonModule. */
     StandaloneComparisonTemplate(ctx){
-      const c=AMCComparisonEngine.build(ctx.monthA,ctx.monthB);
-      const head=['البند',c.labels.a,c.labels.b,'الفرق','% التغير','حصة السابقة','حصة الحالية','الاتجاه'];
-      const rows=arr=>arr.map(r=>AMCComparisonEngine.rowHtml(r)).join('');
-      const section=(title,subtitle,arr)=>`<h1 class="amc-report-title">${title}</h1><p class="amc-report-subtitle">${subtitle}</p>${table(head,arr.map(r=>AMCComparisonEngine.rowHtml(r)))}`;
-      const cover=`<section class="amc-report-page"><div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>تقرير المقارنات</h1><div class="en">Comparison Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>الفترة الأولى</b><strong>${escHtml(c.labels.a)}</strong></div><div class="amc-report-info-row"><b>الفترة الثانية</b><strong>${escHtml(c.labels.b)}</strong></div><div class="amc-report-info-row"><b>نوع المقارنة</b><strong>مقارنة شهرية — Month vs Month</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div></div></div></section>`;
-      const p2=page(`<h1 class="amc-report-title">الملخص التنفيذي للمقارنة</h1><p class="amc-report-subtitle">${escHtml(c.labels.a)} مقابل ${escHtml(c.labels.b)}</p><div class="amc-report-kpis">${kpi('إيرادات الفترة الأولى',money(c.revenue)+' ريال','navy',c.labels.a)}${kpi('إيرادات الفترة الثانية',money(c.bRevenue)+' ريال','green',c.labels.b)}${kpi('الكمية الأولى',qty(c.quantity)+' رد','navy',c.labels.a)}${kpi('الكمية الثانية',qty(c.bQuantity)+' رد','green',c.labels.b)}${kpi('صافي الفترة الأولى',money(c.net)+' ريال',c.net>=0?'green':'red')}${kpi('صافي الفترة الثانية',money(c.bNet)+' ريال',c.bNet>=0?'green':'red')}</div>${table(head,c.metrics.map(r=>AMCComparisonEngine.rowHtml(r)))}`,'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,2,8);
-      const p3=page(section('مقارنة تصنيفات المصروفات','UNION كامل بين الفترتين — لا يختفي أي تصنيف عند الصفر.',c.expenseCategories),'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,3,8);
-      const p4=page(section('مقارنة العملاء — الإيرادات','UNION كامل بين العملاء في الفترتين.',c.customers),'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,4,8);
-      const p5=page(section('مقارنة العملاء — الكميات','مقارنة كمية الردود لكل عميل مع الحفاظ على العناصر الموجودة في إحدى الفترتين فقط.',c.customerQuantities),'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,5,8);
-      const p6=page(section('مقارنة أنواع التحميل — الإيرادات','مقارنة الإيرادات لكل نوع تحميل باستخدام UNION.',c.loadTypes),'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,6,8);
-      const p7=page(section('مقارنة أنواع التحميل — الكميات','مقارنة الكميات لكل نوع تحميل باستخدام UNION.',c.loadTypeQuantities),'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,7,8);
-      const p8=page(`<h1 class="amc-report-title">الربحية والمديونية</h1><p class="amc-report-subtitle">معالجة القيم الصفرية والسالبة وانتقالات الربح والخسارة.</p>${table(head,c.metrics.filter(r=>/صافي الربح|هامش التشغيل|نسبة المصروفات|متوسط قيمة الحمولة|الإيراد لكل رد|المصروف لكل رد|الربح لكل رد/.test(r.label||'')).map(r=>AMCComparisonEngine.rowHtml(r)))}<div class="amc-report-note">${escHtml(c.receivables.reason)}</div>`,'تقرير المقارنات',`${c.labels.a} مقابل ${c.labels.b}`,8,8);
-      return cover+p2+p3+p4+p5+p6+p7+p8;
+      const buildPdf=window.AMCComparisonModule?.buildPdf;
+      if(typeof buildPdf!=='function') throw new Error('محرك PDF لتقرير المقارنات غير متاح حاليًا.');
+      return buildPdf(ctx.monthA,ctx.monthB);
     }
   };
 
@@ -2767,8 +2597,13 @@ setInterval(()=>{
       return ['ReceivablesTemplate',{from:'',to:'',period:'الرصيد الحالي — دون فلترة تاريخ',title:'تقرير المديونية'}];
     }
     if(index==="comparison"){
-      const a=document.getElementById('rCompA')?.value||"",b=document.getElementById('rCompB')?.value||"";
-      return ['StandaloneComparisonTemplate',{monthA:a,monthB:b,period:`${AMCComparisonEngine.monthLabel(a)} مقابل ${AMCComparisonEngine.monthLabel(b)}`,title:'تقرير المقارنات'}];
+      /* The comparison UI does not use the shared rCompA/rCompB controls.
+         Always take the exact periods from the live comparison module state so
+         the official Print/PDF button prints the comparison currently loaded. */
+      const state=window.AMCComparisonModule?.state||{};
+      const a=document.getElementById('rCompA')?.value||state.periodA||"";
+      const b=document.getElementById('rCompB')?.value||state.periodB||"";
+      return ['StandaloneComparisonTemplate',{monthA:a,monthB:b,period:`${comparisonMonthLabel(a)} مقابل ${comparisonMonthLabel(b)}`,title:'تقرير المقارنات'}];
     }
     if(index==="daily"){
       const selected=document.getElementById('rDailyDate')?.value||dailyDefaultDate();
@@ -2854,15 +2689,15 @@ function sum(rows,key){return rows.reduce((s,r)=>s+n2(r[key]),0)}
 function compare(previous,current,kind='neutral'){const difference=current-previous;let direction='stable',status='STABLE',transition='';if(previous===0&&current===0){direction='stable';status='STABLE'}else if(previous===0&&current!==0){direction='new';status='NEW'}else if(kind==='profit'&&previous<0&&current>=0){direction='loss_to_profit';status='LOSS_TO_PROFIT';transition='تحول من خسارة إلى ربح'}else if(kind==='profit'&&previous>=0&&current<0){direction='profit_to_loss';status='PROFIT_TO_LOSS';transition='تحول من ربح إلى خسارة'}else if(difference>0){direction='increase';status='INCREASE'}else if(difference<0){direction='decrease';status='DECREASE'}const percentage=previous===0?null:difference/Math.abs(previous)*100;return{previous,current,difference,percentage,direction,status,transition}}
 function unionCompare(a,b,totalA,totalB,kind){const keys=uniqSorted([...Object.keys(a),...Object.keys(b)]);return keys.map(k=>{const x=compare(n2(a[k]),n2(b[k]),kind);return{label:k,...x,shareA:totalA?x.previous/totalA*100:0,shareB:totalB?x.current/totalB*100:0,kind}}).sort((x,y)=>Math.abs(y.current)+Math.abs(y.previous)-Math.abs(x.current)-Math.abs(x.previous))}
 function dailyMap(rows){const o={};rows.forEach(r=>{const d=localDateKey(r['التاريخ']);if(!d)return;const day=Number(d.slice(8,10));o[day]=(o[day]||0)+n2(r['المبلغ'])});return o}
-function buildModel(ar,br,ae,be,a,b,raw){
+function buildModel(ar,br,ae,be,a,b,raw,labelsOverride){
 const revenueA=sum(ar,'المبلغ'),revenueB=sum(br,'المبلغ'),expenseA=sum(ae,'المبلغ'),expenseB=sum(be,'المبلغ'),qtyA=sum(ar,'الكمية'),qtyB=sum(br,'الكمية'),loadsA=ar.length,loadsB=br.length;
 const custA=aggregate(ar,r=>r['اسم العميل'],r=>r['المبلغ']),custB=aggregate(br,r=>r['اسم العميل'],r=>r['المبلغ']),custQtyA=aggregate(ar,r=>r['اسم العميل'],r=>r['الكمية']),custQtyB=aggregate(br,r=>r['اسم العميل'],r=>r['الكمية']),typeA=aggregate(ar,r=>r['نوع التحميل'],r=>r['المبلغ']),typeB=aggregate(br,r=>r['نوع التحميل'],r=>r['المبلغ']),typeQtyA=aggregate(ar,r=>r['نوع التحميل'],r=>r['الكمية']),typeQtyB=aggregate(br,r=>r['نوع التحميل'],r=>r['الكمية']),catA=aggregate(ae,r=>r['التصنيف'],r=>r['المبلغ']),catB=aggregate(be,r=>r['التصنيف'],r=>r['المبلغ']);
 const customersA=Object.keys(custA).filter(k=>custA[k]!==0),customersB=Object.keys(custB).filter(k=>custB[k]!==0),activeDaysA=uniqSorted(ar.map(r=>localDateKey(r['التاريخ']))).length,activeDaysB=uniqSorted(br.map(r=>localDateKey(r['التاريخ']))).length,expenseDaysA=uniqSorted(ae.map(r=>localDateKey(r['التاريخ']))).length,expenseDaysB=uniqSorted(be.map(r=>localDateKey(r['التاريخ']))).length;
 const metrics={revenue:compare(revenueA,revenueB,'revenue'),expenses:compare(expenseA,expenseB,'expense'),profit:compare(revenueA-expenseA,revenueB-expenseB,'profit'),profitMargin:compare(revenueA?(revenueA-expenseA)/revenueA*100:0,revenueB?(revenueB-expenseB)/revenueB*100:0,'ratio'),expenseRatio:compare(revenueA?expenseA/revenueA*100:0,revenueB?expenseB/revenueB*100:0,'ratio'),salesTransactions:compare(loadsA,loadsB,'count'),quantity:compare(qtyA,qtyB,'quantity'),avgLoadValue:compare(loadsA?revenueA/loadsA:0,loadsB?revenueB/loadsB:0,'money'),revenuePerQuantity:compare(qtyA?revenueA/qtyA:0,qtyB?revenueB/qtyB:0,'money'),expensePerQuantity:compare(qtyA?expenseA/qtyA:0,qtyB?expenseB/qtyB:0,'expense'),profitPerQuantity:compare(qtyA?(revenueA-expenseA)/qtyA:0,qtyB?(revenueB-expenseB)/qtyB:0,'profit'),activeCustomers:compare(customersA.length,customersB.length,'count'),activeDays:compare(activeDaysA,activeDaysB,'count'),avgDailyRevenue:compare(activeDaysA?revenueA/activeDaysA:0,activeDaysB?revenueB/activeDaysB:0,'money'),avgDailyExpenses:compare(expenseDaysA?expenseA/expenseDaysA:0,expenseDaysB?expenseB/expenseDaysB:0,'expense')};
 const rows=[['الإيرادات',metrics.revenue,'money'],['المصروفات',metrics.expenses,'expense'],['صافي الربح / الخسارة',metrics.profit,'money'],['هامش الربح / الخسارة',metrics.profitMargin,'percent'],['نسبة المصروفات إلى الإيرادات',metrics.expenseRatio,'percent'],['عدد عمليات المبيعات',metrics.salesTransactions,'count'],['إجمالي الكمية',metrics.quantity,'quantity'],['متوسط قيمة عملية البيع',metrics.avgLoadValue,'money'],['الإيراد لكل وحدة كمية',metrics.revenuePerQuantity,'money'],['المصروف لكل وحدة كمية',metrics.expensePerQuantity,'expense'],['الربح لكل وحدة كمية',metrics.profitPerQuantity,'profit'],['العملاء النشطون',metrics.activeCustomers,'count'],['أيام نشاط المبيعات',metrics.activeDays,'count'],['متوسط الإيراد اليومي',metrics.avgDailyRevenue,'money'],['متوسط المصروف اليومي',metrics.avgDailyExpenses,'expense']].map(([label,v,type])=>({label,type,...v}));
 const reconciliation={salesA:Math.abs(revenueA-sum(ar,'المبلغ'))<=.01,salesB:Math.abs(revenueB-sum(br,'المبلغ'))<=.01,expensesA:Math.abs(expenseA-sum(ae,'المبلغ'))<=.01,expensesB:Math.abs(expenseB-sum(be,'المبلغ'))<=.01,categoriesA:Math.abs(expenseA-Object.values(catA).reduce((x,y)=>x+y,0))<=.01,categoriesB:Math.abs(expenseB-Object.values(catB).reduce((x,y)=>x+y,0))<=.01,customersA:Math.abs(revenueA-Object.values(custA).reduce((x,y)=>x+y,0))<=.01,customersB:Math.abs(revenueB-Object.values(custB).reduce((x,y)=>x+y,0))<=.01,loadTypesA:Math.abs(revenueA-Object.values(typeA).reduce((x,y)=>x+y,0))<=.01,loadTypesB:Math.abs(revenueB-Object.values(typeB).reduce((x,y)=>x+y,0))<=.01};reconciliation.ok=Object.values(reconciliation).every(Boolean);
-return{labels:{a:monthLabel2(a),b:monthLabel2(b)},monthA:a,monthB:b,periods:{a:{rev:ar,exp:ae},b:{rev:br,exp:be}},totals:{revenueA,revenueB,expenseA,expenseB,profitA:revenueA-expenseA,profitB:revenueB-expenseB,quantityA:qtyA,quantityB:qtyB,loadsA,loadsB},metrics,metricRows:rows,expenseCategories:unionCompare(catA,catB,expenseA,expenseB,'expense'),customers:unionCompare(custA,custB,revenueA,revenueB,'revenue'),customerQuantities:unionCompare(custQtyA,custQtyB,qtyA,qtyB,'quantity'),loadTypes:unionCompare(typeA,typeB,revenueA,revenueB,'revenue'),loadTypeQuantities:unionCompare(typeQtyA,typeQtyB,qtyA,qtyB,'quantity'),dailyRevenue:{a:dailyMap(ar),b:dailyMap(br)},reconciliation,schema:C.schema,source:raw.source,receivables:{available:false,reason:'لا توجد في المصدر الحالي جداول أو حقول مستقلة للتحصيلات أو أرصدة العملاء أو الفواتير الآجلة؛ لذلك لم يتم إنشاء مديونية افتراضية.'}}}
-const service={async fetch(){const raw=await loadRaw();C.state.schema=raw.rawHeaders;return raw},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');if(a===b)throw new Error('يرجى اختيار شهرين مختلفين للمقارنة.');const raw=await this.fetch(),A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');const ar=raw.rev.filter(r=>inRange(r,A.from,A.to)),br=raw.rev.filter(r=>inRange(r,B.from,B.to)),ae=raw.exp.filter(r=>inRange(r,A.from,A.to)),be=raw.exp.filter(r=>inRange(r,B.from,B.to));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${monthLabel2(a)}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${monthLabel2(b)}).`);const data=buildModel(ar,br,ae,be,a,b,raw);C.state.data=data;C.state.periodA=a;C.state.periodB=b;C.state.status='ready';C.state.error='';return data}};
+return{labels:labelsOverride||{a:monthLabel2(a),b:monthLabel2(b)},monthA:a,monthB:b,periods:{a:{rev:ar,exp:ae},b:{rev:br,exp:be}},totals:{revenueA,revenueB,expenseA,expenseB,profitA:revenueA-expenseA,profitB:revenueB-expenseB,quantityA:qtyA,quantityB:qtyB,loadsA,loadsB},metrics,metricRows:rows,expenseCategories:unionCompare(catA,catB,expenseA,expenseB,'expense'),customers:unionCompare(custA,custB,revenueA,revenueB,'revenue'),customerQuantities:unionCompare(custQtyA,custQtyB,qtyA,qtyB,'quantity'),loadTypes:unionCompare(typeA,typeB,revenueA,revenueB,'revenue'),loadTypeQuantities:unionCompare(typeQtyA,typeQtyB,qtyA,qtyB,'quantity'),dailyRevenue:{a:dailyMap(ar),b:dailyMap(br)},reconciliation,schema:C.schema,source:raw.source,receivables:{available:false,reason:'لا توجد في المصدر الحالي جداول أو حقول مستقلة للتحصيلات أو أرصدة العملاء أو الفواتير الآجلة؛ لذلك لم يتم إنشاء مديونية افتراضية.'}}}
+const service={async fetch(){const raw=await loadRaw();C.state.schema=raw.rawHeaders;return raw},async buildRange(fromA,toA,labelA,fromB,toB,labelB,keyA=fromA,keyB=fromB){if(!fromA||!toA||!fromB||!toB)throw new Error('يرجى تحديد فترتين صالحيتين للمقارنة.');if(keyA===keyB||fromA===fromB&&toA===toB)throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');const raw=await this.fetch(),ar=raw.rev.filter(r=>inRange(r,fromA,toA)),br=raw.rev.filter(r=>inRange(r,fromB,toB)),ae=raw.exp.filter(r=>inRange(r,fromA,toA)),be=raw.exp.filter(r=>inRange(r,fromB,toB));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${labelA}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${labelB}).`);const data=buildModel(ar,br,ae,be,keyA,keyB,raw,{a:labelA,b:labelB});C.state.data=data;C.state.periodA=keyA;C.state.periodB=keyB;C.state.status='ready';C.state.error='';return data},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');const A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');return this.buildRange(A.from,A.to,monthLabel2(a),B.from,B.to,monthLabel2(b),a,b)},async buildPeriods(type,first,second){const period=key=>{if(type==='year'){if(!/^\d{4}$/.test(key))throw new Error('صيغة السنة غير صحيحة.');return{from:`${key}-01-01`,to:`${key}-12-31`,label:`سنة ${key}`,key:`Y-${key}`}}if(type==='quarter'){const m=String(key||'').match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('صيغة الربع غير صحيحة.');const y=Number(m[1]),q=Number(m[2]),start=(q-1)*3+1,end=q*3,last=new Date(y,end,0).getDate();return{from:`${y}-${String(start).padStart(2,'0')}-01`,to:`${y}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${q} ${y}`,key:`Q-${key}`}}if(type==='custom'){if(!/^\d{4}-\d{2}-\d{2}$/.test(key?.from)||!/^\d{4}-\d{2}-\d{2}$/.test(key?.to)||key.from>key.to)throw new Error('حدد تاريخ بداية ونهاية صالحين لكل فترة.');return{from:key.from,to:key.to,label:`${key.from} إلى ${key.to}`,key:`D-${key.from}_${key.to}`}}throw new Error('نوع الفترة غير مدعوم.');};const A=period(first),B=period(second);return this.buildRange(A.from,A.to,A.label,B.from,B.to,B.label,A.key,B.key)}};
 function valueCell(v,type){if(type==='percent')return`${Number(v||0).toFixed(2)}%`;if(type==='count'||type==='quantity')return qty2(v);return money2(v)}
 function statusText(x){return x.status==='NEW'?'جديد':x.status==='LOSS_TO_PROFIT'?'تحول من خسارة إلى ربح':x.status==='PROFIT_TO_LOSS'?'تحول من ربح إلى خسارة':x.status==='INCREASE'?'زيادة':x.status==='DECREASE'?'انخفاض':'مستقر'}
 function statusClass(x){return x.status==='LOSS_TO_PROFIT'?'good':x.status==='PROFIT_TO_LOSS'?'bad':x.status==='INCREASE'?'up':x.status==='DECREASE'?'down':'neutral'}
@@ -2958,15 +2793,85 @@ async function renderComparison(){
        let d;
        if(mode==='periods'){
          const type=document.querySelector('#periodType .active')?.dataset.periodType||'month';
-         if(type!=='month')throw new Error('هذا النوع من المقارنة تم تجهيز واجهته، لكن محرك البيانات الحالي يحتاج توسيعًا قبل إصدار أرقام جديدة. لم يتم اختراع نتائج غير مدعومة.');
-         const a=document.getElementById('periodA')?.value,b=document.getElementById('periodB')?.value;if(!a||!b||a===b)throw new Error('اختر فترتين مختلفتين.');d=await service.build(a,b);renderUI(d);
-       }else{throw new Error('تم تجهيز مسار الاختيار لهذا النوع، لكن إصدار التقرير الحسابي له يحتاج خدمة مقارنة مستقلة قبل عرض أرقام جديدة. لا يتم عرض أرقام افتراضية.');}
+         if(type==='month'){
+           const a=document.getElementById('periodA')?.value,b=document.getElementById('periodB')?.value;if(!a||!b||a===b)throw new Error('اختر فترتين مختلفتين.');d=await service.build(a,b);
+         }else if(type==='year'){
+           const a=document.getElementById('yearA')?.value,b=document.getElementById('yearB')?.value;if(!a||!b||a===b)throw new Error('اختر سنتين مختلفتين.');d=await service.buildPeriods('year',a,b);
+         }else if(type==='quarter'){
+           const a=document.getElementById('quarterA')?.value,b=document.getElementById('quarterB')?.value;if(!a||!b||a===b)throw new Error('اختر ربعين مختلفين.');d=await service.buildPeriods('quarter',a,b);
+         }else{
+           const a={from:document.getElementById('customAFrom')?.value,to:document.getElementById('customATo')?.value},b={from:document.getElementById('customBFrom')?.value,to:document.getElementById('customBTo')?.value};
+           d=await service.buildPeriods('custom',a,b);
+         }
+         renderUI(d);
+       }else if(mode==='metrics'){
+       const periods=Array.from(document.getElementById('metricPeriods')?.selectedOptions||[]).map(o=>o.value).filter(Boolean);
+       const metricsSelected=getChecked('metricChoice');
+       if(periods.length<2)throw new Error('اختر فترتين على الأقل للمقارنة.');
+       if(!metricsSelected.length)throw new Error('اختر مؤشرًا واحدًا على الأقل.');
+       const metricRows=periods.map(month=>{
+         const R=monthBounds2(month); if(!R) return null;
+         const ar=raw.rev.filter(r=>inRange(r,R.from,R.to)),ae=raw.exp.filter(r=>inRange(r,R.from,R.to));
+         if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة ${monthLabel2(month)}.`);
+         const revenue=sum(ar,'المبلغ'),expenses=sum(ae,'المبلغ'),quantity=sum(ar,'الكمية'),loads=ar.length;
+         const customers=new Set(ar.map(r=>String(r['اسم العميل']??'').trim()).filter(Boolean)).size;
+         const activeDays=new Set(ar.map(r=>localDateKey(r['التاريخ'])).filter(Boolean)).size;
+         const values={revenue,expenses,profit:revenue-expenses,profitMargin:revenue?(revenue-expenses)/revenue*100:0,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,expensePerQuantity:quantity?expenses/quantity:0,profitPerQuantity:quantity?(revenue-expenses)/quantity:0,activeCustomers:customers,activeDays,avgDailyRevenue:activeDays?revenue/activeDays:0};
+         return{period:monthLabel2(month),values};
+       }).filter(Boolean);
+       body.innerHTML=`<div class="comparison-report comparison-report-ui"><div class="comparison-report-hero"><div><h2>مقارنة المؤشرات</h2><div>Metrics Comparison</div></div><span class="comparison-report-route">${esc2(periods.map(monthLabel2).join(' ↔ '))}</span></div><section><h3>المؤشرات المختارة</h3><div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>الفترة</th>${metricsSelected.map(k=>`<th>${esc2(metricOptions.find(x=>x[0]===k)?.[1]||k)}</th>`).join('')}</tr></thead><tbody>${metricRows.map(r=>`<tr><td>${esc2(r.period)}</td>${metricsSelected.map(k=>`<td class="num">${valueCell(r.values[k],k==='profitMargin'?'percent':['salesTransactions','activeCustomers','activeDays'].includes(k)?'count':k==='quantity'?'quantity':(k.includes('PerQuantity')||k==='expenses')?'expense':'money')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section></div>`;
+     }else{
+       const dimension=mode==='customers'?'customers':mode==='loadTypes'?'loadTypes':mode==='expenseCategories'?'expenseCategories':document.querySelector('#customDimension .active')?.dataset.dimension||'customers';
+       const periodId=mode==='customers'?'customerPeriod':mode==='loadTypes'?'loadTypePeriod':mode==='expenseCategories'?'expenseCategoryPeriod':'customPeriod';
+       const period=document.getElementById(periodId)?.value;
+       if(!period)throw new Error('اختر الفترة المطلوبة.');
+       const R=monthBounds2(period); if(!R)throw new Error('صيغة الفترة غير صحيحة.');
+       const ar=raw.rev.filter(r=>inRange(r,R.from,R.to)),ae=raw.exp.filter(r=>inRange(r,R.from,R.to));
+       if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة ${monthLabel2(period)}.`);
+       const choiceName=mode==='customers'?'customerChoice':mode==='loadTypes'?'loadTypeChoice':mode==='expenseCategories'?'expenseCategoryChoice':dimension==='customers'?'customCustomerChoice':dimension==='loadTypes'?'customLoadTypeChoice':'customExpenseCategoryChoice';
+       const selected=getChecked(choiceName);
+       const limit=mode==='expenseCategories'||(mode==='custom'&&dimension==='expenseCategories')?6:5;
+       if(selected.length<2||selected.length>limit)throw new Error(`اختر من 2 إلى ${limit} عناصر للمقارنة.`);
+       const metricName=mode==='customers'?'customerMetrics':mode==='loadTypes'?'loadTypeMetrics':mode==='expenseCategories'?'expenseCategoryMetrics':'customMetrics';
+       const selectedMetrics=getChecked(metricName);
+       if(!selectedMetrics.length)throw new Error('اختر مؤشرًا واحدًا على الأقل.');
+       const keyField=dimension==='customers'?'اسم العميل':dimension==='loadTypes'?'نوع التحميل':'التصنيف';
+       const rows=selected.map(name=>{
+         const rr=ar.filter(r=>String(r[keyField]??'').trim()===name),ee=ae.filter(r=>String(r[keyField]??'').trim()===name);
+         const revenue=sum(rr,'المبلغ'),expenses=sum(ee,'المبلغ'),quantity=sum(rr,'الكمية'),loads=rr.length;
+         const values={revenue,expenses,profit:revenue-expenses,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,expensePerQuantity:quantity?expenses/quantity:0,profitPerQuantity:quantity?(revenue-expenses)/quantity:0};
+         return{label:name,values};
+       });
+       const title=mode==='customers'?'مقارنة العملاء':mode==='loadTypes'?'مقارنة أنواع التحميل':mode==='expenseCategories'?'مقارنة تصنيفات المصروفات':'مقارنة مخصصة';
+       const titleEn=mode==='customers'?'Customer Comparison':mode==='loadTypes'?'Load Types Comparison':mode==='expenseCategories'?'Expense Categories Comparison':'Custom Comparison';
+       body.innerHTML=`<div class="comparison-report comparison-report-ui"><div class="comparison-report-hero"><div><h2>${title}</h2><div>${titleEn}</div></div><span class="comparison-report-route">${esc2(monthLabel2(period))}</span></div><section><h3>${esc2(title)} — ${esc2(monthLabel2(period))}</h3><div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>العنصر</th>${selectedMetrics.map(k=>`<th>${esc2(metricOptions.find(x=>x[0]===k)?.[1]||k)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td>${esc2(r.label)}</td>${selectedMetrics.map(k=>`<td class="num">${valueCell(r.values[k],k==='salesTransactions'?'count':k==='quantity'?'quantity':(k==='expenses'||k.includes('PerQuantity'))?'expense':'money')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section></div>`;
+     }
      }catch(e){v.textContent=e.message;v.className='comparison-validation error'}
    });
  };
  document.querySelectorAll('.comparison-mode-card').forEach(card=>card.addEventListener('click',()=>{document.querySelectorAll('.comparison-mode-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');renderFlow(card.dataset.mode)}));
 }
 function monthsToQuarters(months){const seen=new Map();months.forEach(m=>{const y=Number(m.slice(0,4)),mo=Number(m.slice(5,7)),q=Math.ceil(mo/3),key=`${y}-Q${q}`;if(!seen.has(key))seen.set(key,{key,label:`Q${q} ${y}`})});return[...seen.values()]}
+
+function buildPdf(monthA,monthB){
+  if(!monthA||!monthB) throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');
+  if(monthA===monthB) throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');
+  const d=C.state.data;
+  if(!d||d.monthA!==monthA||d.monthB!==monthB){
+    throw new Error('لم تكتمل بيانات المقارنة للفترتين المحددتين. أعد إنشاء المقارنة ثم حاول الطباعة مرة أخرى.');
+  }
+  const page=(title,content,num,total)=>`<section class="comparison-report-pdf-page amc-report-page"><div class="comparison-report-pdf-head"><div><b>${esc2(title)}</b><span>Comparison Report</span></div><div><b>${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</b><span>Month vs Month</span></div><div class="page-no">${num} / ${total}</div></div>${content}<div class="comparison-report-pdf-foot">كسارة العساف — تقرير المقارنات — ${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</div></section>`;
+  const cover=`<section class="comparison-report-pdf-page amc-report-page comparison-report-cover-page"><div class="comparison-report-cover"><img src="${document.querySelector('.hero-logo')?.getAttribute('src')||''}" alt=""><h1>تقرير المقارنات</h1><div class="en">Comparison Report</div><div class="comparison-report-cover-grid"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong><b>الفترة الأولى</b><strong>${esc2(d.labels.a)}</strong><b>الفترة الثانية</b><strong>${esc2(d.labels.b)}</strong><b>نوع المقارنة</b><strong>مقارنة شهرية — Month vs Month</strong></div></div></section>`;
+  const total=8;
+  const p2=page('الملخص التنفيذي للمقارنة',`<section><h3>الملخص التنفيذي للمقارنة</h3><div class="comparison-report-kpis">${[['الإيرادات',d.metrics.revenue,'money'],['المصروفات',d.metrics.expenses,'expense'],['صافي الربح / الخسارة',d.metrics.profit,'money'],['هامش الربح / الخسارة',d.metrics.profitMargin,'percent']].map(([l,x,t])=>`<div class="comparison-report-card"><label>${l}</label><div class="comparison-report-pair"><span>${valueCell(x.previous,t)}</span><b>→</b><span>${valueCell(x.current,t)}</span></div><small>${esc2(d.labels.a)} → ${esc2(d.labels.b)} · ${pct2(x.percentage)}</small></div>`).join('')}</div>${compareTable(d.metricRows)}</section>`,2,total);
+  const p3=page('تصنيفات المصروفات',`<section><h3>تصنيفات المصروفات — UNION</h3>${compareTable(d.expenseCategories)}</section>`,3,total);
+  const p4=page('العملاء — الإيرادات',`<section><h3>العملاء — الإيرادات</h3>${compareTable(d.customers)}</section>`,4,total);
+  const p5=page('العملاء — الكميات',`<section><h3>العملاء — الكميات</h3>${compareTable(d.customerQuantities)}</section>`,5,total);
+  const p6=page('أنواع التحميل — الإيرادات',`<section><h3>أنواع التحميل — الإيرادات</h3>${compareTable(d.loadTypes)}</section>`,6,total);
+  const p7=page('أنواع التحميل — الكميات',`<section><h3>أنواع التحميل — الكميات</h3>${compareTable(d.loadTypeQuantities)}</section>`,7,total);
+  const p8=page('الربحية والمديونية',`<section><h3>الربحية والمديونية</h3>${compareTable(d.metricRows.filter(r=>/صافي الربح|هامش الربح|نسبة المصروفات|متوسط قيمة العملية|الإيراد لكل وحدة|المصروف لكل وحدة|الربح لكل وحدة/.test(r.label||'')))}<div class="comparison-report-note">${esc2(d.receivables.reason)}</div></section>`,8,total);
+  return cover+p2+p3+p4+p5+p6+p7+p8;
+}
 
 function printComparison(){
   /* Fully synchronous print path: Chromium keeps transient user activation
@@ -2983,7 +2888,7 @@ function printComparison(){
     return;
   }
   if(window.AMCReportEngine?.Templates){
-    window.AMCReportEngine.Templates.AMCStandaloneComparison=()=>buildPdf(d);
+    window.AMCReportEngine.Templates.AMCStandaloneComparison=()=>buildPdf(a,b);
   }
   if(window.AMCReportEngine?.build){
     const ov=window.AMCReportEngine.build('AMCStandaloneComparison',{title:'تقرير المقارنات',from:'',to:'',monthA:a,monthB:b});
@@ -2996,7 +2901,7 @@ function printComparison(){
   }
 }
 window.renderReceivablesReport=renderReceivablesReport;
-window.AMCComparisonModule={state:C.state,schema:C.schema,service,buildModel,render:renderComparison,print:printComparison};window.renderComparisonReport=renderComparison;try{renderComparisonReport=renderComparison}catch(e){}window.printComparisonReport=printComparison;const oldPrint=window.printCurrentReport;window.printCurrentReport=function(){if(window.AMC_CURRENT_REPORT_INDEX==='comparison'){printComparison();return}return oldPrint?oldPrint.apply(this,arguments):undefined};try{printCurrentReport=window.printCurrentReport}catch(e){}window.addEventListener('hashchange',()=>{if(location.hash==='#/reports/comparison')renderComparison()});if(location.hash==='#/reports/comparison')setTimeout(()=>renderComparison(),0);
+window.AMCComparisonModule={state:C.state,schema:C.schema,service,buildModel,buildPdf,render:renderComparison,print:printComparison};window.renderComparisonReport=renderComparison;try{renderComparisonReport=renderComparison}catch(e){}window.printComparisonReport=printComparison;const oldPrint=window.printCurrentReport;window.printCurrentReport=function(){if(window.AMC_CURRENT_REPORT_INDEX==='comparison'){printComparison();return}return oldPrint?oldPrint.apply(this,arguments):undefined};try{printCurrentReport=window.printCurrentReport}catch(e){}window.addEventListener('hashchange',()=>{if(location.hash==='#/reports/comparison')renderComparison()});if(location.hash==='#/reports/comparison')setTimeout(()=>renderComparison(),0);
 const style=document.createElement('style');style.textContent=`.comparison-report-selector{max-width:1180px;margin:0 auto;padding:6px 0 28px}.comparison-report-selector-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:24px 26px;margin-bottom:18px;background:#fff;border:1px solid #dbe5ee;border-radius:18px;box-shadow:0 8px 24px rgba(23,59,97,.05)}.comparison-eyebrow{display:block;font-size:10px;letter-spacing:.12em;color:#7a8da1;font-weight:800;margin-bottom:7px;direction:ltr}.comparison-report-selector-head h2{margin:0;color:#173b61;font-size:26px}.comparison-report-selector-head p{margin:7px 0 0;color:#6b7d91;font-size:13px}.comparison-source-pill{padding:8px 11px;border:1px solid #dbe5ee;border-radius:999px;background:#f7fafc;color:#607286;font-size:10px;direction:ltr;white-space:nowrap}.comparison-mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.comparison-mode-card{appearance:none;border:1px solid #dbe5ee;background:#fff;border-radius:16px;padding:20px;text-align:right;cursor:pointer;display:flex;flex-direction:column;gap:7px;min-height:138px;transition:.18s ease;box-shadow:0 5px 16px rgba(23,59,97,.035)}.comparison-mode-card:hover{border-color:#a9c8df;transform:translateY(-1px);box-shadow:0 8px 22px rgba(23,59,97,.07)}.comparison-mode-card.selected{border-color:#2c6ba4;background:linear-gradient(180deg,#fff,#f5faff);box-shadow:0 0 0 3px rgba(44,107,164,.08)}.comparison-mode-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#edf5fb;color:#2c6ba4;font-size:18px;font-weight:800}.comparison-mode-card strong{font-size:15px;color:#183c60}.comparison-mode-card small{color:#718297;font-size:11px;line-height:1.6}.comparison-flow{margin-top:18px}.comparison-flow-head{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 22px;background:#fff;border:1px solid #dbe5ee;border-radius:16px;margin-bottom:14px}.comparison-flow-head h3{margin:0;color:#173b61;font-size:20px}.comparison-flow-head p{margin:5px 0 0;color:#708196;font-size:12px}.comparison-back{border:1px solid #d4e0ea;background:#fff;color:#45627c;border-radius:10px;padding:9px 13px;cursor:pointer;white-space:nowrap}.comparison-step{background:#fff;border:1px solid #dbe5ee;border-radius:14px;margin:12px 0;overflow:hidden}.comparison-step-title{padding:13px 16px;background:#f8fafc;border-bottom:1px solid #e8edf2;color:#244a6d;font-size:13px;font-weight:800}.comparison-step-body{padding:16px}.comparison-two-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.comparison-field{display:flex;flex-direction:column;gap:6px}.comparison-field label{font-size:11px;color:#63768a;font-weight:700}.comparison-field input,.comparison-field select,.comparison-search{width:100%;box-sizing:border-box;border:1px solid #d6e1ea;background:#fff;border-radius:9px;padding:10px 11px;color:#263d55;outline:none}.comparison-field input:focus,.comparison-field select:focus,.comparison-search:focus{border-color:#7fb0d4;box-shadow:0 0 0 3px rgba(44,107,164,.08)}.comparison-field small{font-size:10px;color:#7a8da1}.comparison-segment{display:flex;flex-wrap:wrap;gap:7px}.comparison-segment button{border:1px solid #d7e1e9;background:#fff;color:#566d83;border-radius:9px;padding:9px 12px;cursor:pointer;font-size:11px}.comparison-segment button.active{background:#173b61;color:#fff;border-color:#173b61}.comparison-check-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px;max-height:220px;overflow:auto}.comparison-option{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid #e1e8ee;border-radius:9px;background:#fff;color:#344c63;font-size:11px;cursor:pointer}.comparison-option:hover{background:#f8fbfd}.comparison-option input{accent-color:#2c6ba4}.comparison-chip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.comparison-selected{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;min-height:22px}.comparison-chip{display:inline-flex;align-items:center;gap:6px;background:#edf5fb;border:1px solid #cfe2f0;color:#244e70;border-radius:999px;padding:5px 9px;font-size:10px}.comparison-chip button{border:0;background:transparent;color:#668198;cursor:pointer;padding:0;font-size:13px;line-height:1}.comparison-limit{float:left;color:#8a9aab;font-weight:600;font-size:10px;direction:ltr}.comparison-action-bar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:16px;padding:14px 16px;background:#f8fafc;border:1px solid #dbe5ee;border-radius:14px}.comparison-validation{font-size:11px;color:#718297}.comparison-validation.error{color:#b42335}.comparison-primary{border:0;background:#173b61;color:#fff;border-radius:10px;padding:11px 20px;font-weight:800;cursor:pointer}.comparison-primary:hover{background:#214d76}@media(max-width:900px){.comparison-mode-grid{grid-template-columns:1fr 1fr}.comparison-check-list,.comparison-chip-grid{grid-template-columns:1fr 1fr}.comparison-report-selector-head,.comparison-flow-head{flex-direction:column}.comparison-two-fields{grid-template-columns:1fr}}@media(max-width:600px){.comparison-mode-grid,.comparison-check-list,.comparison-chip-grid{grid-template-columns:1fr}.comparison-action-bar{align-items:stretch;flex-direction:column}.comparison-primary{width:100%}}.comparison-report{font-family:inherit;color:#26364a}.comparison-report-hero{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 18px;margin-bottom:16px;background:#fff;border:1px solid #dbe5ee;border-radius:14px}.comparison-report-hero h2{margin:0;color:#163b61}.comparison-report-route{font:12px ui-monospace,monospace;direction:ltr}.comparison-report-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0}.comparison-report-card{background:#fff;border:1px solid #dbe5ee;border-radius:12px;padding:14px;break-inside:avoid}.comparison-report-card label{display:block;color:#66788c;font-size:12px;margin-bottom:8px}.comparison-report-pair{display:flex;align-items:center;justify-content:space-between;gap:7px;font-weight:800;direction:ltr}.comparison-report-pair span{direction:ltr;unicode-bidi:isolate}.comparison-report-card small{display:block;margin-top:8px;color:#75869a;font-size:10px;direction:rtl}.comparison-report-schema,.comparison-report-recon{display:flex;flex-wrap:wrap;gap:8px 14px;background:#f7fafc;border:1px solid #dbe5ee;border-radius:10px;padding:10px;margin:12px 0;font-size:11px}.comparison-report-schema span,.comparison-report-recon span{direction:ltr;unicode-bidi:isolate}.comparison-report-recon .good{color:#16804b}.comparison-report-recon .bad{color:#b42335}.comparison-report section{background:#fff;border:1px solid #dbe5ee;border-radius:14px;padding:16px;margin:14px 0;break-inside:auto}.comparison-report section h3{margin:0 0 12px;color:#173b61}.comparison-report-table-wrap{overflow:auto}.comparison-report-table{width:100%;border-collapse:collapse;table-layout:auto}.comparison-report-table th{background:#173b61;color:#fff;font-weight:700}.comparison-report-table th,.comparison-report-table td{padding:8px 7px;border-bottom:1px solid #e5ebf1;font-size:11px;vertical-align:middle}.comparison-report-table .num{direction:ltr;unicode-bidi:isolate;text-align:left;white-space:nowrap}.comparison-report-status{display:inline-block;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;white-space:nowrap}.comparison-report-status.good,.comparison-report-status.up{background:#e9f7ef;color:#147a47}.comparison-report-status.bad,.comparison-report-status.down{background:#fdecee;color:#b42335}.comparison-report-status.neutral{background:#eef2f6;color:#607286}.comparison-report-transition{display:block;color:#65788c;margin-top:3px}.comparison-report-note,.comparison-report-empty,.comparison-report-alert,.comparison-report-loading{padding:16px;border-radius:10px;background:#f7fafc;border:1px dashed #ccd8e4}.comparison-report-alert{background:#fff3f4;border-color:#efb7bf;color:#a21d2e}.comparison-report-loading{text-align:center}.comparison-report-chart{width:100%;height:auto;display:block}.comparison-report-chart text{font-family:inherit}.comparison-report-chart .chart-label{font-size:12px;fill:#33465b}.comparison-report-chart .chart-value,.comparison-report-chart .chart-axis,.comparison-report-chart .chart-legend{font-size:9px;fill:#627489;direction:ltr}.comparison-report-pdf-page{direction:rtl}.comparison-report-pdf-head{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;border-bottom:2px solid #b8871c;padding-bottom:8px;margin-bottom:10px}.comparison-report-pdf-head div{display:flex;flex-direction:column;gap:2px}.comparison-report-pdf-head span{font-size:9px;color:#6b7d91;direction:ltr;unicode-bidi:isolate}.comparison-report-pdf-head .page-no{direction:ltr;unicode-bidi:isolate;font-size:9px;color:#5e7186}.comparison-report-pdf-foot{position:absolute;left:13mm;right:13mm;bottom:7mm;border-top:1px solid #e1e7ed;padding-top:5px;color:#75869a;font-size:8px;text-align:center}.comparison-report-cover-page{display:flex;align-items:center;justify-content:center}.comparison-report-cover{width:82%;text-align:center}.comparison-report-cover img{max-width:72mm;max-height:36mm;object-fit:contain;margin-bottom:12mm}.comparison-report-cover h1{font-size:30px;color:#173b61;margin:0}.comparison-report-cover .en{color:#b8871c;letter-spacing:.12em;margin:5px 0 20px;direction:ltr}.comparison-report-cover-grid{display:grid;grid-template-columns:1fr 1.4fr;border:1px solid #dbe5ee;border-radius:10px;overflow:hidden;text-align:right}.comparison-report-cover-grid>*{padding:10px;border-bottom:1px solid #e7edf2}.comparison-report-cover-grid>*:nth-last-child(-n+2){border-bottom:0}.comparison-report-cover-grid b{background:#f5f8fb;color:#5e7186}.comparison-report-cover-grid strong{direction:rtl}.comparison-report-pdf-page .comparison-report-kpis{grid-template-columns:repeat(4,1fr)}.comparison-report-pdf-page .comparison-report-card{padding:9px}.comparison-report-pdf-page .comparison-report-card label{font-size:9px}.comparison-report-pdf-page .comparison-report-card small{font-size:8px}.comparison-report-pdf-page .comparison-report-table th,.comparison-report-pdf-page .comparison-report-table td{font-size:9px;padding:5px}.comparison-report-pdf-page .comparison-report-status{font-size:8px}.comparison-report-pdf-page .comparison-report-table-wrap{overflow:visible}.comparison-report-pdf-page section{break-inside:avoid}@media(max-width:900px){.comparison-report-kpis{grid-template-columns:1fr 1fr}.comparison-report-hero{align-items:flex-start;flex-direction:column}}@media print{.comparison-validation{display:none!important}.comparison-report-pdf-page{box-shadow:none!important;margin:0!important;width:210mm!important;height:297mm!important;min-height:297mm!important;transform:none!important;overflow:hidden!important}.comparison-report-pdf-page .comparison-report-kpis{grid-template-columns:repeat(4,1fr)}.comparison-report-pdf-page .comparison-report-table{page-break-inside:auto}.comparison-report-pdf-page .comparison-report-table tr{page-break-inside:avoid;break-inside:avoid}.comparison-report-pdf-page .comparison-report-table thead{display:table-header-group}.comparison-report-pdf-page .comparison-report-chart{break-inside:avoid}.comparison-report-pdf-page .comparison-report-pdf-foot{position:absolute}}`;document.head.appendChild(style);
 })();
 </script>
