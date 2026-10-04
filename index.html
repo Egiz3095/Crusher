@@ -910,6 +910,10 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 .report-list .report-item.monthly-full-report-item{background:#f3efff;border-color:#ddd2ff;color:#4c3b73}
 .report-list .report-item.monthly-full-report-item .report-icon{background:#7c5cc4;color:#fff}
 .report-list .report-item.monthly-full-report-item:hover{background:#e9e0ff;border-color:#cbb8f4}
+.report-list .report-item.weekly-report-item{order:2!important;background:#eaf7f4;border-color:#c6e6de;color:#1d5c52}.report-list .report-item.weekly-report-item .report-icon{background:#2a9d8f;color:#fff}.report-list .report-item.weekly-report-item:hover{background:#dcf1ec;border-color:#a9d8cd}.report-list .report-item.weekly-report-item.active{background:#cdeae3;border-color:#7fc5b7;box-shadow:inset -3px 0 0 #2a9d8f}
+/* ترتيب مركز التقارير: التنفيذي، الشهري، الأسبوعي، اليومي التراكمي، اليومي المختصر، ثم بقية التقارير */
+.report-list .report-item:first-child{order:1!important}.report-list .report-item.monthly-full-report-item{order:2!important}.report-list .report-item.weekly-report-item{order:3!important}.report-list .report-item.daily-report-item{order:4!important}.report-list .report-item.daily-brief-report-item{order:5!important}.report-list .report-item.receivables-report-item{order:6!important}
+.report-list .report-item:not(:first-child):not(.monthly-full-report-item):not(.weekly-report-item):not(.daily-report-item):not(.daily-brief-report-item):not(.receivables-report-item){order:7!important}
 .report-list .report-item.monthly-full-report-item.active{background:#e1d5ff;border-color:#a98be3;box-shadow:inset -3px 0 0 #7c5cc4}
 .amc-mf-screen{direction:rtl}.amc-mf-headline{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;padding:12px 14px;background:#f7f5fc;border:1px solid #e3dcf2;border-radius:10px;color:#4c3b73;font-weight:700}.amc-mf-section{background:#fff;border:1px solid #e1e5eb;border-radius:12px;padding:16px;margin:0 0 16px;box-shadow:0 3px 12px rgba(23,41,77,.05)}.amc-mf-section h3{margin:0 0 12px;color:#17294d}.amc-mf-section h4,.amc-mf-section h2{color:#17294d;margin:14px 0 8px}.amc-mf-summary,.amc-mf-note{padding:10px 12px;background:#f8fafc;border-right:4px solid #c79a28;border-radius:6px;line-height:1.8}.amc-mf-table-wrap{overflow:auto}.amc-mf-table{width:100%;border-collapse:collapse;font-size:13px}.amc-mf-table th,.amc-mf-table td{padding:8px 7px;border-bottom:1px solid #e7ebf0;text-align:right;white-space:nowrap}.amc-mf-table th{background:#f5f7fa;color:#17294d}.amc-mf-table .total td{font-weight:800;background:#fafbfc}.amc-mf-table .up{color:#1f8b3b;font-weight:800}.amc-mf-table .down{color:#d7262e;font-weight:800}.amc-mf-empty,.amc-mf-chart-empty{padding:24px;text-align:center;color:#727a85;background:#fafbfc;border-radius:8px}.amc-mf-chart-box{margin-top:14px;padding:10px;border:1px solid #e5e9ef;border-radius:10px}.amc-mf-chart-box h3,.amc-mf-chart-box h4{margin:4px 0 10px}.amc-mf-svg{display:block;width:100%;height:auto;max-height:320px}.amc-mf-legend{display:flex;gap:18px;justify-content:center;font-size:12px}.amc-mf-legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-left:5px}.amc-mf-mini-list{display:flex;flex-wrap:wrap;gap:8px}.amc-mf-mini-list span{padding:7px 9px;background:#f7f9fb;border-radius:7px}.amc-mf-alert{padding:10px 12px;margin:7px 0;background:#fff8e9;border-right:4px solid #c79a28;border-radius:6px;line-height:1.7}
 .amc-mf-sticky{position:sticky;top:0;z-index:5;align-items:center;flex-wrap:wrap}.amc-mf-headline small{font-weight:600;opacity:.8}.amc-mf-pill{display:inline-block;margin-right:8px;padding:2px 9px;border-radius:99px;background:#fff3d6;color:#8a6410;font-size:12px}
@@ -920,6 +924,7 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
 .amc-mf-table .best td{background:#eef9f0}.amc-mf-table .worst td{background:#fdf0f0}.amc-mf-table .fri td{color:#8b93a0;background:#fafbfc}.amc-mf-table .zero td{background:#fff3d6}.amc-mf-table thead th{position:sticky;top:0}
 .amc-mf-tag{display:inline-block;padding:1px 7px;border-radius:99px;background:#efe9ff;color:#4c3b73;font-size:11px;font-weight:700;margin-right:4px}.amc-mf-mini-list em{color:#727a85;font-style:normal}
 .amc-mf-alert.crit{background:#fdecec;border-right-color:#d7262e}.amc-mf-alert.info{background:#eef3fb;border-right-color:#17294d}.amc-mf-alert.warn{background:#fff8e9;border-right-color:#c79a28}.amc-mf-alert b{margin-left:6px}
+.amc-mf-pos{color:#1f8b3b!important}.amc-mf-neg{color:#d7262e!important}.amc-mf-pos,.amc-mf-neg{font-weight:700}
 @media print{
   .amc-report-page:has(.amc-mf-cover),.amc-report-page:has(.amc-mf-print-section),.amc-report-page:has(.amc-mf-screen){print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .amc-report-page:has(.amc-mf-cover) .amc-report-cover{min-height:245mm;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
@@ -928,6 +933,8 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
   .amc-report-page:has(.amc-mf-print-section) .amc-report-table{table-layout:auto!important;font-size:9.6px!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table th{font-size:9px!important;padding:1.25mm 1.2mm!important;white-space:normal!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table td{font-size:10px!important;padding:1.05mm 1.2mm!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table tr{break-inside:avoid!important;page-break-inside:avoid!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-section-title{break-after:avoid!important;page-break-after:avoid!important}.amc-mf-daily-page[data-tier="1"] .amc-report-table td{font-size:9.2px!important;padding:.72mm 1mm!important}.amc-mf-daily-page[data-tier="2"] .amc-report-table td{font-size:8.4px!important;padding:.48mm .8mm!important;line-height:1.1!important}.amc-mf-daily-page[data-tier="2"] .amc-report-table th{font-size:8px!important;padding:.55mm .8mm!important}.amc-mf-daily-page .amc-mf-chart-box{margin-top:4mm}.amc-mf-daily-page .amc-mf-svg{max-height:42mm}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box{break-inside:avoid;page-break-inside:avoid}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box .amc-mf-svg{max-height:52mm!important}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box h3{font-size:12px!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-note{font-size:9.5px!important;line-height:1.55!important}
   .amc-report-page .amc-mf-daily-page .amc-report-table td{font-size:11.5px!important;padding:1.1mm 1.4mm!important;line-height:1.2!important;white-space:nowrap!important}.amc-report-page .amc-mf-daily-page .amc-report-table th{font-size:10.5px!important;padding:1.3mm 1.4mm!important;white-space:nowrap!important}
   .amc-report-page .amc-mf-exp-page .amc-report-table td{font-size:10.5px!important;padding:1.3mm 1.4mm!important;line-height:1.3!important}.amc-report-page .amc-mf-exp-page .amc-report-table td.nw,.amc-report-page .amc-mf-exp-page .amc-report-table th{white-space:nowrap!important;overflow-wrap:normal!important}.amc-report-page .amc-mf-exp-page .amc-report-table th{font-size:10px!important}
+  .amc-report-page .amc-mf-wk3 .amc-report-table td{font-size:10.5px!important;padding:.85mm 1.3mm!important;line-height:1.2!important;white-space:nowrap!important}.amc-report-page .amc-mf-wk3 .amc-report-table th{font-size:9.5px!important;padding:1.1mm 1.3mm!important;white-space:nowrap!important}.amc-mf-wk3 .amc-report-section-title{margin-top:5mm}
+  .amc-report-page .amc-mf-wk-page .amc-report-table td{font-size:11px!important;padding:1.1mm 1.4mm!important;white-space:nowrap!important}.amc-report-page .amc-mf-wk-page .amc-report-table th{font-size:10px!important;white-space:nowrap!important}.amc-report-page .amc-mf-wk-page .amc-report-table tr:first-child td{white-space:normal!important}
   .amc-report-page .amc-mf-trend-page .amc-report-table td{font-size:11px!important;white-space:nowrap!important}.amc-mf-trend-page .amc-mf-chart-box{margin-top:6mm;break-inside:avoid}.amc-mf-trend-page .amc-mf-svg{max-height:85mm!important}
 }
 </style>
@@ -979,6 +986,7 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
         <button class="report-item" type="button"><span class="report-icon">↔</span><span><strong>تقرير حركة الفترة</strong><span>كل العمليات خلال فترة زمنية محددة</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item daily-brief-report-item" type="button" data-report-additive="dailybrief"><span class="report-icon">◔</span><span><strong>التقرير اليومي المختصر</strong><span>غلاف + ورقة واحدة: مبيعات وتحصيلات ومصروفات اليوم</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item monthly-full-report-item" type="button" data-report-additive="monthlyfull"><span class="report-icon">▥</span><span><strong>التقرير الشهري الشامل</strong><span>تحليل شهري كامل ومقارنة بشهر تختاره</span></span><b class="report-arrow">‹</b></button>
+        <button class="report-item weekly-report-item" type="button" data-report-additive="weekly"><span class="report-icon">▤</span><span><strong>التقرير الأسبوعي</strong><span>أداء أسبوع من السبت إلى الجمعة ومقارنة بأسبوع تختاره</span></span><b class="report-arrow">‹</b></button>
       </nav>
       <div class="report-sidebar-foot">جميع التقارير تعتمد على البيانات الديناميكية الحالية للنظام ولا تضيف أرقامًا ثابتة.</div>
     </aside>
@@ -1630,6 +1638,154 @@ function mfSvgCats(model){const rows=model.topCats.slice(0,8);if(!rows.length)re
 function mfCmpRow(label,a,b,kind='money'){const av=kind==='pct'?a:b==null?null:a;const pv=kind==='pct'?b:b;const d=mfDiff(av,pv);const fmt=x=>x==null?'—':kind==='pct'?mfPct(x):kind==='qty'?mfQty(x):mfMoney(x);return `<tr><td>${mfEsc(label)}</td><td>${fmt(av)}</td><td>${fmt(pv)}</td><td class="${mfCmpClass(d.diff)}">${fmt(d.diff)}</td><td class="${mfCmpClass(d.pct)}">${d.pct==null?'—':mfPct(d.pct)}</td></tr>`;}
 function mfScreenTable(headers,rows,empty){return rows.length?`<div class="amc-mf-table-wrap"><table class="amc-mf-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`:`<div class="amc-mf-empty">${empty||'لا توجد بيانات'}</div>`;}
 /* MF: ===== رسوم ومكوّنات جديدة للتقرير الشهري ===== */
+/* WK: ===== التقرير الأسبوعي (السبت → الجمعة) — مستقل عن بقية التقارير ===== */
+function wkStartOf(dateStr){const d=new Date(dateStr+'T00:00:00');d.setDate(d.getDate()-((d.getDay()+1)%7));return mfDateKey(d);}
+function wkAddDays(key,n){const d=new Date(key+'T00:00:00');d.setDate(d.getDate()+n);return mfDateKey(d);}
+function wkDays(start){return Array.from({length:7},(_,i)=>wkAddDays(start,i));}
+function wkLabel(start){return /^\d{4}-\d{2}-\d{2}$/.test(start||'')?`${mfFmtDate(start)} – ${mfFmtDate(wkAddDays(start,6))}`:'—';}
+function wkWeeksAvailable(){const d=mfData();return [...new Set([...(d.rev||[]),...(d.exp||[]),...(d.col||[])].map(r=>dateValue(r['التاريخ'])).filter(Boolean).map(wkStartOf))].sort();}
+function wkDefault(){const w=wkWeeksAvailable();return w.length?w[w.length-1]:'';}
+function wkCompareOptions(start){
+  const avail=wkWeeksAvailable(),others=avail.filter(k=>k!==start).reverse();
+  const opts=[{value:'prev',label:`الأسبوع السابق (${wkLabel(wkAddDays(start,-7))})`}];
+  if(avail.includes(wkAddDays(start,-28)))opts.push({value:'ago4',label:`نفس الأسبوع من الشهر الماضي (${wkLabel(wkAddDays(start,-28))})`});
+  if(avail.filter(k=>k<start).length>=2)opts.push({value:'avg',label:'متوسط آخر 4 أسابيع سابقة'});
+  others.forEach(k=>opts.push({value:k,label:wkLabel(k)}));
+  opts.push({value:'none',label:'بدون مقارنة'});
+  return opts;
+}
+function wkResolveCompare(start,spec){
+  spec=spec||'prev';
+  if(spec==='none')return {mode:'none',keys:[],name:''};
+  if(spec==='avg'){const ks=wkWeeksAvailable().filter(k=>k<start).slice(-4);return {mode:'avg',keys:ks,name:ks.length?`متوسط ${ks.length} أسابيع سابقة`:''};}
+  const key=spec==='prev'?wkAddDays(start,-7):spec==='ago4'?wkAddDays(start,-28):spec;
+  const ok=/^\d{4}-\d{2}-\d{2}$/.test(key||'');
+  return {mode:'single',keys:ok?[key]:[],name:ok?wkLabel(key):''};
+}
+function wkMetricsOf(all,start){const to=wkAddDays(start,6);return mfMetrics(filterRows(all.rev||[],start,to),filterRows(all.exp||[],start,to),filterRows(all.col||[],start,to),[]);}
+function wkModel(start,cmpSpec){
+  const data=mfData(),cmp=wkResolveCompare(start,cmpSpec),to=wkAddDays(start,6),nC=Math.max(1,cmp.keys.length);
+  const revAll=data.rev||[],expAll=data.exp||[],colAll=data.col||[];
+  const rev=filterRows(revAll,start,to),exp=filterRows(expAll,start,to),col=filterRows(colAll,start,to);
+  const inK=all=>cmp.keys.length?all.filter(r=>{const d=dateValue(r['التاريخ']);return d&&cmp.keys.includes(wkStartOf(d));}):[];
+  const prevRev=inK(revAll),prevExp=inK(expAll),prevCol=inK(colAll);
+  const prevHas=!!(cmp.keys.length&&(prevRev.length||prevExp.length||prevCol.length)),single=cmp.mode==='single'&&prevHas;
+  const curM=mfMetrics(rev,exp,col,[]),prevM=prevHas?mfScaleMetrics(mfMetrics(prevRev,prevExp,prevCol,[]),nC):null;
+  const latest=[...revAll,...expAll,...colAll].map(r=>dateValue(r['التاريخ'])).filter(Boolean).sort().pop()||'';
+  const partial=!!latest&&latest>=start&&latest<to,dayLimit=partial?latest:to;
+  const daily=mfDailySeries(rev,exp,wkDays(start).filter(d=>d<=dayLimit));
+  const cmpDaily=single?mfDailySeries(prevRev,prevExp,wkDays(cmp.keys[0])):[];
+  const customers=mfAggregateQty(rev,r=>r['اسم العميل']),prevCustomers=mfScaleMap(mfAggregateQty(prevRev,r=>r['اسم العميل']),nC);
+  const types=mfAggregateQty(rev,r=>r['نوع التحميل']),prevTypes=mfScaleMap(mfAggregateQty(prevRev,r=>r['نوع التحميل']),nC);
+  const cats=mfAggregate(exp,r=>r['التصنيف']),prevCats=mfScaleMap(mfAggregate(prevExp,r=>r['التصنيف']),nC);
+  const topCustomers=Object.entries(customers).map(([name,v])=>({name,...v,share:curM.revenue?v.amount/curM.revenue*100:0,avg:v.qty?v.amount/v.qty:null})).sort((a,b)=>b.amount-a.amount);
+  const topTypes=Object.entries(types).map(([name,v])=>({name,...v,share:curM.revenue?v.amount/curM.revenue*100:0,avg:v.qty?v.amount/v.qty:null})).sort((a,b)=>b.amount-a.amount);
+  const topCats=Object.entries(cats).map(([name,amount])=>({name,amount,share:curM.expenses?amount/curM.expenses*100:0,prev:prevHas?(prevCats[name]??null):null})).sort((a,b)=>b.amount-a.amount);
+  const topExpenses=exp.map(r=>({date:dateValue(r['التاريخ']),statement:r['البيان']||'—',category:r['التصنيف']||'غير مصنف',amount:mfNum(r['المبلغ'])})).sort((a,b)=>b.amount-a.amount).slice(0,10).map(x=>({...x,share:curM.expenses?x.amount/curM.expenses*100:0}));
+  const collectionAgg={};col.forEach(r=>{const k=String(r['العميل']||'غير محدد').trim()||'غير محدد';(collectionAgg[k]??={amount:0,count:0,last:''});collectionAgg[k].amount+=mfNum(r['المبلغ']);collectionAgg[k].count++;const d=dateValue(r['التاريخ']);if(d>collectionAgg[k].last)collectionAgg[k].last=d;});
+  const collections=Object.entries(collectionAgg).map(([name,v])=>({name,...v})).sort((a,b)=>b.amount-a.amount);
+  const newCustomers=single?topCustomers.filter(x=>!(x.name in prevCustomers)):[];
+  const lostCustomers=single?Object.entries(prevCustomers).filter(([n])=>!(n in customers)).map(([name,v])=>({name,amount:v.amount,qty:v.qty})).sort((a,b)=>b.amount-a.amount):[];
+  const concentration=topCustomers.slice(0,3).reduce((a,x)=>a+x.amount,0)/(curM.revenue||1)*100;
+  /* WK: اتجاه آخر 6 أسابيع */
+  const trend=wkWeeksAvailable().filter(k=>k<=start).slice(-6).map(k=>{const x=wkMetricsOf(data,k);return {key:k,label:wkLabel(k),revenue:x.revenue,expenses:x.expenses,net:x.net,margin:x.margin,qty:x.qty,collections:x.collections};});
+  /* WK: تراكم الشهر حتى نهاية الأسبوع مقابل نفس الفترة من الشهر السابق */
+  const ref=dayLimit,[ry,rm,rd]=ref.split('-').map(Number),mKey=`${ry}-${String(rm).padStart(2,'0')}`,pm=new Date(ry,rm-2,1),pKey=`${pm.getFullYear()}-${String(pm.getMonth()+1).padStart(2,'0')}`,pLast=new Date(pm.getFullYear(),pm.getMonth()+1,0).getDate(),pTo=`${pKey}-${String(Math.min(rd,pLast)).padStart(2,'0')}`;
+  const mtdCur=mfMetrics(filterRows(revAll,mKey+'-01',ref),filterRows(expAll,mKey+'-01',ref),filterRows(colAll,mKey+'-01',ref),[]);
+  const pRev=filterRows(revAll,pKey+'-01',pTo),pExp=filterRows(expAll,pKey+'-01',pTo),pCol=filterRows(colAll,pKey+'-01',pTo);
+  const mtdPrev=(pRev.length||pExp.length||pCol.length)?mfMetrics(pRev,pExp,pCol,[]):null;
+  const mtd={cur:mtdCur,prev:mtdPrev,label:mfMonthLabel(mKey),prevLabel:mfMonthLabel(pKey),to:ref,prevTo:pTo};
+  /* WK: تنبيهات وملخص */
+  const nm=cmp.name||'المقارنة',alertItems=[],add=(l,t)=>alertItems.push({level:l,text:t});
+  if(prevM){const rd2=mfDiff(curM.revenue,prevM.revenue),nd=mfDiff(curM.net,prevM.net);
+    if(Math.abs(rd2.pct||0)>=10)add(rd2.pct<=-25?'crit':rd2.pct<0?'warn':'info',`تغيّر إجمالي الإيرادات بنسبة ${mfPct(rd2.pct)} عن ${nm}.`);
+    if(Math.abs(nd.pct||0)>=10)add(nd.pct<=-25?'crit':nd.pct<0?'warn':'info',`تغيّر صافي التشغيل بنسبة ${mfPct(nd.pct)} عن ${nm}.`);
+    if(prevM.margin!=null&&curM.margin!=null&&prevM.margin-curM.margin>=3)add('warn',`انخفض هامش التشغيل بمقدار ${(prevM.margin-curM.margin).toFixed(1)} نقطة مئوية عن ${nm}.`);}
+  topCats.forEach(c=>{const d=mfDiff(c.amount,c.prev);if(d.pct!=null&&d.pct>=25)add('warn',`تصنيف المصروف «${c.name}» ارتفع ${mfPct(d.pct)} عن ${nm}.`);});
+  if(topCustomers[0]&&topCustomers[0].share>40)add('warn',`حصة أكبر عميل «${topCustomers[0].name}» تتجاوز 40% من الإيراد.`);
+  /* الجمعة قد يكون فيها عمل: لا يُعدّ يوم الجمعة بلا مبيعات تنبيهًا، وبقية الأيام تُعدّ */
+  daily.filter(x=>new Date(x.date+'T00:00:00').getDay()!==5&&x.revenue===0).forEach(x=>add('crit',`لا توجد مبيعات يوم ${x.weekday} ${mfFmtDate(x.date)}.`));
+  if(!alertItems.length)add('info','الأسبوع ضمن النطاق الطبيعي وفق قواعد التنبيه المحددة.');
+  const ord={crit:0,warn:1,info:2};alertItems.sort((a,b)=>ord[a.level]-ord[b.level]);
+  const positives=[],attention=[];
+  if(prevM){const rd2=mfDiff(curM.revenue,prevM.revenue),nd=mfDiff(curM.net,prevM.net),qd=mfDiff(curM.qty,prevM.qty),ed=mfDiff(curM.expenses,prevM.expenses);
+    if(rd2.pct!=null&&rd2.pct>0)positives.push(`ارتفعت الإيرادات ${mfPct(rd2.pct)} عن ${nm} (${mfMoney(rd2.diff)} ريال).`);
+    if(rd2.pct!=null&&rd2.pct<0)attention.push(`انخفضت الإيرادات ${mfPct(Math.abs(rd2.pct))} عن ${nm} (${mfMoney(Math.abs(rd2.diff))} ريال).`);
+    if(nd.diff!=null&&nd.diff>0)positives.push(`تحسّن صافي التشغيل بمقدار ${mfMoney(nd.diff)} ريال عن ${nm}.`);
+    if(nd.diff!=null&&nd.diff<0)attention.push(`تراجع صافي التشغيل بمقدار ${mfMoney(Math.abs(nd.diff))} ريال عن ${nm}.`);
+    if(qd.pct!=null&&qd.pct>0)positives.push(`زادت الكمية ${mfPct(qd.pct)} (${mfQty(curM.qty)} رد).`);
+    if(qd.pct!=null&&qd.pct<0)attention.push(`انخفضت الكمية ${mfPct(Math.abs(qd.pct))} (${mfQty(curM.qty)} رد).`);
+    if(ed.pct!=null&&ed.pct>=10)attention.push(`ارتفعت المصروفات ${mfPct(ed.pct)} عن ${nm}.`);
+    if(ed.pct!=null&&ed.pct<=-10)positives.push(`انخفضت المصروفات ${mfPct(Math.abs(ed.pct))} عن ${nm}.`);
+  }else if(curM.revenue||curM.expenses){if(curM.net>0)positives.push(`صافي التشغيل موجب ${mfMoney(curM.net)} ريال بهامش ${mfPct(curM.margin)}.`);if(curM.net<0)attention.push(`صافي التشغيل سالب ${mfMoney(curM.net)} ريال.`);}
+  if(curM.collectionRate!=null&&curM.collectionRate>=80)positives.push(`نسبة التحصيل ${mfPct(curM.collectionRate)} من مبيعات الأسبوع.`);
+  if(curM.collectionRate!=null&&curM.collectionRate<50&&curM.revenue)attention.push(`نسبة التحصيل ${mfPct(curM.collectionRate)} فقط من مبيعات الأسبوع.`);
+  if(topCustomers[0]&&concentration>=60)attention.push(`أكبر 3 عملاء يمثلون ${mfPct(concentration)} من الإيراد (تركّز مرتفع).`);
+  const zero=alertItems.filter(x=>x.text.startsWith('لا توجد مبيعات')).length;if(zero)attention.push(`${zero} يوم عمل بلا مبيعات.`);
+  return {start,to,label:wkLabel(start),curM,prevM,prevHas,single,rev,exp,col,daily,cmpDaily,customers,prevCustomers,types,prevTypes,cats,prevCats,topCustomers,topTypes,topCats,topExpenses,collections,newCustomers,lostCustomers,concentration,trend,mtd,alertItems,alerts:alertItems.map(x=>x.text),positives:positives.slice(0,3),attention:attention.slice(0,3),cmpMode:cmp.mode,cmpName:cmp.name,partial,dayLimit};
+}
+function wkDailyRowsHtml(m){
+  const work=m.daily.filter(x=>x.revenue>0),dMax=work.length?Math.max(...work.map(x=>x.revenue)):-1,dMin=work.length?Math.min(...work.map(x=>x.revenue)):Infinity;
+  return m.daily.map(x=>{const fri=new Date(x.date+'T00:00:00').getDay()===5,z=x.revenue===0;const cls=z?(fri?'fri':'zero'):(work.length>1&&x.revenue===dMax)?'best':(work.length>1&&x.revenue===dMin)?'worst':'';const tg=z?(fri?'<span class="amc-mf-tag">بلا عمل</span>':'<span class="amc-mf-tag">بلا مبيعات</span>'):cls==='best'?'<span class="amc-mf-tag">الأعلى</span>':cls==='worst'?'<span class="amc-mf-tag">الأدنى</span>':'';return `<tr class="${cls}"><td>${mfFmtDate(x.date)}</td><td>${x.weekday} ${tg}</td><td>${mfMoney(x.revenue)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.expenses)}</td><td>${mfMoney(x.net)}</td><td>${mfMoney(x.cumulative)}</td></tr>`;});
+}
+function renderWeeklyReport(){
+  activeReport='weekly';window.AMC_CURRENT_REPORT_INDEX='weekly';
+  document.getElementById('reportTitle').textContent='التقرير الأسبوعي';document.getElementById('reportDescription').textContent='أداء أسبوع من السبت إلى الجمعة ومقارنة بأسبوع تختاره';
+  const ws=document.getElementById('reportWorkspace');ws.hidden=false;document.querySelectorAll('.dashboard-content > *:not(#reportWorkspace)').forEach(x=>x.style.display='none');
+  document.querySelectorAll('.report-item').forEach(x=>x.classList.toggle('active',x.classList.contains('weekly-report-item')));
+  const def=wkDefault(),weeks=wkWeeksAvailable().slice().reverse();
+  document.getElementById('reportToolbar').innerHTML=`<div class="report-filter"><label>الأسبوع (سبت ← جمعة)</label><select id="rWeeklyWeek">${weeks.map(k=>`<option value="${k}">${mfEsc(wkLabel(k))}</option>`).join('')}</select></div><div class="report-filter"><label>قارن مع</label><select id="rWeeklyCmp"></select></div><div class="report-filter"><label>&nbsp;</label><button id="rWeeklyApply">تطبيق التقرير</button></div>`;
+  const wEl=()=>document.getElementById('rWeeklyWeek'),cEl=()=>document.getElementById('rWeeklyCmp');
+  if(wEl()&&def)wEl().value=def;
+  const fillCmp=keep=>{const sel=cEl();if(!sel)return;const key=wEl()?.value||def,opts=wkCompareOptions(key),was=keep?sel.value:'prev';sel.innerHTML=opts.map(o=>`<option value="${mfEsc(o.value)}">${mfEsc(o.label)}</option>`).join('');sel.value=opts.some(o=>o.value===was)?was:'prev';};
+  fillCmp(false);
+  const build=()=>{
+    const key=wEl()?.value||def,body=document.getElementById('reportBody');
+    if(!key){body.innerHTML='<div class="amc-mf-empty">لا توجد بيانات لعرض التقرير.</div>';return;}
+    try{
+      const m=wkModel(key,cEl()?.value||'prev'),cm=m.curM,prev=m.prevM,nm=m.cmpName||'المقارنة',hasCmp=!!prev,single=m.single;
+      const tag=t=>`<span class="amc-mf-tag">${t}</span>`;
+      const sec=(id,title,content)=>`<details class="amc-mf-section" id="wk-sec-${id}" open><summary>${title}</summary><div class="amc-mf-sec-body">${content}</div></details>`;
+      const custRows=m.topCustomers.map((x,i)=>{const p=m.prevCustomers[x.name],d=hasCmp&&p?mfDiff(x.amount,p.amount):null;return `<tr><td>${i+1}</td><td>${mfEsc(x.name)}${single&&!p?' '+tag('جديد'):''}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.avg==null?'—':mfMoney(x.avg)}</td><td>${hasCmp?(p?mfMoney(p.amount):'—'):'—'}</td><td>${d&&d.diff!=null?mfMoney(d.diff):(hasCmp&&!p?mfMoney(x.amount):'—')}</td></tr>`;});
+      custRows.push(`<tr class="total"><td></td><td>الإجمالي</td><td>${mfQty(cm.qty)}</td><td>${mfMoney(cm.revenue)}</td><td>${mfPct(100)}</td><td>${cm.avgPrice==null?'—':mfMoney(cm.avgPrice)}</td><td>${hasCmp?mfMoney(prev.revenue):'—'}</td><td>${hasCmp?mfMoney(cm.revenue-prev.revenue):'—'}</td></tr>`);
+      const lostRows=m.lostCustomers.map(x=>`<tr><td>${mfEsc(x.name)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.amount)}</td></tr>`);
+      const typeRows=m.topTypes.map(x=>{const p=m.prevTypes[x.name],d=hasCmp?mfDiff(x.amount,p?p.amount:0):null;return `<tr><td>${mfEsc(x.name)}${single&&!p?' '+tag('جديد'):''}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.avg==null?'—':mfMoney(x.avg)}</td><td>${hasCmp?(p?mfMoney(p.amount):'—'):'—'}</td><td>${d&&d.diff!=null?mfMoney(d.diff):'—'}</td></tr>`;});
+      const catRows=m.topCats.map(x=>{const d=mfDiff(x.amount,x.prev);return `<tr><td>${mfEsc(x.name)}${single&&x.prev==null?' '+tag('جديد'):''}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.prev==null?'—':mfMoney(x.prev)}</td><td>${d.diff==null?'—':mfMoney(d.diff)}</td><td>${d.pct==null?'—':mfPct(d.pct)}</td></tr>`;});
+      const topExpRows=m.topExpenses.map(x=>`<tr><td>${mfFmtDate(x.date)}</td><td>${mfEsc(x.statement)}</td><td>${mfEsc(x.category)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td></tr>`);
+      const colRows=m.collections.map(x=>`<tr><td>${mfEsc(x.name)}</td><td>${mfMoney(x.amount)}</td><td>${x.count}</td><td>${x.last?mfFmtDate(x.last):'—'}</td></tr>`);
+      const opRows=[mfCmpRowX('ربح الرد',cm.profitPerQty,prev?.profitPerQty,'money','up'),mfCmpRowX('تكلفة الرد',cm.costPerQty,prev?.costPerQty,'money','down'),mfCmpRowX('متوسط سعر الرد',cm.avgPrice,prev?.avgPrice,'money','up'),mfCmpRowX('أيام التشغيل',cm.operatingDays,prev?.operatingDays,'qty','up'),mfCmpRowX('متوسط الإيراد اليومي',cm.avgDailyRevenue,prev?.avgDailyRevenue,'money','up'),mfCmpRowX('إجمالي التحصيلات',cm.collections,prev?.collections,'money','up'),mfCmpRowX('نسبة التحصيل',cm.collectionRate,prev?.collectionRate,'pct','up')];
+      const trendRows=m.trend.map(x=>`<tr${x.key===m.start?' class="total"':''}><td>${x.label}</td><td>${mfMoney(x.revenue)}</td><td>${mfMoney(x.expenses)}</td><td>${mfMoney(x.net)}</td><td>${mfPct(x.margin)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.collections)}</td></tr>`);
+      const t=m.mtd,mt=[mfCmpRowX('الإيرادات',t.cur.revenue,t.prev?.revenue,'money','up'),mfCmpRowX('المصروفات',t.cur.expenses,t.prev?.expenses,'money','down'),mfCmpRowX('الصافي',t.cur.net,t.prev?.net,'money','up'),mfCmpRowX('الكمية',t.cur.qty,t.prev?.qty,'qty','up')];
+      const kcards=[mfCard('الإيرادات',mfMoney(cm.revenue),mfDeltaHtml(cm.revenue,prev?.revenue,'up'),'green'),mfCard('المصروفات',mfMoney(cm.expenses),mfDeltaHtml(cm.expenses,prev?.expenses,'down'),'red'),mfCard('الصافي',mfMoney(cm.net),mfDeltaHtml(cm.net,prev?.net,'up'),cm.net>=0?'green':'red'),mfCard('الهامش',mfPct(cm.margin),mfDeltaHtml(cm.margin,prev?.margin,'up','pct'),'navy'),mfCard('الكمية',mfQty(cm.qty),mfDeltaHtml(cm.qty,prev?.qty,'up','qty'),'navy'),mfCard('التحصيلات',mfMoney(cm.collections),mfDeltaHtml(cm.collections,prev?.collections,'up'),'gold'),mfCard('نسبة التحصيل',mfPct(cm.collectionRate),mfDeltaHtml(cm.collectionRate,prev?.collectionRate,'up','pct'),'gold'),mfCard('أيام التشغيل',mfQty(cm.operatingDays),mfDeltaHtml(cm.operatingDays,prev?.operatingDays,'up','qty'),'navy')].join('');
+      const li=a=>a.length?`<ul>${a.map(x=>`<li>${mfEsc(x)}</li>`).join('')}</ul>`:'<p class="amc-mf-muted">لا توجد نقاط ضمن قواعد الرصد.</p>';
+      const insights=`<div class="amc-mf-insights"><div class="amc-mf-ins good"><h4>نقاط إيجابية</h4>${li(m.positives)}</div><div class="amc-mf-ins bad"><h4>نقاط تحتاج انتباهًا</h4>${li(m.attention)}</div></div>`;
+      const lvl={crit:'حرج',warn:'تنبيه',info:'معلومة'};
+      const summary=`الإيرادات ${mfMoney(cm.revenue)} ريال، والمصروفات ${mfMoney(cm.expenses)} ريال، وصافي التشغيل ${mfMoney(cm.net)} ريال، بهامش ${mfPct(cm.margin)}. تم تشغيل ${mfQty(cm.qty)} رد، والتحصيلات ${mfMoney(cm.collections)} ريال.`;
+      const sections=[
+        ['1','الملخص التنفيذي',`<div class="amc-mf-cards">${kcards}</div>${insights}<p class="amc-mf-summary">${summary}</p>`],
+        ['2','الأداء اليومي',`${mfScreenTable(['التاريخ','اليوم','مبيعات','كمية','مصروفات','صافي اليوم','التراكمي'],wkDailyRowsHtml(m),'لا توجد بيانات في هذا الأسبوع')}<div class="amc-mf-chart-box"><h4>الإيرادات والمصروفات اليومية</h4>${mfSvgDaily(m)}</div>${single?mfSvgLines(m.daily.map(x=>x.revenue),m.cmpDaily.map(x=>x.revenue),'هذا الأسبوع',nm,'إيراد كل يوم مقابل أسبوع المقارنة (1 = السبت ... 7 = الجمعة)'):''}`],
+        ['3','المبيعات حسب العميل',`${mfScreenTable(['#','العميل','الكمية','الإيراد','النسبة','متوسط سعر الرد',`إيراد ${nm}`,'الفرق'],custRows,'لا توجد مبيعات في هذا الأسبوع')}${single?`<h4>عملاء توقفوا (اشتروا في ${mfEsc(nm)} ولم يشتروا هذا الأسبوع)</h4>${mfScreenTable(['العميل','الكمية','الإيراد'],lostRows,'لا يوجد عملاء متوقفون')}`:''}<div class="amc-mf-chart-box"><h4>أعلى 8 عملاء</h4>${mfSvgCustomers(m)}</div>`],
+        ['4','أنواع التحميل',mfScreenTable(['النوع','الكمية','الإيراد','النسبة','متوسط السعر',`إيراد ${nm}`,'الفرق'],typeRows,'لا توجد مبيعات في هذا الأسبوع')],
+        ['5','المصروفات حسب التصنيف',`${mfScreenTable(['التصنيف','المبلغ','النسبة',nm,'الفرق','الفرق %'],catRows,'لا توجد مصروفات في هذا الأسبوع')}<div class="amc-mf-chart-box"><h4>نسب تصنيفات المصروفات</h4>${mfSvgCats(m)}</div>`],
+        ['6','أكبر بنود المصروفات',mfScreenTable(['التاريخ','البيان','التصنيف','المبلغ','النسبة'],topExpRows,'لا توجد مصروفات في هذا الأسبوع')],
+        ['7','التحصيل',`${mfScreenTable(['العميل','التحصيلات','عدد الدفعات','آخر دفعة'],colRows,'لا توجد تحصيلات في هذا الأسبوع')}<p class="amc-mf-note">الفرق بين مبيعات الأسبوع وتحصيلاته: <b>${mfMoney(cm.revenue-cm.collections)}</b> ريال · نسبة التحصيل: <b>${mfPct(cm.collectionRate)}</b></p>`],
+        ['8','مؤشرات التشغيل',mfScreenTable(['المؤشر','هذا الأسبوع',nm,'الفرق','النسبة'],opRows,'لا توجد بيانات')],
+        ['9','اتجاه آخر 6 أسابيع وتراكم الشهر',`${mfScreenTable(['الأسبوع','الإيرادات','المصروفات','الصافي','الهامش','الكمية','التحصيلات'],trendRows,'لا توجد بيانات')}<h4>تراكم ${mfEsc(t.label)} حتى ${mfFmtDate(t.to)} مقابل نفس الفترة من ${mfEsc(t.prevLabel)}</h4>${mfScreenTable(['المؤشر',`${t.label} (حتى ${mfFmtDate(t.to)})`,`${t.prevLabel} (حتى ${mfFmtDate(t.prevTo)})`,'الفرق','النسبة'],mt,'لا توجد بيانات')}`],
+        ['10','التحليل والتنبيهات',m.alertItems.map(x=>`<div class="amc-mf-alert ${x.level}"><b>${lvl[x.level]}</b> ${mfEsc(x.text)}</div>`).join('')]
+      ];
+      const nav=`<nav class="amc-mf-nav">${sections.map(s=>`<button type="button" onclick="mfGoto('wk-sec-${s[0]}')">${s[1]}</button>`).join('')}</nav>`;
+      const noData=(m.cmpMode!=='none'&&!hasCmp)?`<div class="amc-mf-alert warn">${m.cmpName?`لا توجد بيانات في «${mfEsc(m.cmpName)}» — تظهر الشرطات (—) في أعمدة المقارنة.`:'لا يوجد أسبوع مقارنة متاح لهذا الاختيار — تظهر الشرطات (—) في أعمدة المقارنة.'}</div>`:'';
+      const partial=m.partial?`<span class="amc-mf-pill">أسبوع غير مكتمل — حتى ${mfFmtDate(m.dayLimit)}</span>`:'';
+      const partialNote=(hasCmp&&m.partial)?`<div class="amc-mf-alert info">ملاحظة: الأسبوع الحالي غير مكتمل (حتى ${mfFmtDate(m.dayLimit)}) بينما أسبوع المقارنة كامل، فالفروق في الإجماليات تتأثر بعدد الأيام.</div>`:'';
+      const head=`<div class="amc-mf-headline amc-mf-sticky"><span>${mfEsc(m.label)} <small>(${mfQty(cm.operatingDays)} يوم تشغيل)</small> ${partial}</span><span>${hasCmp?`مقارنة مع ${mfEsc(nm)} <small>(${mfQty(prev.operatingDays)} ${m.cmpMode==='avg'?'يوم تشغيل متوسط':'يوم تشغيل'})</small>`:m.cmpMode==='none'?'بدون مقارنة':'لا توجد بيانات للمقارنة'}</span></div>`;
+      body.innerHTML=`<div class="amc-mf-screen">${head}${nav}${noData}${partialNote}${sections.map(s=>sec(s[0],s[0]+'. '+s[1],s[2])).join('')}</div>`;mfColorizeDom(body);
+    }catch(err){console.error(err);body.innerHTML=`<div class="amc-mf-empty">تعذّر بناء التقرير الأسبوعي: ${mfEsc(err&&err.message||err)}</div>`;}
+  };
+  document.getElementById('rWeeklyApply')?.addEventListener('click',build);
+  wEl()?.addEventListener('change',()=>{fillCmp(true);build();});
+  cEl()?.addEventListener('change',build);
+  setTimeout(build,0);
+}
 function mfGoto(id){const el=document.getElementById(id);if(!el)return;el.open=true;el.scrollIntoView({behavior:'smooth',block:'start'});}
 function mfDeltaHtml(cur,prev,good,kind){
   const d=mfDiff(cur,prev);if(d.diff==null||cur==null)return '';
@@ -1682,6 +1838,34 @@ function mfSvgTrendPrint(rows){
   rows.forEach((x,i)=>{const cx=W-p-gap*(i+.5);out+=`<circle cx="${cx.toFixed(1)}" cy="${y(x.revenue).toFixed(1)}" r="3.5" fill="#17294d"/><circle cx="${cx.toFixed(1)}" cy="${y(x.expenses).toFixed(1)}" r="3.5" fill="#c79a28"/>`;});
   return `<svg class="amc-mf-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="اتجاه آخر 6 أشهر">${out}</svg><div class="amc-mf-legend"><span><i style="background:#1f8b3b"></i>صافي موجب</span><span><i style="background:#d7262e"></i>صافي سالب</span><span><i style="background:#17294d"></i>الإيرادات</span><span><i style="background:#c79a28"></i>المصروفات</span></div>`;
 }
+/* MF: تلوين الجداول — الإيرادات أخضر، المصروفات أحمر، الموجب أخضر والسالب أحمر، والنسب كما هي */
+function mfColorizeDom(root){
+  const heads=[...root.querySelectorAll('h1,h2,h3,h4,summary')],isMonth=h=>/\d{4}$/.test(h)||/^متوسط \d+ (أشهر|أسابيع)/.test(h)||/^(الأسبوع (الحالي|السابق)|متوسط الأسابيع السابقة)$/.test(h);
+  const parse=t=>{const x=String(t).replace(/[,\s\u066c]/g,'').replace(/\u2212/g,'-'),m=x.match(/^-?\d+(\.\d+)?/);return m?parseFloat(m[0]):null;};
+  const paint=(td,kind,txt)=>{const t=String(txt).trim();if(!t||t==='—')return;td.classList.remove('up','down','amc-mf-pos','amc-mf-neg');if(kind==='rev'){td.classList.add('amc-mf-pos');return;}if(kind==='exp'){td.classList.add('amc-mf-neg');return;}const v=parse(t);if(v==null||v===0)return;td.classList.add(v>0?'amc-mf-pos':'amc-mf-neg');};
+  root.querySelectorAll('table').forEach(tb=>{
+    const ths=[...tb.querySelectorAll('thead th')].map(x=>x.textContent.trim());if(!ths.length)return;
+    let ctx='';heads.forEach(h=>{if(h.compareDocumentPosition(tb)&Node.DOCUMENT_POSITION_FOLLOWING)ctx=h.textContent;});
+    const expCtx=/المصروفات|بنود|المتكررة|التصنيفات/.test(ctx)&&!/التحصيل/.test(ctx),custCtx=/العملاء/.test(ctx)&&/تغيرات/.test(ctx),colCtx=/التحصيل/.test(ctx),indicator=ths[0]==='المؤشر';
+    const roles=ths.map((h,i)=>{
+      if(i===0&&!/^(مبيعات|الإيرادات|الإيراد|مصروفات|المصروفات)$/.test(h))return 'skip';
+      if(/%|النسبة|الهامش|نسبة/.test(h))return 'skip';
+      if(h==='الفرق')return 'sign';
+      if(indicator)return 'row';
+      if(isMonth(h))return expCtx?'exp':custCtx?'rev':'skip';
+      if(/^(مبيعات|الإيرادات|الإيراد)$/.test(h)||/^إيراد /.test(h)||/^مبيعات نفس/.test(h)||h==='التحصيلات')return 'rev';
+      if(/^(مصروفات|المصروفات)$/.test(h))return 'exp';
+      if(/^(صافي اليوم|الصافي|صافي|التراكمي)$/.test(h))return 'sign';
+      if(h==='المبلغ')return expCtx?'exp':colCtx?'rev':'skip';
+      if(h==='الإجمالي'&&expCtx)return 'exp';
+      return 'skip';});
+    tb.querySelectorAll('tbody tr').forEach(tr=>{const tds=[...tr.children];const label=(tds[0]?.textContent||'').trim();
+      const rowKind=/الإيراد|مبيعات|التحصيلات/.test(label)?'rev':/المصروف|تكلفة/.test(label)?'exp':/صافي|ربح/.test(label)?'sign':'skip';
+      let ci=0;tds.forEach(td=>{const i=ci;ci+=td.colSpan||1;let r=roles[i]||'skip';if(r==='row')r=rowKind;if(r==='skip')return;paint(td,r,td.textContent);});});
+  });
+  return root;
+}
+function mfColorizeHtml(html){const t=document.createElement('template');t.innerHTML=html;mfColorizeDom(t.content);return t.innerHTML;}
 function renderMonthlyFullReport(){
   activeReport='monthlyfull';window.AMC_CURRENT_REPORT_INDEX='monthlyfull';
   document.getElementById('reportTitle').textContent='التقرير الشهري الشامل';document.getElementById('reportDescription').textContent='تحليل شهري كامل ومقارنة بشهر تختاره';
@@ -1743,7 +1927,7 @@ function renderMonthlyFullReport(){
     const partialNote=(hasCmp&&m.isLatestMonth&&m.dayLimit<m.cur.to)?`<div class="amc-mf-alert info">ملاحظة: الشهر الحالي غير مكتمل (حتى ${mfFmtDate(m.dayLimit)}) بينما شهر المقارنة كامل، فالفروق في الإجماليات تتأثر بعدد الأيام.</div>`:'';
     const partial=(m.isLatestMonth&&m.dayLimit<m.cur.to)?`<span class="amc-mf-pill">شهر غير مكتمل — حتى ${mfFmtDate(m.dayLimit)}</span>`:'';
     const head=`<div class="amc-mf-headline amc-mf-sticky"><span>${mfMonthLabel(key)} <small>(${mfQty(cm.operatingDays)} يوم تشغيل)</small> ${partial}</span><span>${hasCmp?`مقارنة مع ${mfEsc(nm)} <small>(${mfQty(prev.operatingDays)} ${m.cmpMode==='avg'?'يوم تشغيل متوسط':'يوم تشغيل'})</small>`:m.cmpMode==='none'?'بدون مقارنة':'لا توجد بيانات للمقارنة'}</span></div>`;
-    body.innerHTML=`<div class="amc-mf-screen">${head}${nav}${noData}${partialNote}${sections.map(s=>sec(s[0],s[0]+'. '+s[1],s[2])).join('')}</div>`;
+    body.innerHTML=`<div class="amc-mf-screen">${head}${nav}${noData}${partialNote}${sections.map(s=>sec(s[0],s[0]+'. '+s[1],s[2])).join('')}</div>`;mfColorizeDom(body);
     }catch(err){console.error(err);body.innerHTML=`<div class="amc-mf-empty">تعذّر بناء التقرير الشهري: ${mfEsc(err&&err.message||err)}</div>`;}
   };
   document.getElementById('rMonthlyFullApply')?.addEventListener('click',build);
@@ -1968,6 +2152,7 @@ document.querySelectorAll(".report-item").forEach((btn)=>btn.addEventListener("c
   if(btn.classList.contains("daily-brief-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderDailyBriefReport(); return; }
   if(btn.classList.contains("comparison-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderComparisonReport(); return; }
   if(btn.classList.contains("monthly-full-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderMonthlyFullReport(); return; }
+  if(btn.classList.contains("weekly-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderWeeklyReport(); return; }
   const legacyIndex=Array.from(document.querySelectorAll(".report-item")).filter(x=>!x.classList.contains("daily-report-item")&&!x.classList.contains("comparison-report-item")&&!x.classList.contains("receivables-report-item")).indexOf(btn);
   renderReport(legacyIndex);
 }));
@@ -2606,6 +2791,7 @@ setInterval(()=>{
         <div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>شركة كسارة العساف للمعادن</strong></div>
         <div class="amc-report-info-row"><b>الفترة المالية</b><strong>${escHtml(ctx.period)}</strong></div>
         <div class="amc-report-info-row"><b>تاريخ الإصدار</b><strong>${formatDate(new Date())}</strong></div>
+        <div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div>
       </div>
     </div></section>`;
   }
@@ -2776,7 +2962,7 @@ setInterval(()=>{
       const dayRevenue=dayRows.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
       const dayQty=dayRows.reduce((a,r)=>a+parseNum(r['الكمية']),0);
       const dayDateLabel=selected?formatDate(new Date(selected+'T00:00:00')):'—';
-      pages.push(page(`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>التقرير اليومي التراكمي</h1><div class="en">Cumulative Daily Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(selected?formatDate(new Date(selected+'T00:00:00')):'—')}</strong></div><div class="amc-report-info-row"><b>الفترة الشهرية</b><strong>${escHtml(reportDateLabel(monthStart,selected))}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div></div></div>`,'التقرير اليومي التراكمي',dayDateLabel,1,11));
+      pages.push(page(`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>التقرير اليومي التراكمي</h1><div class="en">Cumulative Daily Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(selected?formatDate(new Date(selected+'T00:00:00')):'—')}</strong></div><div class="amc-report-info-row"><b>الفترة الشهرية</b><strong>${escHtml(reportDateLabel(monthStart,selected))}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,'التقرير اليومي التراكمي',dayDateLabel,1,11));
 
       /* ADDITIVE ONLY:
          صفحة مبيعات اليوم تضاف مباشرة بعد الغلاف.
@@ -2903,7 +3089,7 @@ setInterval(()=>{
       const dayQty=salesDay.reduce((a,r)=>a+parseNum(r['الكمية']),0);
       const dayExpenses=expDay.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
       const dayCollections=colDay.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
-      const cover=page(`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${repTitle}</h1><div class="en">Daily Brief Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(dayDateLabel)}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div></div></div>`,repTitle,dayDateLabel,1,2);
+      const cover=page(`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${repTitle}</h1><div class="en">Daily Brief Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(dayDateLabel)}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,repTitle,dayDateLabel,1,2);
       const box=(cls,title,count,inner)=>`<div class="amc-brief-box ${cls}"><div class="amc-brief-box-head"><b>${title}</b><span>عدد الحركات: ${qty(count)}</span></div>${inner}</div>`;
       const salesRows=salesDay.map(r=>`<tr><td>${escHtml((r['اسم العميل']||'غير محدد').trim()||'غير محدد')}</td><td>${escHtml((r['نوع التحميل']||'غير محدد').trim()||'غير محدد')}</td><td class="num">${qty(parseNum(r['الكمية']))}</td><td class="num amc-report-green">${money(parseNum(r['المبلغ']))}</td></tr>`);
       salesRows.push(`<tr class="total"><td>الإجمالي</td><td></td><td class="num">${qty(dayQty)}</td><td class="num amc-report-green">${money(dayRevenue)}</td></tr>`);
@@ -2928,7 +3114,7 @@ setInterval(()=>{
       const data=mfData(), key=ctx.monthKey||ctx.to?.slice(0,7)||mfMonthDefault(), m=mfModel(key,ctx.compareKey), prev=m.prevM, title=ctx.title||'التقرير الشهري الشامل', period=ctx.period||mfMonthLabel(key);
       const totalPages=12; // page count is fixed by the 12 defined report sections; long tables are internally split below.
       const cmp=(label,a,b,kind='money')=>{const d=mfDiff(a,b),fmt=x=>x==null?'—':kind==='pct'?mfPct(x):kind==='qty'?mfQty(x):mfMoney(x);return `<tr><td>${escHtml(label)}</td><td>${fmt(a)}</td><td>${fmt(b)}</td><td class="${mfCmpClass(d.diff)}">${fmt(d.diff)}</td><td class="${mfCmpClass(d.pct)}">${d.pct==null?'—':mfPct(d.pct)}</td></tr>`};
-      const cover=page(`<div class="amc-report-cover amc-mf-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${escHtml(title)}</h1><div class="en">Monthly Comprehensive Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>الشهر</b><strong>${escHtml(mfMonthLabel(key))}</strong></div><div class="amc-report-info-row"><b>شهر المقارنة</b><strong>${escHtml(m.cmpName||'بدون مقارنة')}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div></div></div>`,title,period,1,totalPages);
+      const cover=page(`<div class="amc-report-cover amc-mf-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${escHtml(title)}</h1><div class="en">Monthly Comprehensive Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>الشهر</b><strong>${escHtml(mfMonthLabel(key))}</strong></div><div class="amc-report-info-row"><b>شهر المقارنة</b><strong>${escHtml(m.cmpName||'بدون مقارنة')}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,title,period,1,totalPages);
       const execRows=[['إجمالي الإيرادات',m.curM.revenue,prev?.revenue],['إجمالي المصروفات',m.curM.expenses,prev?.expenses],['صافي التشغيل',m.curM.net,prev?.net],['هامش التشغيل',m.curM.margin,prev?.margin,'pct'],['الكمية',m.curM.qty,prev?.qty,'qty'],['إجمالي التحصيلات',m.curM.collections,prev?.collections],['المديونية',m.curM.debt,null],['نسبة التحصيل',m.curM.collectionRate,prev?.collectionRate,'pct']].map(x=>cmp(x[0],x[1],x[2],x[3]||'money')).join('');
       const summary=page(`<h1 class="amc-report-title">الملخص التنفيذي</h1><p class="amc-report-subtitle">${escHtml(mfMonthLabel(key))}${prev?` — مقارنة مع ${escHtml(m.cmpName)}`:(m.cmpMode==='none'?' — بدون مقارنة':' — لا توجد بيانات للمقارنة')}</p>${compactKpis([['الإيرادات',mfMoney(m.curM.revenue),'green'],['المصروفات',mfMoney(m.curM.expenses),'red'],['الصافي',mfMoney(m.curM.net),m.curM.net>=0?'green':'red'],['الهامش',mfPct(m.curM.margin),'navy'],['الكمية',mfQty(m.curM.qty),'navy'],['التحصيلات',mfMoney(m.curM.collections),'gold'],['المديونية',mfMoney(m.curM.debt),'red'],['نسبة التحصيل',mfPct(m.curM.collectionRate),'gold']])}${table(['المؤشر',mfMonthLabel(key),(m.cmpName||'المقارنة'),'الفرق','النسبة'],[...execRows.split('</tr>').filter(Boolean).map(x=>x+'</tr>')])}<div class="amc-report-note">الإيرادات ${mfMoney(m.curM.revenue)} ريال، والمصروفات ${mfMoney(m.curM.expenses)} ريال، وصافي التشغيل ${mfMoney(m.curM.net)} ريال، بهامش ${mfPct(m.curM.margin)}. تم تشغيل ${mfQty(m.curM.qty)} رد، والتحصيلات ${mfMoney(m.curM.collections)} ريال.</div>`,title,period,2,totalPages);
       const dailyRows=m.daily.map(x=>`<tr><td>${mfFmtDate(x.date)}</td><td>${x.weekday}</td><td>${mfMoney(x.revenue)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.expenses)}</td><td>${mfMoney(x.net)}</td><td>${mfMoney(x.cumulative)}</td></tr>`);dailyRows.push(`<tr class="total"><td colspan="2">الإجمالي</td><td>${mfMoney(m.curM.revenue)}</td><td>${mfQty(m.curM.qty)}</td><td>${mfMoney(m.curM.expenses)}</td><td>${mfMoney(m.curM.net)}</td><td>—</td></tr>`);
@@ -2951,20 +3137,48 @@ setInterval(()=>{
       const compPageNo=collPageNo+debtPages.length;const compRows=[['إجمالي الإيرادات',m.curM.revenue,prev?.revenue],['إجمالي المصروفات',m.curM.expenses,prev?.expenses],['صافي التشغيل',m.curM.net,prev?.net],['هامش التشغيل',m.curM.margin,prev?.margin,'pct'],['الكمية',m.curM.qty,prev?.qty,'qty'],['متوسط سعر الرد',m.curM.avgPrice,prev?.avgPrice],['تكلفة الرد',m.curM.costPerQty,prev?.costPerQty],['ربح الرد',m.curM.profitPerQty,prev?.profitPerQty],['إجمالي التحصيلات',m.curM.collections,prev?.collections],['نسبة التحصيل',m.curM.collectionRate,prev?.collectionRate,'pct'],['أيام التشغيل',m.curM.operatingDays,prev?.operatingDays,'qty'],['متوسط الإيراد اليومي',m.curM.avgDailyRevenue,prev?.avgDailyRevenue],['نقطة التعادل بالأردّة',m.curM.breakEvenQty,prev?.breakEvenQty,'qty']].map(x=>cmp(x[0],x[1],x[2],x[3]||'money'));
       const customerChangeRows=m.customerChanges.map(x=>`<tr><td>${escHtml(x.name)}</td><td>${mfMoney(x.current)}</td><td>${mfMoney(x.previous)}</td><td>${x.diff==null?'—':mfMoney(x.diff)}</td><td>${x.pct==null?'—':mfPct(x.pct)}</td></tr>`);const categoryChangeRows=m.categoryChanges.map(x=>`<tr><td>${escHtml(x.name)}</td><td>${mfMoney(x.current)}</td><td>${x.previous==null?'—':mfMoney(x.previous)}</td><td>${x.diff==null?'—':mfMoney(x.diff)}</td><td>${x.pct==null?'—':mfPct(x.pct)}</td></tr>`);
       const compPages=[
-        page(`<h1 class="amc-report-title">المقارنة مع ${escHtml(m.cmpName||'المقارنة')}</h1>${table(['المؤشر',mfMonthLabel(key),(m.cmpName||'المقارنة'),'الفرق','النسبة'],compRows)}<h2 class="amc-report-section-title">أكبر 5 تغيرات في العملاء</h2>${table(['العميل',mfMonthLabel(key),'السابق','الفرق','النسبة'],customerChangeRows)}`,title,period,compPageNo,totalPages),
-        page(`<h1 class="amc-report-title">المقارنة مع ${escHtml(m.cmpName||'المقارنة')} — استكمال</h1><h2 class="amc-report-section-title">أكبر 5 تغيرات في التصنيفات</h2>${table(['التصنيف',mfMonthLabel(key),'السابق','الفرق','النسبة'],categoryChangeRows)}`,title,period,compPageNo+1,totalPages)
+        page(`<h1 class="amc-report-title">المقارنة مع ${escHtml(m.cmpName||'المقارنة')}</h1>${table(['المؤشر',mfMonthLabel(key),(m.cmpName||'المقارنة'),'الفرق','النسبة'],compRows)}<h2 class="amc-report-section-title">أكبر 5 تغيرات في العملاء</h2>${table(['العميل',mfMonthLabel(key),(m.cmpName||'المقارنة'),'الفرق','النسبة'],customerChangeRows)}`,title,period,compPageNo,totalPages),
+        page(`<h1 class="amc-report-title">المقارنة مع ${escHtml(m.cmpName||'المقارنة')} — استكمال</h1><h2 class="amc-report-section-title">أكبر 5 تغيرات في التصنيفات</h2>${table(['التصنيف',mfMonthLabel(key),(m.cmpName||'المقارنة'),'الفرق','النسبة'],categoryChangeRows)}`,title,period,compPageNo+1,totalPages)
       ];
             // Long customer/debt tables are chunked; the dynamic page total is recalculated here.
       const all=[cover,summary,dailyPage,weeksPage,...customerPages,typesPage,catPage,expPage,insightsPage,...debtPages,...compPages];
       const actual=all.length;
-      return all.map((html,i)=>html.replace(/صفحة \d+ من \d+/,'صفحة '+(i+1)+' من '+actual)).join('');
+      return all.map((html,i)=>mfColorizeHtml(html).replace(/صفحة \d+ من \d+/,'صفحة '+(i+1)+' من '+actual)).join('');
+    },
+
+    WeeklyTemplate(ctx){
+      const key=/^\d{4}-\d{2}-\d{2}$/.test(ctx.weekKey||'')?ctx.weekKey:(/^\d{4}-\d{2}-\d{2}$/.test(ctx.from||'')?wkStartOf(ctx.from):wkDefault()),m=wkModel(key,ctx.compareKey),cm=m.curM,prev=m.prevM,single=m.single,nm=m.cmpName||'المقارنة',pv=m.cmpMode==='avg'?'متوسط الأسابيع السابقة':'الأسبوع السابق',title=ctx.title||'التقرير الأسبوعي',period=ctx.period||m.label,totalPages=5;
+      const cover=page(`<div class="amc-report-cover amc-mf-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${escHtml(title)}</h1><div class="en">Weekly Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>الأسبوع</b><strong>${escHtml(m.label)}</strong></div><div class="amc-report-info-row"><b>أسبوع المقارنة</b><strong>${escHtml(m.cmpName||'بدون مقارنة')}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,title,period,1,totalPages);
+      const cmpRow=(label,a,b,kind='money')=>{const d=mfDiff(a,b),fmt=x=>x==null?'—':kind==='pct'?mfPct(x):kind==='qty'?mfQty(x):mfMoney(x);return `<tr><td>${escHtml(label)}</td><td>${fmt(a)}</td><td>${fmt(b)}</td><td>${d.diff==null?'—':kind==='pct'?d.diff.toFixed(1)+' نقطة':fmt(d.diff)}</td><td>${d.pct==null||kind==='pct'?'—':mfPct(d.pct)}</td></tr>`;};
+      const kp=compactKpis([['الإيرادات',mfMoney(cm.revenue),'green'],['المصروفات',mfMoney(cm.expenses),'red'],['الصافي',mfMoney(cm.net),cm.net>=0?'green':'red'],['الهامش',mfPct(cm.margin),'navy'],['الكمية',mfQty(cm.qty),'navy'],['التحصيلات',mfMoney(cm.collections),'gold'],['نسبة التحصيل',mfPct(cm.collectionRate),'gold'],['أيام التشغيل',mfQty(cm.operatingDays),'navy']]);
+            const dRows=wkDailyRowsHtml(m).map(x=>x.replace(/<span class="amc-mf-tag">[^<]*<\/span>/,'').replace(/<tr class="[^"]*">/,'<tr>'));dRows.push(`<tr class="total"><td colspan="2">الإجمالي</td><td>${mfMoney(cm.revenue)}</td><td>${mfQty(cm.qty)}</td><td>${mfMoney(cm.expenses)}</td><td>${mfMoney(cm.net)}</td><td>—</td></tr>`);
+      const p2=page(`<div class="amc-mf-wk-page"><h1 class="amc-report-title">الملخص التنفيذي</h1><p class="amc-report-subtitle">${escHtml(m.label)}${prev?` — مقارنة مع ${escHtml(nm)}`:(m.cmpMode==='none'?' — بدون مقارنة':' — لا توجد بيانات للمقارنة')}</p>${kp}<h2 class="amc-report-section-title">الأداء اليومي</h2>${table(['التاريخ','اليوم','مبيعات','كمية','مصروفات','صافي اليوم','التراكمي'],dRows)}</div>`,title,period,2,totalPages);
+      const custRows=m.topCustomers.map((x,i)=>{const p=m.prevCustomers[x.name],d=prev&&p?mfDiff(x.amount,p.amount):null;return `<tr><td>${i+1}</td><td>${escHtml(x.name)}${single&&!p?' (جديد)':''}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.avg==null?'—':mfMoney(x.avg)}</td><td>${prev?(p?mfMoney(p.amount):'—'):'—'}</td><td>${d&&d.diff!=null?mfMoney(d.diff):(prev&&!p?mfMoney(x.amount):'—')}</td></tr>`;});
+      const custTotal=`<tr class="total"><td></td><td>الإجمالي</td><td>${mfQty(cm.qty)}</td><td>${mfMoney(cm.revenue)}</td><td>${mfPct(100)}</td><td>${cm.avgPrice==null?'—':mfMoney(cm.avgPrice)}</td><td>${prev?mfMoney(prev.revenue):'—'}</td><td>${prev?mfMoney(cm.revenue-prev.revenue):'—'}</td></tr>`;
+      const custHead=['#','العميل','الكمية','إيراد الأسبوع الحالي','النسبة','متوسط سعر الرد',`إيراد ${pv}`,'الفرق'];
+      const typeRows=m.topTypes.map(x=>{const p=m.prevTypes[x.name],d=prev?mfDiff(x.amount,p?p.amount:0):null;return `<tr><td>${escHtml(x.name)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.avg==null?'—':mfMoney(x.avg)}</td><td>${prev?(p?mfMoney(p.amount):'—'):'—'}</td><td>${d&&d.diff!=null?mfMoney(d.diff):'—'}</td></tr>`;});
+      const typeTable=`<h2 class="amc-report-section-title">أنواع التحميل</h2>${table(['النوع','الكمية','إيراد الأسبوع الحالي','النسبة','متوسط السعر',`إيراد ${pv}`,'الفرق'],typeRows)}`;
+      const custPages=[];const per=34;const allC=[...custRows,custTotal];for(let i=0;i<allC.length;i+=per){const rows=allC.slice(i,i+per),last=i+per>=allC.length;custPages.push({rows,last});}
+      const lastFew=custPages[custPages.length-1].rows.length+typeRows.length+3<=38;
+      const p3s=custPages.map((c,i)=>page(`<div class="amc-mf-wk3"><h1 class="amc-report-title">المبيعات حسب العميل${i?' — استكمال':''}</h1>${table(custHead,c.rows)}${c.last?`<div class="amc-report-note">تركيز الإيراد لأكبر 3 عملاء: <b>${mfPct(m.concentration)}</b></div>`:''}${c.last&&lastFew?typeTable:''}</div>`,title,period,3+i,totalPages));
+      const typePage=lastFew?[]:[page(`<h1 class="amc-report-title">أنواع التحميل</h1>${table(['النوع','الكمية','إيراد الأسبوع الحالي','النسبة','متوسط السعر',`إيراد ${pv}`,'الفرق'],typeRows)}`,title,period,3+custPages.length,totalPages)];
+      const catRows=m.topCats.slice(0,8).map(x=>{const d=mfDiff(x.amount,x.prev);return `<tr><td>${escHtml(x.name)}</td><td>${mfMoney(x.amount)}</td><td>${mfPct(x.share)}</td><td>${x.prev==null?'—':mfMoney(x.prev)}</td><td>${d.diff==null?'—':mfMoney(d.diff)}</td><td>${d.pct==null?'—':mfPct(d.pct)}</td></tr>`;});
+      const topExpRows=m.topExpenses.slice(0,6).map(x=>`<tr><td class="nw">${mfFmtDate(x.date)}</td><td>${escHtml(x.statement)}</td><td>${escHtml(x.category)}</td><td class="nw">${mfMoney(x.amount)}</td><td class="nw">${mfPct(x.share)}</td></tr>`);
+      const colRows=m.collections.slice(0,6).map(x=>`<tr><td>${escHtml(x.name)}</td><td>${mfMoney(x.amount)}</td><td>${x.count}</td><td>${x.last?mfFmtDate(x.last):'—'}</td></tr>`);
+      const p4=page(`<div class="amc-mf-exp-page"><h1 class="amc-report-title">المصروفات حسب التصنيف</h1>${table(['التصنيف','الأسبوع الحالي','النسبة',pv,'الفرق','الفرق %'],catRows)}<h2 class="amc-report-section-title">أكبر بنود المصروفات</h2>${table(['التاريخ','البيان','التصنيف','المبلغ','النسبة'],topExpRows)}<h2 class="amc-report-section-title">التحصيل</h2>${colRows.length?table(['العميل','التحصيلات','عدد الدفعات','آخر دفعة'],colRows):'<div class="amc-report-note">لا توجد تحصيلات في هذا الأسبوع.</div>'}<div class="amc-report-note">الفرق بين مبيعات الأسبوع وتحصيلاته: <b>${mfMoney(cm.revenue-cm.collections)}</b> ريال · نسبة التحصيل: <b>${mfPct(cm.collectionRate)}</b></div></div>`,title,period,4+custPages.length-1+typePage.length,totalPages);
+      const opRows=[cmpRow('ربح الرد',cm.profitPerQty,prev?.profitPerQty),cmpRow('تكلفة الرد',cm.costPerQty,prev?.costPerQty),cmpRow('متوسط سعر الرد',cm.avgPrice,prev?.avgPrice),cmpRow('أيام التشغيل',cm.operatingDays,prev?.operatingDays,'qty'),cmpRow('متوسط الإيراد اليومي',cm.avgDailyRevenue,prev?.avgDailyRevenue),cmpRow('إجمالي التحصيلات',cm.collections,prev?.collections),cmpRow('نسبة التحصيل',cm.collectionRate,prev?.collectionRate,'pct')];
+      const trendRows=m.trend.map(x=>`<tr><td>${escHtml(x.label)}</td><td>${mfMoney(x.revenue)}</td><td>${mfMoney(x.expenses)}</td><td>${mfMoney(x.net)}</td><td>${mfPct(x.margin)}</td><td>${mfQty(x.qty)}</td><td>${mfMoney(x.collections)}</td></tr>`);
+      const t=m.mtd,mtRows=[cmpRow('الإيرادات',t.cur.revenue,t.prev?.revenue),cmpRow('المصروفات',t.cur.expenses,t.prev?.expenses),cmpRow('الصافي',t.cur.net,t.prev?.net),cmpRow('الكمية',t.cur.qty,t.prev?.qty,'qty')];
+      const p5=page(`<div class="amc-mf-wk-page"><h1 class="amc-report-title">مؤشرات التشغيل والاتجاه</h1>${table(['المؤشر','الأسبوع الحالي',pv,'الفرق','النسبة'],opRows)}<h2 class="amc-report-section-title">اتجاه آخر 6 أسابيع</h2>${table(['الأسبوع','الإيرادات','المصروفات','الصافي','الهامش','الكمية','التحصيلات'],trendRows)}</div>`,title,period,5,totalPages);
+      const all=[cover,p2,...p3s,...typePage,p4,p5];const actual=all.length;
+      return all.map((html,i)=>mfColorizeHtml(html).replace(/صفحة \d+ من \d+/,'صفحة '+(i+1)+' من '+actual)).join('');
     },
 
     ReceivablesTemplate(ctx){
       const {receivables,total}=receivablesSnapshot(ctx.receivables,ctx.col);
       const title=ctx.title||'تقرير المديونية';
       const period='الرصيد الحالي — دون فلترة تاريخ';
-      const coverContent=`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${escHtml(title)}</h1><div class="en">Receivables Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>مصدر البيانات</b><strong>مديونية عملاء الكسارة</strong></div><div class="amc-report-info-row"><b>نوع التقرير</b><strong>رصيد حالي للعملاء</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div></div></div>`;
+      const coverContent=`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${escHtml(title)}</h1><div class="en">Receivables Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>مصدر البيانات</b><strong>مديونية عملاء الكسارة</strong></div><div class="amc-report-info-row"><b>نوع التقرير</b><strong>رصيد حالي للعملاء</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`;
       if(!receivables.length){
         const cover=page(coverContent,title,period,1,2);
         const empty=page(`<h1 class="amc-report-title">المديونية الحالية</h1><p class="amc-report-subtitle">لا توجد مديونية فعلية في مصدر البيانات الحالي.</p><div class="amc-report-kpis">${kpi('إجمالي المديونية',money(0)+' ريال','red')}${kpi('عدد العملاء المدينين',qty(0),'navy')}</div><div class="amc-report-note">لا توجد سجلات ذات مديونية أكبر من صفر لعرضها في هذا التقرير.</div>`,title,period,2,2);
@@ -3062,6 +3276,10 @@ setInterval(()=>{
     return {from,to};
   }
   function mapCurrentReport(index){
+    if(index==="weekly"){
+      const wk=document.getElementById('rWeeklyWeek')?.value||wkDefault();
+      return ['WeeklyTemplate',{from:wk,to:wkAddDays(wk,6),selectedDate:wkAddDays(wk,6),period:wkLabel(wk),title:'التقرير الأسبوعي',weekKey:wk,compareKey:document.getElementById('rWeeklyCmp')?.value||'prev'}];
+    }
     if(index==="monthlyfull"){
       const selected=document.getElementById('rMonthlyFullMonth')?.value||mfMonthDefault();
       const b=mfMonthBounds(selected);
@@ -3109,7 +3327,7 @@ setInterval(()=>{
   function printCurrentReport(){
     /* Independent report routing: comparison must never fall back to Executive. */
     const rawIndex=window.AMC_CURRENT_REPORT_INDEX;
-    const idx=(rawIndex==="receivables")?"receivables":(rawIndex==="daily")?"daily":(rawIndex==="dailybrief")?"dailybrief":(rawIndex==="comparison")?"comparison":(rawIndex==="monthlyfull")?"monthlyfull":(Number.isInteger(rawIndex)?rawIndex:0);
+    const idx=(rawIndex==="receivables")?"receivables":(rawIndex==="daily")?"daily":(rawIndex==="dailybrief")?"dailybrief":(rawIndex==="comparison")?"comparison":(rawIndex==="monthlyfull")?"monthlyfull":(rawIndex==="weekly")?"weekly":(Number.isInteger(rawIndex)?rawIndex:0);
     const [tpl,opt]=mapCurrentReport(idx);
     if(window.AMCReportEngine?.build){
       const ov=window.AMCReportEngine.build(tpl,opt);
@@ -3138,6 +3356,8 @@ setInterval(()=>{
          window.AMC_CURRENT_REPORT_INDEX='comparison';
        }else if(b.classList.contains('monthly-full-report-item')){
          window.AMC_CURRENT_REPORT_INDEX='monthlyfull';
+       }else if(b.classList.contains('weekly-report-item')){
+         window.AMC_CURRENT_REPORT_INDEX='weekly';
        }else{
         window.AMC_CURRENT_REPORT_INDEX=Array.from(document.querySelectorAll('.report-item')).filter(x=>!x.classList.contains('daily-report-item')&&!x.classList.contains('comparison-report-item')&&!x.classList.contains('receivables-report-item')).indexOf(b);
       }
@@ -3343,7 +3563,7 @@ function buildPdf(monthA,monthB){
     throw new Error('لم تكتمل بيانات المقارنة للفترتين المحددتين. أعد إنشاء المقارنة ثم حاول الطباعة مرة أخرى.');
   }
   const page=(title,content,num,total)=>`<section class="comparison-report-pdf-page amc-report-page"><div class="comparison-report-pdf-head"><div><b>${esc2(title)}</b><span>Comparison Report</span></div><div><b>${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</b><span>Month vs Month</span></div><div class="page-no">${num} / ${total}</div></div>${content}<div class="comparison-report-pdf-foot">كسارة العساف — تقرير المقارنات — ${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</div></section>`;
-  const cover=`<section class="comparison-report-pdf-page amc-report-page comparison-report-cover-page"><div class="comparison-report-cover"><img src="${document.querySelector('.hero-logo')?.getAttribute('src')||''}" alt=""><h1>تقرير المقارنات</h1><div class="en">Comparison Report</div><div class="comparison-report-cover-grid"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong><b>الفترة الأولى</b><strong>${esc2(d.labels.a)}</strong><b>الفترة الثانية</b><strong>${esc2(d.labels.b)}</strong><b>نوع المقارنة</b><strong>مقارنة شهرية — Month vs Month</strong></div></div></section>`;
+  const cover=`<section class="comparison-report-pdf-page amc-report-page comparison-report-cover-page"><div class="comparison-report-cover"><img src="${document.querySelector('.hero-logo')?.getAttribute('src')||''}" alt=""><h1>تقرير المقارنات</h1><div class="en">Comparison Report</div><div class="comparison-report-cover-grid"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong><b>الفترة الأولى</b><strong>${esc2(d.labels.a)}</strong><b>الفترة الثانية</b><strong>${esc2(d.labels.b)}</strong><b>نوع المقارنة</b><strong>مقارنة شهرية — Month vs Month</strong><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></section>`;
   const total=8;
   const p2=page('الملخص التنفيذي للمقارنة',`<section><h3>الملخص التنفيذي للمقارنة</h3><div class="comparison-report-kpis">${[['الإيرادات',d.metrics.revenue,'money'],['المصروفات',d.metrics.expenses,'expense'],['صافي الربح / الخسارة',d.metrics.profit,'money'],['هامش الربح / الخسارة',d.metrics.profitMargin,'percent']].map(([l,x,t])=>`<div class="comparison-report-card"><label>${l}</label><div class="comparison-report-pair"><span>${valueCell(x.previous,t)}</span><b>→</b><span>${valueCell(x.current,t)}</span></div><small>${esc2(d.labels.a)} → ${esc2(d.labels.b)} · ${pct2(x.percentage)}</small></div>`).join('')}</div>${compareTable(d.metricRows)}</section>`,2,total);
   const p3=page('تصنيفات المصروفات',`<section><h3>تصنيفات المصروفات — UNION</h3>${compareTable(d.expenseCategories)}</section>`,3,total);
@@ -3898,6 +4118,7 @@ const style=document.createElement('style');style.textContent=`.comparison-repor
             <div class="amc-report-info-row"><b>نوع التقرير</b><strong>${selected==='overview'?'التقرير الشامل لمركز الزيوت والمخزون':'تقرير مركز الزيوت والمخزون'}</strong></div>
             <div class="amc-report-info-row"><b>عدد صفحات التقرير</b><strong>${selectedSections.length}</strong></div>
             <div class="amc-report-info-row"><b>تاريخ الإصدار</b><strong>${today}</strong></div>
+            <div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div>
           </div>
         </div>
         <div class="amc-report-footer">
