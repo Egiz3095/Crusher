@@ -282,7 +282,12 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 
 /* ===== Functional Reports Workspace ===== */
 .report-workspace{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
-.report-workspace-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:22px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#fff,#f8fbfd)}
+.report-workspace-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:20px 24px;border-bottom:3px solid #c79a28;background:linear-gradient(112deg,#17294d 0%,#213a61 72%,#2b476e 100%);color:#fff}
+#reportWorkspace .report-workspace-kicker{font-size:10px;letter-spacing:.16em;color:#e6c56b}
+#reportWorkspace .report-workspace-head h2{color:#fff;font-size:24px;line-height:1.3}
+#reportWorkspace .report-workspace-head p{color:#d7dfeb;font-size:11px;line-height:1.75}
+#reportWorkspace .report-back{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.32);color:#fff}
+#reportWorkspace .report-print{background:#c79a28;border-color:#c79a28;color:#17294d}
 .report-workspace-kicker{font-size:11px;letter-spacing:.12em;font-weight:800;color:var(--primary);margin-bottom:5px}
 .report-workspace-head h2{margin:0;color:var(--text);font-size:22px}.report-workspace-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
 .report-back{border:1px solid var(--border);background:#fff;color:var(--primary);font-weight:800;padding:10px 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
@@ -298,6 +303,7 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 .report-empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:12px;background:#fafcfd}.report-note{padding:12px 14px;border-radius:10px;background:#f3f8fb;border-right:3px solid var(--primary);color:var(--muted);font-size:12px;margin-bottom:14px}
 .report-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf5fa;color:var(--primary);font-size:10px;font-weight:800}.report-alert{padding:14px;border:1px solid var(--border);border-radius:11px;margin-bottom:10px;background:#fff}.report-alert strong{display:block;margin-bottom:5px}.report-alert p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
 @media(max-width:1000px){.report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.report-grid{grid-template-columns:1fr}.report-workspace-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:760px){#reportWorkspace .report-workspace-head{padding:16px}}
 @media(max-width:600px){.report-kpis{grid-template-columns:1fr}.report-body{padding:12px}.report-toolbar{padding:12px}.report-filter{width:100%}.report-filter input,.report-filter select,.report-filter button{width:100%}}
 
 /* ===== Industrial Executive Hero refinement ===== */
@@ -788,122 +794,141 @@ table{width:100%;border-collapse:collapse;font-size:10px}th{text-align:right;col
 </style>
 
 <style id="oil-inventory-module-style">
-.oil-report-item .report-icon{background:linear-gradient(135deg,#9a6418,#c08a2d)!important;color:#fff!important}
-.oil-report-item:hover{border-color:#cda45a!important}
-.oil-report-module{direction:rtl;color:#243447;font-family:inherit}
-.oil-report-hero{background:linear-gradient(135deg,#fffaf0,#fff 62%);border:1px solid #ead9b4;border-radius:16px;padding:18px 20px;margin-bottom:14px;box-shadow:0 8px 22px rgba(115,78,21,.06)}
-.oil-report-hero h2{margin:0;color:#6e4b18;font-size:22px}.oil-report-hero p{margin:6px 0 0;color:#718096;font-size:11px;line-height:1.8}
-.oil-report-toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:end;padding:13px;background:#fff;border:1px solid #dbe5ee;border-radius:14px;margin-bottom:14px}
-.oil-filter{display:flex;flex-direction:column;gap:5px;min-width:140px;flex:1}.oil-filter label{font-size:10px;font-weight:800;color:#61758a}.oil-filter select,.oil-filter input{width:100%;box-sizing:border-box;border:1px solid #d4dfe8;background:#fff;border-radius:8px;padding:9px 10px;color:#263d55;font:inherit;font-size:11px;outline:none}.oil-filter select:focus,.oil-filter input:focus{border-color:#b8871c;box-shadow:0 0 0 3px rgba(184,135,28,.10)}
-.oil-btn{border:1px solid #b8871c;background:#b8871c;color:#fff;border-radius:9px;padding:9px 14px;font-weight:800;font-size:11px;cursor:pointer}.oil-btn.secondary{background:#fff;color:#7a571e;border-color:#d8c08b}.oil-btn:hover{filter:brightness(.96)}
-.oil-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.oil-tab{border:1px solid #d7e1e9;background:#fff;color:#5e7287;border-radius:9px;padding:8px 11px;font-size:10px;font-weight:800;cursor:pointer}.oil-tab.active{background:#6e4b18;color:#fff;border-color:#6e4b18}
-.oil-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.oil-kpi{background:#fff;border:1px solid #dbe5ee;border-radius:13px;padding:13px;min-width:0}.oil-kpi label{display:block;color:#74869a;font-size:10px;margin-bottom:6px}.oil-kpi strong{display:block;color:#173b61;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.oil-kpi small{display:block;color:#8a99a8;font-size:9px;margin-top:4px}
-.oil-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.oil-card{background:#fff;border:1px solid #dbe5ee;border-radius:14px;padding:15px;margin-bottom:14px;break-inside:avoid}.oil-card h3{margin:0 0 11px;color:#173b61;font-size:14px}.oil-card.full{grid-column:1/-1}.oil-table-wrap{overflow:auto}.oil-table{width:100%;border-collapse:collapse;min-width:680px}.oil-table th{background:#6e4b18;color:#fff;font-weight:800}.oil-table th,.oil-table td{padding:7px 8px;border-bottom:1px solid #e7edf2;font-size:10px;vertical-align:middle;white-space:nowrap}.oil-table td.num,.oil-table th.num{direction:ltr;text-align:left;font-variant-numeric:tabular-nums}.oil-table tr.total td{font-weight:900;background:#faf6ed;border-top:2px solid #d9bd7b}.oil-badge{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:800;background:#edf5fb;color:#315a7d}.oil-badge.good{background:#eaf7ef;color:#197548}.oil-badge.warn{background:#fff5df;color:#91620f}.oil-badge.bad{background:#fdecee;color:#b42335}
-.oil-bars{display:flex;flex-direction:column;gap:8px}.oil-bar-row{display:grid;grid-template-columns:150px 1fr 80px;gap:8px;align-items:center;font-size:10px}.oil-bar-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.oil-bar-track{height:10px;background:#eef2f5;border-radius:999px;overflow:hidden}.oil-bar-fill{height:100%;background:linear-gradient(90deg,#b8871c,#d8b15c);border-radius:999px}.oil-bar-value{text-align:left;direction:ltr;white-space:nowrap;font-variant-numeric:tabular-nums}
-.oil-alert{padding:11px 13px;border:1px solid #dbe5ee;border-radius:10px;background:#f8fafc;margin-bottom:8px;font-size:10px;line-height:1.7}.oil-alert.bad{background:#fff3f4;border-color:#efb7bf;color:#9e2030}.oil-alert.warn{background:#fff8e9;border-color:#ead39b;color:#7b5916}.oil-alert.good{background:#eef9f2;border-color:#bfe1ca;color:#176b3f}
-.oil-empty{padding:24px;text-align:center;border:1px dashed #ccd8e4;border-radius:12px;background:#f8fafc;color:#718297;font-size:11px}.oil-loading{text-align:center;padding:35px;color:#6f8193}.oil-source{font-size:9px;color:#8795a3;margin-top:8px}.oil-mini-note{font-size:9px;color:#7b8b99;line-height:1.7}.oil-report-error{padding:16px;background:#fff3f4;border:1px solid #efb7bf;border-radius:12px;color:#9f2232}.oil-report-error strong{display:block;margin-bottom:5px}
-@media(max-width:900px){.oil-kpis{grid-template-columns:1fr 1fr}.oil-grid{grid-template-columns:1fr}.oil-card.full{grid-column:auto}.oil-bar-row{grid-template-columns:110px 1fr 70px}}
-@media(max-width:600px){.oil-kpis{grid-template-columns:1fr 1fr}.oil-report-hero h2{font-size:19px}.oil-filter{min-width:120px}.oil-toolbar{align-items:stretch}.oil-tabs{overflow:auto;flex-wrap:nowrap}.oil-tab{white-space:nowrap}.oil-bar-row{grid-template-columns:90px 1fr 62px;font-size:9px}}
-@media print{
-  .oil-report-toolbar,.oil-tabs,.oil-source{display:none!important}
-  .oil-card{box-shadow:none!important;break-inside:auto;page-break-inside:auto}
-  .oil-table-wrap{break-inside:avoid!important;page-break-inside:avoid!important}
-  .oil-table{break-inside:avoid!important;page-break-inside:avoid!important}
-  /* نصوص مركز الزيوت خارج الجداول: +20% وBold */
-  .oil-single-report-page{
-    height:297mm!important;
-    min-height:297mm!important;
-    max-height:297mm!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-    break-after:page!important;
-    page-break-after:always!important;
-  }
-  /* التقرير بالكامل Bold */
-  .oil-single-report-page,
-  .oil-single-report-page *{
-    font-weight:700!important;
-  }
-  .oil-single-report-page .oil-table th,
-  .oil-single-report-page .oil-table td,
-  .oil-single-report-page .oil-table .oil-total-row{
-    font-weight:700!important;
-  }
-  .oil-single-report-page .oil-amc-content p,
-  .oil-single-report-page .oil-amc-content h1,
-  .oil-single-report-page .oil-amc-content h2,
-  .oil-single-report-page .oil-amc-content h3,
-  .oil-single-report-page .oil-amc-content h4,
-  .oil-single-report-page .oil-amc-content li,
-  .oil-single-report-page .oil-amc-content label,
-  .oil-single-report-page .oil-amc-content .oil-card-title,
-  .oil-single-report-page .oil-amc-content .oil-kpi-label,
-  .oil-single-report-page .oil-amc-content .oil-kpi-value,
-  .oil-single-report-page .oil-amc-content .oil-note,
-  .oil-single-report-page .oil-amc-content .oil-empty{
-    font-size:1.2em!important;
-    font-weight:700!important;
-  }
-  .oil-single-report-page:last-of-type{break-after:auto!important;page-break-after:auto!important}
-  .oil-single-report-page{break-inside:avoid!important;page-break-inside:avoid!important}
-  .oil-report-heading{flex:0 0 auto}
-  .oil-fit-viewport{
-    position:relative!important;
-    width:100%!important;
-    overflow:hidden!important;
-    flex:0 0 auto!important;
-  }
-  .oil-fit-content{
-    width:100%;
-    transform-origin:top right;
-    box-sizing:border-box;
-  }
-  .oil-fit-content .oil-card{
-    break-inside:avoid!important;
-    page-break-inside:avoid!important;
-  }
-  .oil-report-module{font-family:Arial,Tahoma,"Segoe UI",sans-serif}
-  .oil-table-wrap{overflow:visible!important;width:100%!important}
-  .oil-table{
-    width:100%!important;min-width:0!important;
-    table-layout:fixed!important;border-collapse:collapse!important;direction:rtl!important;
-  }
-  .oil-table th,.oil-table td{
-    box-sizing:border-box!important;
-    font-family:Arial,Tahoma,"Segoe UI",sans-serif!important;
-    font-size:9.5px!important;line-height:1.35!important;
-    padding:1.25mm 1.5mm!important;
-    white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
-    vertical-align:top!important;
-  }
-  .oil-table th{text-align:right!important;white-space:normal!important}
-  .oil-table td.num,.oil-table th.num{
-    direction:ltr!important;text-align:right!important;
-    unicode-bidi:plaintext!important;font-variant-numeric:tabular-nums!important;
-  }
-  .oil-table thead{display:table-header-group}
-  .oil-table tr{break-inside:avoid!important;page-break-inside:avoid!important}
-  .oil-table .oil-total-row{
-    font-weight:800!important;
-    border-top:2px solid #173b61!important;
-    background:#f5f7fa!important;
-  }
-  .oil-table .oil-total-row td{
-    font-weight:800!important;
-  }
-  .oil-table .oil-total-row .total-label{
-    color:#173b61!important;
-    text-align:right!important;
-  }
-  .oil-table .oil-total-row .oil-total-number{
-    color:#173b61!important;
-  }
-  .oil-kpis{grid-template-columns:repeat(4,1fr)!important}
-  .oil-grid{grid-template-columns:1fr 1fr}
-  .oil-amc-page .oil-amc-content .oil-table th{background:#6e4b18!important;color:#fff!important}
-  .oil-amc-page .oil-amc-content .oil-card h3{font-size:13px!important;margin-bottom:2mm!important}
-  .oil-amc-cover .amc-report-cover{min-height:205mm!important}
-}
+#reportWorkspace:has(.oil-report-module){--oil-navy:#17294d;--oil-navy-2:#213a61;--oil-gold:#c79a28;--oil-green:#1f8b3b;--oil-red:#d7262e;--oil-line:#dbe4ee;--oil-soft:#f5f7fa;--oil-text:#28384e;--oil-muted:#68788d}
+.oil-report-item .report-icon{background:var(--oil-gold)!important;color:#fff!important}.oil-report-item:hover{border-color:var(--oil-gold)!important}
+#reportWorkspace:has(.oil-report-module){border-color:#cfd8e5;border-radius:16px;box-shadow:0 12px 34px rgba(23,41,77,.09);overflow:hidden}
+#reportWorkspace:has(.oil-report-module) .report-workspace-head{background:linear-gradient(112deg,#17294d 0%,#213a61 72%,#2b476e 100%);border-bottom:3px solid var(--oil-gold);padding:20px 24px;color:#fff}
+#reportWorkspace:has(.oil-report-module) .report-workspace-kicker{color:#e6c56b;font-size:10px;letter-spacing:.16em}
+#reportWorkspace:has(.oil-report-module) #reportTitle{color:#fff;font-size:24px;line-height:1.3}
+#reportWorkspace:has(.oil-report-module) #reportDescription{color:#d7dfeb;font-size:11px;line-height:1.75}
+#reportWorkspace:has(.oil-report-module) .report-head-actions{gap:8px}
+#reportWorkspace:has(.oil-report-module) .report-print{background:var(--oil-gold);border-color:var(--oil-gold);color:#17294d}
+#reportWorkspace:has(.oil-report-module) .report-back{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.32);color:#fff}
+#reportWorkspace:has(.oil-report-module) .report-toolbar{display:block;padding:18px 22px;background:#f5f7fa;border-bottom:1px solid var(--oil-line)}
+#reportWorkspace:has(.oil-report-module) .report-body{padding:20px 22px 26px;background:#fbfcfe}
+.oil-report-module{direction:rtl;color:var(--oil-text);font-family:inherit}
+.oil-filter-console{padding:18px;background:#fff;border:1px solid var(--oil-line);border-radius:14px;box-shadow:0 4px 16px rgba(23,41,77,.045)}
+.oil-filter-console-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 2px 14px;margin-bottom:14px;border-bottom:1px solid #e9eef4}
+.oil-filter-console-head>div:first-child>span,.oil-view-overline{display:block;color:var(--oil-gold);font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.oil-filter-console-head h3{margin:3px 0;color:var(--oil-navy);font-size:16px;font-weight:900}
+.oil-filter-console-head p{margin:0;color:var(--oil-muted);font-size:10px;line-height:1.65}
+.oil-active-range{flex:0 0 auto;min-width:190px;padding:8px 12px;border:1px solid #e7ecf2;border-radius:9px;background:#f8fafc;text-align:left}
+.oil-active-range span{display:block;color:var(--oil-muted);font-size:9px;font-weight:700}
+.oil-active-range strong{display:block;margin-top:3px;color:var(--oil-navy);font-size:11px;direction:rtl}
+.oil-toolbar-group{display:grid;grid-template-columns:180px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid #edf1f5}
+.oil-toolbar-heading{display:flex;align-items:flex-start;gap:9px;color:var(--oil-navy)}
+.oil-toolbar-index{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#edf2f8;color:var(--oil-navy);font-size:10px;font-weight:900}
+.oil-toolbar-heading b{display:block;font-size:11px;font-weight:900}
+.oil-toolbar-heading small{display:block;margin-top:3px;color:var(--oil-muted);font-size:9px;font-weight:500;line-height:1.5}
+.oil-toolbar-fields{display:grid;gap:9px;min-width:0}
+.oil-date-fields{grid-template-columns:repeat(4,minmax(0,1fr))}
+.oil-filter-fields{grid-template-columns:repeat(5,minmax(0,1fr))}
+.oil-filter{display:flex;flex-direction:column;gap:5px;min-width:0}
+.oil-filter label{color:#52647a;font-size:9px;font-weight:800;line-height:1.4}
+.oil-filter select,.oil-filter input{width:100%;min-width:0;min-height:38px;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--oil-navy);font:inherit;font-size:10px;outline:none}
+.oil-filter select:focus,.oil-filter input:focus{border-color:#6985aa;box-shadow:0 0 0 3px rgba(23,41,77,.09)}
+.oil-toolbar-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:13px}
+.oil-period-hint{max-width:620px;padding:8px 10px;border-right:3px solid var(--oil-gold);border-radius:6px;background:#f8fafc;color:#52647a;font-size:9px;line-height:1.7}
+.oil-period-hint strong{color:var(--oil-navy)}
+.oil-toolbar-actions{display:flex;gap:7px;flex:none}
+.oil-btn{min-height:36px;padding:8px 13px;border:1px solid var(--oil-navy);border-radius:8px;background:var(--oil-navy);color:#fff;font-size:10px;font-weight:900;cursor:pointer;transition:transform .15s,background .15s}
+.oil-btn:hover{transform:translateY(-1px);background:var(--oil-navy-2)}
+.oil-btn.secondary{border-color:#cbd5e1;background:#fff;color:var(--oil-navy)}
+.oil-toolbar-error{margin-top:8px;color:#b4232c;font-size:10px;font-weight:800}
+.oil-tabs{display:flex;align-items:stretch;gap:8px;margin:0 0 18px;padding:8px;border:1px solid #e0e7ef;border-radius:12px;background:#f3f6fa;overflow-x:auto;scrollbar-width:thin}
+.oil-tab-group{display:flex;align-items:center;gap:4px;padding-left:8px;border-left:1px solid #d7dfe8;flex:0 0 auto}
+.oil-tab-group:last-child{padding-left:0;border-left:0}
+.oil-tab-group-label{align-self:center;margin-left:3px;color:#8491a1;font-size:8px;font-weight:900;white-space:nowrap}
+.oil-tab-list{display:flex;gap:4px}
+.oil-tab{flex:0 0 auto;min-height:34px;padding:7px 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:#53647a;font-size:9px;font-weight:800;white-space:nowrap;cursor:pointer;transition:background .15s,color .15s,border .15s}
+.oil-tab:hover{border-color:#d5dee8;background:#fff;color:var(--oil-navy)}
+.oil-tab.active{border-color:var(--oil-navy);background:var(--oil-navy);color:#fff;box-shadow:0 3px 8px rgba(23,41,77,.15)}
+.oil-view-context{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:-2px 2px 15px;padding:0 2px 12px;border-bottom:1px solid #e4eaf1}
+.oil-view-context h3{margin:2px 0;color:var(--oil-navy);font-size:19px;font-weight:900}
+.oil-view-context p{margin:3px 0 0;color:var(--oil-muted);font-size:10px;line-height:1.65}
+.oil-view-period{flex:0 0 auto;padding:7px 10px;border:1px solid #e0e7ef;border-radius:8px;background:#fff;color:#52647a;font-size:9px;font-weight:800}
+.oil-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:14px}
+.oil-kpi{position:relative;min-width:0;overflow:hidden;padding:14px;border:1px solid #dfe6ee;border-radius:11px;background:#fff;box-shadow:0 3px 10px rgba(23,41,77,.035)}
+.oil-kpi:before{position:absolute;inset:0 0 auto;height:3px;background:var(--oil-navy);content:""}
+.oil-kpi.green:before{background:var(--oil-green)}.oil-kpi.red:before{background:var(--oil-red)}.oil-kpi.gold:before{background:var(--oil-gold)}
+.oil-kpi label{display:block;margin:1px 0 7px;color:#66768a;font-size:9px;font-weight:700;line-height:1.45}
+.oil-kpi strong{display:block;color:var(--oil-navy);font-size:16px;font-weight:900;line-height:1.4;overflow-wrap:anywhere}
+.oil-kpi small{display:block;margin-top:6px;color:#7a8797;font-size:9px;line-height:1.6;overflow-wrap:anywhere}
+.oil-dashboard-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.oil-dashboard-kpis .oil-kpi{min-height:112px;padding:15px}
+.oil-dashboard-kpis .oil-kpi strong{font-size:17px}
+.oil-dashboard-kpis .oil-kpi small{font-size:9px}
+.oil-kpi-comparison{display:block;margin-top:2px;color:#52647a}
+.oil-kpi-comparison b{color:var(--oil-navy)}
+.oil-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 0 16px}
+.oil-count-item{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0;padding:9px 12px;border:1px solid #e1e7ef;border-radius:9px;background:#f7f9fc}
+.oil-count-item span{color:#66768a;font-size:9px;font-weight:700}.oil-count-item strong{color:var(--oil-navy);font-size:14px;font-weight:900;font-variant-numeric:tabular-nums}
+.oil-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:stretch}
+.oil-card{min-width:0;margin:0 0 13px;padding:15px;border:1px solid #e0e7ef;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(23,41,77,.035);break-inside:avoid}
+.oil-card h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;color:var(--oil-navy);font-size:12px;font-weight:900}
+.oil-card h3:before{width:3px;height:14px;border-radius:2px;background:var(--oil-gold);content:""}
+.oil-card.full{grid-column:1/-1}
+.oil-overview-intro{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 12px;padding:2px 2px 13px;border-bottom:1px solid #e0e7ef}
+.oil-overview-intro h3{margin:3px 0;color:var(--oil-navy);font-size:20px;font-weight:900}
+.oil-overview-intro p{margin:3px 0 0;color:#66768a;font-size:10px;line-height:1.7}
+.oil-overview-chip{flex:0 0 auto;padding:7px 10px;border:1px solid #dfe6ee;border-radius:8px;background:#f8fafc;color:#53647a;font-size:9px;font-weight:800}
+.oil-overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:stretch}
+.oil-overview-grid .oil-card{height:100%;box-sizing:border-box}
+.oil-alert-list{display:grid;gap:8px}
+.oil-alert-row{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;border:1px solid #e5eaf0;border-right:3px solid #17294d;border-radius:8px;background:#fbfcfe}
+.oil-alert-row.red{border-right-color:var(--oil-red);background:#fffafa}.oil-alert-row.gold{border-right-color:var(--oil-gold);background:#fffdf7}.oil-alert-row.green{border-right-color:var(--oil-green);background:#f7fcf8}
+.oil-alert-symbol{display:grid;place-items:center;flex:0 0 20px;width:20px;height:20px;border-radius:6px;background:#eef2f7;color:var(--oil-navy);font-size:10px;font-weight:900}
+.oil-alert-row.red .oil-alert-symbol{background:#fdecee;color:var(--oil-red)}.oil-alert-row.gold .oil-alert-symbol{background:#fff2cf;color:#9b7418}.oil-alert-row.green .oil-alert-symbol{background:#e7f5eb;color:var(--oil-green)}
+.oil-alert-row strong{display:block;color:var(--oil-navy);font-size:10px;font-weight:900}.oil-alert-row p{margin:2px 0 0;color:#6d7b8c;font-size:9px;line-height:1.65}
+.oil-bars{display:flex;flex-direction:column;gap:9px}
+.oil-bar-row{display:grid;grid-template-columns:minmax(105px,150px) minmax(0,1fr) 84px;gap:9px;align-items:center;font-size:9px}
+.oil-bar-label{overflow:hidden;color:#52647a;text-overflow:ellipsis;white-space:nowrap}
+.oil-bar-track{height:8px;overflow:hidden;border-radius:999px;background:#edf1f5}
+.oil-bar-fill{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#17294d,#526a8a)}
+.oil-bar-value{text-align:left;direction:ltr;white-space:nowrap;color:var(--oil-navy);font-size:9px;font-weight:800;font-variant-numeric:tabular-nums}
+.oil-report-module .amc-mf-chart-box{margin:4px 0 0;padding:10px 12px;border:1px solid #e2e8ef;border-radius:10px;background:#fbfcfe}
+.oil-report-module .amc-mf-chart-box h3,.oil-report-module .amc-mf-chart-box h4{margin:2px 0 8px;color:var(--oil-navy);font-size:10px;font-weight:900}
+.oil-report-module .amc-mf-svg{max-height:220px}
+.oil-report-module .amc-mf-legend{color:#63738a;font-size:9px}
+.oil-report-module .amc-mf-legend i{width:9px;height:9px}
+.oil-flow-summary{max-width:760px;margin:3px auto 0;padding:16px;border:1px solid #e0e7ef;border-radius:10px;background:#fff}
+.oil-flow-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid #edf1f5;color:#66768a;font-size:9px;font-weight:700}
+.oil-flow-head strong{color:#17294d;font-size:11px;font-variant-numeric:tabular-nums}
+.oil-flow-line{margin:10px 0}
+.oil-flow-label{display:flex;justify-content:space-between;gap:12px;margin-bottom:5px;color:#63738a;font-size:9px}
+.oil-flow-label strong{color:#17294d;font-size:10px;font-variant-numeric:tabular-nums}
+.oil-flow-track{height:10px;overflow:hidden;border-radius:999px;background:#edf1f5}
+.oil-flow-track i{display:block;height:100%;border-radius:999px;background:#17294d}
+.oil-flow-line.gold .oil-flow-track i{background:#c79a28}
+.oil-flow-net{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;padding:9px 11px;border-radius:7px;background:#f5f7fa;color:#52647a;font-size:9px;font-weight:800}
+.oil-flow-net strong{font-size:11px;font-variant-numeric:tabular-nums}
+.oil-flow-summary>p{margin:9px 0 0;color:#8190a0;font-size:8px;line-height:1.6}
+.oil-table-wrap{width:100%;overflow:auto;border:1px solid #e1e7ef;border-radius:9px}
+.oil-report-module .amc-report-table{width:100%;min-width:670px;border-collapse:separate;border-spacing:0;font-size:10px;background:#fff}
+.oil-report-module .amc-report-table th,.oil-report-module .amc-report-table td{padding:8px 9px;border:0;border-bottom:1px solid #e7ecf2;text-align:center;vertical-align:middle}
+.oil-report-module .amc-report-table th{position:sticky;top:0;z-index:1;background:#f1f4f8;color:var(--oil-navy);font-size:9px;font-weight:900;line-height:1.5;white-space:nowrap}
+.oil-report-module .amc-report-table td{color:#37475b;line-height:1.5}
+.oil-report-module .amc-report-table tbody tr:nth-child(even):not(.total){background:#fafbfd}
+.oil-report-module .amc-report-table tbody tr:hover:not(.total){background:#f1f5fa}
+.oil-report-module .amc-report-table td.num,.oil-report-module .amc-report-table th.num{direction:ltr;text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.oil-report-module .amc-report-table tr.total td{font-weight:900;background:#edf2f7;border-top:2px solid var(--oil-navy);border-bottom:0;color:var(--oil-navy)}
+.oil-report-module .amc-report-table td.total-label{text-align:right;color:var(--oil-navy)}
+.oil-negative{color:var(--oil-red)!important;font-weight:900}
+.oil-badge{display:inline-flex;align-items:center;justify-content:center;min-height:20px;padding:2px 8px;border:1px solid #e0e7ef;border-radius:999px;background:#f3f6fa;color:#52647a;font-size:8px;font-weight:900;white-space:nowrap}
+.oil-badge.good{border-color:#cce7d2;background:#eaf7ef;color:var(--oil-green)}.oil-badge.warn{border-color:#f1dfb2;background:#fff7e5;color:#91620f}.oil-badge.bad{border-color:#f2c9cd;background:#fdecee;color:var(--oil-red)}
+.oil-insights{margin:0;padding-right:18px;color:#52647a;font-size:10px;line-height:1.9}
+.oil-mini-note{margin:9px 0 0;padding:9px 11px;border-right:3px solid var(--oil-gold);border-radius:6px;background:#f6f8fb;color:#63738a;font-size:9px;line-height:1.8}
+.oil-empty{padding:28px 16px;border:1px dashed #c8d2df;border-radius:9px;background:#f8fafc;color:#697a8e;text-align:center;font-size:10px}
+.oil-loading{padding:35px;color:#64748b;text-align:center}
+.oil-source{margin-top:8px;color:#8795a3;font-size:9px}
+.oil-report-error{padding:16px;border:1px solid #efb7bf;border-radius:12px;background:#fff3f4;color:#9f2232}
+.oil-report-error strong{display:block;margin-bottom:5px}
+.oil-more-button{display:block;margin:10px auto 0;padding:8px 15px;border:1px solid #c8d3df;border-radius:8px;background:#fff;color:var(--oil-navy);font-size:9px;font-weight:900;cursor:pointer}
+.oil-period-hint strong{color:var(--oil-navy)}
+@media(max-width:1050px){.oil-toolbar-group{grid-template-columns:145px minmax(0,1fr)}.oil-filter-fields{grid-template-columns:repeat(3,minmax(0,1fr))}.oil-dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.oil-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){#reportWorkspace:has(.oil-report-module) .report-workspace-head{padding:16px}.oil-toolbar-group{grid-template-columns:1fr;gap:8px}.oil-toolbar-heading{align-items:center}.oil-toolbar-footer{align-items:stretch;flex-direction:column}.oil-active-range{min-width:0;text-align:right}.oil-overview-grid{grid-template-columns:1fr}.oil-overview-grid .oil-card{height:auto}.oil-grid{grid-template-columns:1fr}}
+@media(max-width:600px){#reportWorkspace:has(.oil-report-module) .report-body{padding:12px}#reportWorkspace:has(.oil-report-module) .report-toolbar{padding:12px}.oil-filter-console{padding:12px}.oil-filter-console-head{align-items:stretch;flex-direction:column}.oil-date-fields,.oil-filter-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.oil-dashboard-kpis{grid-template-columns:1fr 1fr}.oil-dashboard-kpis .oil-kpi{min-height:0;padding:12px}.oil-dashboard-kpis .oil-kpi strong{font-size:14px}.oil-count-grid{grid-template-columns:1fr 1fr}.oil-overview-intro{align-items:flex-start;flex-direction:column}.oil-overview-chip{white-space:normal}.oil-view-context{align-items:flex-start;flex-direction:column}.oil-toolbar-actions{display:grid;grid-template-columns:1fr 1fr}.oil-toolbar-actions #oilPrint{grid-column:1/-1}.oil-tabs{gap:5px;padding:6px}.oil-tab-group{gap:2px;padding-left:5px}.oil-tab-group-label{display:none}.oil-tab{min-height:32px;padding:6px 8px;font-size:8px}.oil-bar-row{grid-template-columns:80px minmax(0,1fr) 65px;gap:6px;font-size:8px}.oil-report-module .amc-report-table{min-width:640px}.oil-card{padding:12px}}
+@media print{#reportWorkspace:has(.oil-report-module) .report-workspace-head,#reportWorkspace:has(.oil-report-module) .report-toolbar,.oil-report-module .oil-tabs,.oil-report-module .oil-source,.oil-report-module .oil-more-button{display:none!important}.oil-report-module{font-family:Arial,Tahoma,"Segoe UI",sans-serif!important;color:var(--oil-navy)!important}.oil-card{box-shadow:none!important;break-inside:auto!important;page-break-inside:auto!important}.oil-report-module .amc-report-table{min-width:0!important;width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;border-radius:0!important}.oil-report-module .amc-report-table th,.oil-report-module .amc-report-table td{font-family:Arial,Tahoma,"Segoe UI",sans-serif!important;font-size:9px!important;line-height:1.28!important;padding:1.15mm 1mm!important;border:1px solid #bfc9d5!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;vertical-align:middle!important}.oil-report-module .amc-report-table td.num,.oil-report-module .amc-report-table th.num{white-space:nowrap!important;direction:ltr!important;text-align:center!important;unicode-bidi:plaintext!important;font-variant-numeric:tabular-nums!important}.oil-report-module .amc-report-table thead{display:table-header-group!important}.oil-report-module .amc-report-table tr{break-inside:avoid!important;page-break-inside:avoid!important}.oil-report-module .amc-report-table tr.total td{background:#eef2f6!important;border-top:2px solid #17294d!important;color:#17294d!important}.oil-dashboard-kpis{grid-template-columns:repeat(4,minmax(0,1fr))!important}.oil-kpi{break-inside:avoid!important}}
 </style>
 <style id="amc-mf-style">
 .report-list .report-item.monthly-full-report-item{order:2!important}
@@ -951,7 +976,7 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
   .amc-mf-monthly-matrix-chart .amc-mf-matrix-legend-value{font-weight:800!important;color:#17314c!important;white-space:nowrap!important}
   .amc-mf-monthly-matrix-chart .amc-mf-matrix-legend-share{font-size:8px!important;color:#64748b!important;white-space:nowrap!important}
   .amc-report-page:has(.amc-mf-cover) .amc-report-cover{height:220mm!important;min-height:0!important;max-height:220mm!important;box-sizing:border-box!important}.amc-mf-cover .amc-report-cover-logo{max-width:46mm;max-height:34mm}.amc-mf-cover .amc-report-info{margin-top:18mm;min-width:110mm}
-  .amc-report-page:has(.amc-mf-print-section){padding-top:13mm!important;padding-bottom:14mm!important}
+  .amc-report-page:has(.amc-mf-print-section){padding-top:10px!important;padding-bottom:14mm!important}
   .amc-report-page:has(.amc-mf-print-section) .amc-report-table{table-layout:auto!important;font-size:9.6px!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table th{font-size:9px!important;padding:1.25mm 1.2mm!important;white-space:normal!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table td{font-size:10px!important;padding:1.05mm 1.2mm!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-table tr{break-inside:avoid!important;page-break-inside:avoid!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-section-title{break-after:avoid!important;page-break-after:avoid!important}.amc-mf-daily-page[data-tier="1"] .amc-report-table td{font-size:9.2px!important;padding:.72mm 1mm!important}.amc-mf-daily-page[data-tier="2"] .amc-report-table td{font-size:8.4px!important;padding:.48mm .8mm!important;line-height:1.1!important}.amc-mf-daily-page[data-tier="2"] .amc-report-table th{font-size:8px!important;padding:.55mm .8mm!important}.amc-mf-daily-page .amc-mf-chart-box{margin-top:4mm}.amc-mf-daily-page .amc-mf-svg{max-height:42mm}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box{break-inside:avoid;page-break-inside:avoid}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box .amc-mf-svg{max-height:52mm!important}.amc-report-page:has(.amc-mf-print-section) .amc-mf-chart-box h3{font-size:12px!important}.amc-report-page:has(.amc-mf-print-section) .amc-report-note{font-size:9.5px!important;line-height:1.55!important}
   .amc-report-page .amc-mf-daily-page .amc-report-table td{font-size:11.5px!important;padding:1.1mm 1.4mm!important;line-height:1.2!important;white-space:nowrap!important}.amc-report-page .amc-mf-daily-page .amc-report-table th{font-size:10.5px!important;padding:1.3mm 1.4mm!important;white-space:nowrap!important}
   .amc-report-page .amc-mf-exp-page .amc-report-table td{font-size:10.5px!important;padding:1.3mm 1.4mm!important;line-height:1.3!important}.amc-report-page .amc-mf-exp-page .amc-report-table td.nw,.amc-report-page .amc-mf-exp-page .amc-report-table th{white-space:nowrap!important;overflow-wrap:normal!important}.amc-report-page .amc-mf-exp-page .amc-report-table th{font-size:10px!important}
@@ -1186,13 +1211,40 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
 </script>
 <style id="oil-inventory-print-bridge">
 @media print{
-  #amc-report-preview .oil-print-content .oil-tabs{display:none!important}
-  #amc-report-preview .oil-print-content .oil-card{break-inside:auto;page-break-inside:auto}
-  #amc-report-preview .oil-print-content .oil-table-wrap{overflow:visible!important}
-  #amc-report-preview .oil-print-content .oil-table{width:100%!important;min-width:0!important;table-layout:auto!important}
-  #amc-report-preview .oil-print-content .oil-table th{white-space:normal!important;font-size:10px!important;line-height:1.35!important}
-  #amc-report-preview .oil-print-content .oil-table td{white-space:normal!important;font-size:10.5px!important;line-height:1.45!important;overflow-wrap:anywhere!important;word-break:normal!important;vertical-align:top!important}
-  #amc-report-preview .oil-print-content .oil-table tr{break-inside:avoid;page-break-inside:avoid}
+  #amc-report-preview .amc-mf-oil-print{width:210mm!important;min-height:297mm!important;box-sizing:border-box!important;padding:10px 12mm 14mm!important;margin:0 auto!important;display:flex!important;flex-direction:column!important;position:relative!important;overflow:visible!important;break-after:page!important;page-break-after:always!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;background:#fff!important;color:#17294d!important}
+  #amc-report-preview .amc-mf-oil-print:last-child{break-after:auto!important;page-break-after:auto!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-header{flex:0 0 auto!important;margin-bottom:4mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-footer{flex:0 0 auto!important;margin-top:auto!important;padding-top:3mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-title{color:#17294d!important;font-size:18px!important;margin:0 0 3mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-section-title{color:#17314c!important;font-size:13px!important;margin:3mm 0 1.5mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-note{font-size:9px!important;line-height:1.5!important;color:#52647a!important;border-right:3px solid #c79a28!important;background:#f8fafc!important;padding:2mm 2.5mm!important;margin:2mm 0!important;break-inside:avoid!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-subtitle{font-size:10px!important;color:#52647a!important;margin:0 0 3mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-cover{height:220mm!important;min-height:220mm!important;max-height:220mm!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;text-align:center!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-cover-logo{max-width:46mm!important;max-height:34mm!important;object-fit:contain!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-info-row{font-size:12px!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-oil-cover .en{font-size:13px!important;letter-spacing:.12em!important;color:#52647a!important;margin:1mm 0 4mm!important}
+  #amc-report-preview .amc-mf-oil-print .oil-toc{max-width:165mm!important;text-align:right!important;font-size:8.5px!important;margin-top:5mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-daily-kpis{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:2.2mm!important;margin:2mm 0 3mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-daily-kpi{min-height:18mm!important;padding:2.3mm!important;break-inside:avoid!important;border-radius:2mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-daily-kpi label{font-size:8px!important;line-height:1.3!important}
+  #amc-report-preview .amc-mf-oil-print .amc-daily-kpi strong{font-size:12px!important;line-height:1.4!important}
+  #amc-report-preview .amc-mf-oil-print .amc-daily-kpi small{font-size:7px!important;line-height:1.3!important}
+  #amc-report-preview .amc-mf-oil-print .oil-print-insights{font-size:10px!important;line-height:1.8!important;margin:1mm 0 2mm!important;padding-right:6mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table-wrap{overflow:visible!important;width:100%!important;margin:1mm 0 0!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table{width:100%!important;min-width:0!important;table-layout:fixed!important;border-collapse:collapse!important;font-size:9px!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table th,#amc-report-preview .amc-mf-oil-print .amc-report-table td{border:1px solid #bfc9d5!important;text-align:center!important;vertical-align:middle!important;padding:1.1mm 1mm!important;font-size:9px!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;color:#17294d!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table th{background:#f5f7fa!important;color:#17294d!important;font-weight:800!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table td.num,#amc-report-preview .amc-mf-oil-print .amc-report-table th.num{white-space:nowrap!important;direction:ltr!important;text-align:center!important;unicode-bidi:plaintext!important;font-variant-numeric:tabular-nums!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table thead{display:table-header-group!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table tr{break-inside:avoid!important;page-break-inside:avoid!important}
+  #amc-report-preview .amc-mf-oil-print .amc-report-table tr.total td{background:#eef2f6!important;border-top:2px solid #17314c!important;font-weight:800!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-chart-box{margin:2mm 0!important;padding:2mm!important;border:1px solid #dbe4ee!important;border-radius:2mm!important;break-inside:avoid!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-chart-box h3{font-size:10px!important;color:#17314c!important;margin:0 0 1mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-svg{max-height:52mm!important;height:auto!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-legend{font-size:8px!important;gap:5mm!important}
+  #amc-report-preview .amc-mf-oil-print .amc-mf-alert{font-size:9px!important;padding:1.5mm 2mm!important;margin:1mm 0!important;break-inside:avoid!important}
+  #amc-report-preview .amc-mf-oil-print .oil-empty{padding:3mm!important;font-size:9px!important}
+  #amc-report-preview .amc-mf-oil-print .oil-card{border-color:#dbe4ee!important;break-inside:auto!important;page-break-inside:auto!important}
 }
 </style>
 </body>
@@ -2823,18 +2875,21 @@ window.AMCReceivables={model,state:ST};
   .amc-report-toolbar button.primary{background:#172f55;color:#fff;border-color:#172f55}
   .amc-report-toolbar button.gold{background:#b88a1e;color:#fff;border-color:#b88a1e}
   .amc-report-stage{padding:24px 16px 60px;display:flex;flex-direction:column;align-items:center;gap:18px}
-  .amc-report-page{width:210mm;min-height:297mm;box-sizing:border-box;background:#fff;position:relative;padding:17mm 13mm 18mm;box-shadow:0 5px 28px rgba(17,36,64,.10);page-break-after:always;overflow:hidden}
+  .amc-report-page{width:210mm;min-height:297mm;box-sizing:border-box;background:#fff;position:relative;padding:10px 13mm 18mm;box-shadow:0 5px 28px rgba(17,36,64,.10);page-break-after:always;overflow:hidden}
   .amc-report-page:last-child{page-break-after:auto}
   .amc-report-page,.amc-report-page *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  .amc-report-header{height:19mm;border-bottom:1px solid #dce2e9;display:flex;align-items:flex-start;justify-content:space-between;direction:rtl;gap:12mm}
-  .amc-report-brand{display:flex;align-items:flex-start;gap:8px;min-width:52mm}
-  .amc-report-brand img{width:24mm;height:16mm;object-fit:contain;object-position:right top}
-  .amc-report-brand-name{font-size:17px;font-weight:900;color:#8a6b25;line-height:1.1;margin-top:1mm}
-  .amc-report-brand-en{font-size:9px;color:#667080;margin-top:2px;direction:ltr;text-align:right}
-  .amc-report-meta{text-align:left;direction:rtl;color:#626b78;font-size:9px;line-height:1.65;padding-top:1mm}
-  .amc-report-meta strong{display:block;color:#243451;font-size:10px}
+  .amc-report-header{height:24mm;box-sizing:border-box;margin:0 -4mm 5mm;padding:2.5mm 4mm;border-bottom:1mm solid #c79a28;background:linear-gradient(112deg,#17294d 0%,#213a61 72%,#2b476e 100%);display:flex;align-items:center;justify-content:space-between;direction:rtl;gap:8mm;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .amc-report-brand{display:flex;align-items:center;gap:2mm;min-width:52mm}
+  .amc-report-brand img{width:24mm;height:16mm;object-fit:contain;object-position:right center}
+  .amc-report-brand-name{font-size:15px;font-weight:900;color:#fff;line-height:1.1;margin-top:0}
+  .amc-report-brand-en{font-size:7px;color:#d7dfeb;margin-top:1mm;direction:ltr;text-align:right}
+  .amc-report-meta{text-align:left;direction:rtl;color:#d7dfeb;font-size:8px;line-height:1.5;padding-top:0}
+  .amc-report-meta:before{content:"LIVE REPORT";display:block;color:#e6c56b;font-size:7px;font-weight:900;letter-spacing:.16em;margin-bottom:1mm}
+  .amc-report-meta strong{display:block;color:#fff;font-size:13px}
+  .amc-report-meta span{display:block;color:#fff;font-size:8px;line-height:1.35}
+  .amc-report-header .amc-report-meta span.amc-mf-date{color:#fff!important}
   .amc-report-footer{position:absolute;left:13mm;right:13mm;bottom:7mm;border-top:1px solid #e0e5eb;padding-top:3mm;color:#727a85;font-size:8px;display:flex;justify-content:space-between;direction:rtl}
-  .amc-report-title{font-size:22px;font-weight:900;color:#17294d;margin:11mm 0 2mm;line-height:1.2;position:relative;padding-right:10px}
+  .amc-report-title{font-size:22px;font-weight:900;color:#17294d;margin:5mm 0 2mm;line-height:1.2;position:relative;padding-right:10px}
   .amc-report-title:before{content:"";position:absolute;right:0;top:2px;width:4px;height:28px;background:#c79a28;border-radius:0 2px 2px 0}
   .amc-report-subtitle{font-size:11px;color:#6b7481;margin:0 0 7mm}
   .amc-report-cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:205mm}
@@ -2913,7 +2968,7 @@ window.AMCReceivables={model,state:ST};
     .amc-report-page .amc-report-section-title{break-after:avoid;page-break-after:avoid}
 
     /* Daily report page 11 only: flexible A4 fit without aggressively shrinking the content. */
-    .amc-report-page:has(.amc-daily-analysis){padding-top:15mm;padding-bottom:15mm}
+    .amc-report-page:has(.amc-daily-analysis){padding-top:10px!important;padding-bottom:15mm}
     .amc-report-page:has(.amc-daily-analysis) .amc-daily-analysis{width:100%;box-sizing:border-box;overflow-wrap:anywhere}
     .amc-report-page:has(.amc-daily-analysis) .amc-report-title{font-size:20px;margin:7mm 0 2mm;padding-right:9px;line-height:1.2}
     .amc-report-page:has(.amc-daily-analysis) .amc-report-title:before{width:3px;height:24px;top:1px}
@@ -2935,7 +2990,7 @@ window.AMCReceivables={model,state:ST};
   }
 
   /* Daily Brief report: cover + ONE sheet holding sales / collections / expenses boxes. Density grows with row count. */
-  .amc-report-page:has(.amc-brief-fit){padding-top:14mm!important;padding-bottom:16mm!important}
+  .amc-report-page:has(.amc-brief-fit){padding-top:10px!important;padding-bottom:16mm!important}
   .amc-brief-fit .amc-brief-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:3mm 0 3mm}
   .amc-brief-fit .amc-daily-kpi{min-height:16mm;padding:2.6mm 3mm 2mm}
   .amc-brief-fit .amc-daily-kpi label{margin-bottom:1.6mm}
@@ -2958,7 +3013,7 @@ window.AMCReceivables={model,state:ST};
   .amc-report-page .amc-brief-fit[data-tier="2"] .amc-report-table th{font-size:9px!important;padding:.7mm 1.4mm!important}
 
   /* Daily report page 5 only: keep the whole month on ONE A4 page; compaction grows with the number of day rows. */
-  .amc-report-page:has(.amc-month-fit:not([data-tier="0"])){padding-top:14mm!important;padding-bottom:14mm!important}
+  .amc-report-page:has(.amc-month-fit:not([data-tier="0"])){padding-top:10px!important;padding-bottom:14mm!important}
   .amc-report-page:has(.amc-month-fit) .amc-report-table tr{break-inside:avoid;page-break-inside:avoid}
   .amc-month-fit[data-tier="1"] .amc-report-table td{font-size:12.35px!important;padding:1.2mm 1.8mm!important;line-height:1.35!important}
   .amc-month-fit[data-tier="1"] .amc-report-table th{padding:1.4mm 1.8mm!important}
@@ -3522,7 +3577,7 @@ function executiveReceivablesSection(ctx){
       const dayQty=salesDay.reduce((a,r)=>a+parseNum(r['الكمية']),0);
       const dayExpenses=expDay.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
       const dayCollections=colDay.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
-      const cover=page(`<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${repTitle}</h1><div class="en">Daily Brief Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(dayDateLabel)}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,repTitle,dayDateLabel,1,2);
+      const cover=page(`<div class="amc-report-cover amc-mf-cover amc-mf-weekly-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>${repTitle}</h1><div class="en">Daily Brief Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف للمعادن</strong></div><div class="amc-report-info-row"><b>تاريخ التقرير</b><strong>${escHtml(dayDateLabel)}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong>${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></div>`,repTitle,dayDateLabel,1,2);
       const box=(cls,title,count,inner)=>`<div class="amc-brief-box ${cls}"><div class="amc-brief-box-head"><b>${title}</b><span>عدد الحركات: ${qty(count)}</span></div>${inner}</div>`;
       const salesRows=salesDay.map(r=>`<tr><td>${escHtml((r['اسم العميل']||'غير محدد').trim()||'غير محدد')}</td><td>${escHtml((r['نوع التحميل']||'غير محدد').trim()||'غير محدد')}</td><td class="num">${qty(parseNum(r['الكمية']))}</td><td class="num amc-report-green">${money(parseNum(r['المبلغ']))}</td></tr>`);
       salesRows.push(`<tr class="total"><td>الإجمالي</td><td></td><td class="num">${qty(dayQty)}</td><td class="num amc-report-green">${money(dayRevenue)}</td></tr>`);
@@ -4073,646 +4128,404 @@ const style=document.createElement('style');style.textContent=`.comparison-repor
   'use strict';
   if(window.OilInventoryReport) return;
 
-  const CFG={
-    id: (window.SHEETS&&window.SHEETS.id) || '1WR93LO4G-1qTiCYmgXUcus_jy00Iq-RGC96QKoIpPoU',
-    purchasesSheet:'الفواتير',
-    consumptionSheet:'الزيوت',
-    cacheKey:'oil_inventory_module_v1'
-  };
-  const state={purchases:[],consumption:[],loadedAt:0,tab:'overview',filters:{from:'',to:'',product:'',unit:'',equipment:'',supplier:'',invoice:''}};
+  const CFG={id:(window.SHEETS&&window.SHEETS.id)||'1WR93LO4G-1qTiCYmgXUcus_jy00Iq-RGC96QKoIpPoU',purchasesSheet:'الفواتير',consumptionSheet:'الزيوت'};
+  const state={purchases:[],consumption:[],loadedAt:0,tab:'overview',filters:{from:'',to:'',product:'',unit:'',equipment:'',supplier:'',invoice:'',compare:'previous',coverDays:15}};
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const num=v=>{if(v==null)return 0;let x=String(v).replace(/[,\s٬]/g,'').replace(/[٫]/g,'.').replace(/[^\d.-]/g,'');return Number(x)||0;};
-  const fmt=v=>Number(v||0).toLocaleString('en-US',{maximumFractionDigits:2});
-  const money=v=>Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const dateObj=v=>{const s=String(v||'').trim();if(!s)return null;let d=new Date(s);if(!isNaN(d))return d;const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);return m?new Date(+m[3],+m[2]-1,+m[1]):null;};
+  const attr=v=>esc(v).replace(/`/g,'&#96;');
+  const toAscii=s=>String(s??'').replace(/[٠-٩۰-۹]/g,c=>String('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹'.indexOf(c)%10));
+  const clean=v=>String(v??'').replace(/\s+/g,' ').trim();
+  const normKey=v=>clean(toAscii(v)).replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,'').replace(/ـ/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
+  const norm=v=>clean(v);
+  const key=(...xs)=>JSON.stringify(xs.map(normKey));
+  const num=v=>{if(v==null||v==='')return 0;let s=toAscii(v).replace(/[٬،]/g,'').replace(/[٫]/g,'.').replace(/[\s,]/g,'');const neg=/^\(.*\)$/.test(s);s=s.replace(/[()]/g,'').replace(/[^\d.+-]/g,'');const n=Number(s);return Number.isFinite(n)?(neg?-Math.abs(n):n):0;};
+
+  const lineNet=r=>num(r?.['الكمية'])*num(r?.['السعر قبل الضريبة']);
+  function declaredTax(r){
+    const raw=clean(r?.['الضريبة 15%']),net=lineNet(r);if(!raw)return null;
+    const value=num(raw),grossRaw=clean(r?.['الإجمالي مع الضريبة']),gross=grossRaw?num(grossRaw):null,delta=gross==null?null:gross-net;
+    if(raw.includes('%'))return net*value/100;
+    if(value>0&&value<1)return net*value;
+    if(value===15&&delta!=null&&Math.abs(delta-net*.15)<=Math.max(.05,Math.abs(net*.15)*.005))return net*.15;
+    return value;
+  }
+  const lineTax=r=>{const grossRaw=clean(r?.['الإجمالي مع الضريبة']),net=lineNet(r),gross=grossRaw?num(grossRaw):null;if(gross!=null&&net>=0&&gross>=net-.05)return Math.max(0,gross-net);return declaredTax(r)??0;};
+  const lineGross=r=>{const raw=clean(r?.['الإجمالي مع الضريبة']),value=raw?num(raw):null;return value!=null&&(value!==0||lineNet(r)===0)?value:lineNet(r)+lineTax(r);};
+  function taxMismatch(r){const raw=clean(r?.['الضريبة 15%']),grossRaw=clean(r?.['الإجمالي مع الضريبة']);if(!raw||!grossRaw)return false;const declared=declaredTax(r),actual=num(grossRaw)-lineNet(r);return declared!=null&&Math.abs(actual-declared)>Math.max(.05,Math.abs(actual)*.005);}
+  const fmt=v=>typeof window.mfQty==='function'?window.mfQty(Number(v)||0):(Number(v)||0).toLocaleString('en-US',{maximumFractionDigits:2});
+  const money=v=>typeof window.mfMoney==='function'?window.mfMoney(Number(v)||0):(Number(v)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const pct=v=>typeof window.mfPct==='function'?window.mfPct(v):v==null||!Number.isFinite(Number(v))?'—':`${Number(v).toFixed(1)}%`;
+  const diff=(a,b)=>typeof window.mfDiff==='function'?window.mfDiff(a,b):(b==null?{diff:null,pct:null}:{diff:(a||0)-b,pct:b===0?null:((a||0)-b)/Math.abs(b)*100});
+  const helperReachability={mfMoney:typeof window.mfMoney==='function',mfQty:typeof window.mfQty==='function',mfPct:typeof window.mfPct==='function',mfDiff:typeof window.mfDiff==='function',mfFmtDate:typeof window.mfFmtDate==='function',mfColorizeHtml:typeof window.mfColorizeHtml==='function',escHtml:typeof window.escHtml==='function',formatDate:typeof window.formatDate==='function',logoSrc:typeof window.logoSrc==='function',weeklyPage:typeof window.page==='function',weeklyTable:false,weeklyCompactKpis:typeof window.compactKpis==='function',outerReportTable:typeof window.table==='function'};
+  console.info('[OilInventoryReport] weekly helper reachability',helperReachability);
+  let modelCache=null,modelCacheKey='',templatePoll=0,nextMoreId=0,moreRowsById=Object.create(null);
+
+  function dateObj(value){
+    const s=toAscii(value).trim();if(!s)return null;
+    let m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if(m){const d=new Date(+m[3],+m[2]-1,+m[1]);return d.getFullYear()===+m[3]&&d.getMonth()===+m[2]-1&&d.getDate()===+m[1]?d:null;}
+    m=s.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})(?:[T ].*)?$/);
+    if(m){const d=new Date(+m[1],+m[2]-1,+m[3]);return d.getFullYear()===+m[1]&&d.getMonth()===+m[2]-1&&d.getDate()===+m[3]?d:null;}
+    const d=new Date(s);return Number.isNaN(d.getTime())?null:d;
+  }
   const dateKey=v=>{const d=dateObj(v);return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`:'';};
-  const dateLabel=v=>{const k=dateKey(v);return k?k.split('-').reverse().join('/'):String(v||'');};
-  const clean=v=>String(v??'').trim();
-  const norm=v=>clean(v).replace(/\s+/g,' ');
-  const key=(a,b,c,d='')=>[norm(a),norm(b),norm(c),norm(d)].join('¦');
-  const uniqueSorted=a=>[...new Set(a.filter(Boolean))].sort((x,y)=>String(x).localeCompare(String(y),'ar'));
-  const escapeHtmlAttr=v=>esc(v).replace(/`/g,'&#96;');
+  const dateLabel=v=>{const k=dateKey(v);return k?k.split('-').reverse().join('/'):clean(v)||'—';};
+  const formatDate=d=>d?`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`:'—';
+  const unitOf=r=>clean(r?.['الوحدة']??r?.['وحدة']??r?.['وحدة القياس']??r?.unit??r?.Unit)||'غير محدد';
+  const addDays=(iso,n)=>{const d=dateObj(iso);if(!d)return '';d.setDate(d.getDate()+n);return dateKey(d);};
+  const daysBetween=(a,b)=>{const x=dateObj(a),y=dateObj(b);return x&&y?Math.max(1,Math.floor((y-x)/86400000)+1):1;};
+  const inRange=(v,from,to)=>{const d=dateKey(v);return !!d&&(!from||d>=from)&&(!to||d<=to);};
+  const dataRoot=()=>typeof reportData!=='undefined'&&reportData?reportData:(window.reportData||{});
+  const invalidate=()=>{modelCache=null;modelCacheKey='';};
 
   async function loadData(force=false){
-    // نفس مسار Apps Script المستخدم في اللوحة الرئيسية — بدون طلب CSV إضافي إلى Google Sheets.
-    if(!force && Array.isArray(reportData.oilPurchases) && Array.isArray(reportData.oilConsumption)){
-      state.purchases=reportData.oilPurchases||[];
-      state.consumption=reportData.oilConsumption||[];
-      state.loadedAt=Date.now();
-      return state;
-    }
-    if(typeof loadFreshData!=='function') throw new Error('مسار Google Apps Script غير متاح في الصفحة.');
-    const result=await loadFreshData(!!force);
-    state.purchases=result.oilPurchases||[];
-    state.consumption=result.oilConsumption||[];
-    state.loadedAt=Date.now();
-    return state;
+    const root=dataRoot();
+    if(!force&&Array.isArray(root.oilPurchases)&&Array.isArray(root.oilConsumption)){state.purchases=root.oilPurchases;state.consumption=root.oilConsumption;state.loadedAt=Date.now();invalidate();return state;}
+    if(typeof loadFreshData!=='function')throw new Error(`مسار Google Apps Script غير متاح لورقتي «${CFG.purchasesSheet}» و«${CFG.consumptionSheet}».`);
+    const result=await loadFreshData(!!force);state.purchases=Array.isArray(result?.oilPurchases)?result.oilPurchases:[];state.consumption=Array.isArray(result?.oilConsumption)?result.oilConsumption:[];state.loadedAt=Date.now();invalidate();return state;
   }
 
-  function currentRange(){
-    const f=state.filters;return {from:f.from||'',to:f.to||''};
-  }
-  function inRange(v,from,to){const d=dateKey(v);return !!d&&(!from||d>=from)&&(!to||d<=to);}
-  function filterBase(){
+  function matchesFilters(r,kind,ignoreDate=false){
     const f=state.filters;
-    const purchases=state.purchases.filter(r=>{
-      if(!inRange(r['تاريخ الفاتورة'],f.from,f.to))return false;
-      if(f.product&&norm(r['إسم الصنف'])!==f.product)return false;
-      if(f.unit&&norm(r['الوحدة'])!==f.unit)return false;
-      if(f.supplier&&norm(r['إسم المورد'])!==f.supplier)return false;
-      if(f.invoice&&norm(r['رقم الفاتورة'])!==f.invoice)return false;
-      return true;
-    });
-    const consumption=state.consumption.filter(r=>{
-      if(!inRange(r['التاريخ'],f.from,f.to))return false;
-      if(f.product&&norm(r['إسم الصنف'])!==f.product)return false;
-      if(f.unit&&norm(r['الوحدة'])!==f.unit)return false;
-      if(f.supplier&&norm(r['إسم المورد'])!==f.supplier)return false;
-      if(f.invoice&&norm(r['رقم الفاتورة'])!==f.invoice)return false;
-      if(f.equipment&&norm(r['المعدة'])!==f.equipment)return false;
-      return true;
-    });
-    return {purchases,consumption};
+    if(!ignoreDate){const date=kind==='purchase'?r['تاريخ الفاتورة']:r['التاريخ'];if(!inRange(date,f.from,f.to))return false;}
+    if(f.product&&normKey(r['إسم الصنف'])!==normKey(f.product))return false;
+    if(f.unit&&normKey(unitOf(r))!==normKey(f.unit))return false;
+    if(f.supplier&&normKey(r['إسم المورد'])!==normKey(f.supplier))return false;
+    if(f.invoice&&normKey(r['رقم الفاتورة'])!==normKey(f.invoice))return false;
+    if(kind==='consumption'&&f.equipment&&normKey(r['المعدة'])!==normKey(f.equipment))return false;
+    return true;
   }
-
-  function stockAsOf(to){
-    const purchases=state.purchases.filter(r=>{const d=dateKey(r['تاريخ الفاتورة']);return d&&(!to||d<=to);});
-    const consumption=state.consumption.filter(r=>{const d=dateKey(r['التاريخ']);return d&&(!to||d<=to);});
-    const pMap={},cMap={};
-    purchases.forEach(r=>{const product=norm(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit);pMap[k]=(pMap[k]||0)+num(r['الكمية']);});
-    consumption.forEach(r=>{const product=norm(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit);cMap[k]=(cMap[k]||0)+num(r['الكمية']);});
-    const products=uniqueSorted([...Object.keys(pMap),...Object.keys(cMap)]);
-    return products.map(k=>{
-      const parts=k.split('¦'), product=parts[0]||'غير محدد', unit=parts[1]||'غير محدد';
-      return {product,unit,purchase:pMap[k]||0,consumption:cMap[k]||0,balance:(pMap[k]||0)-(cMap[k]||0),stockKey:k};
-    });
+  function filterBase(from=state.filters.from,to=state.filters.to){
+    const oldFrom=state.filters.from,oldTo=state.filters.to;state.filters.from=from||'';state.filters.to=to||'';
+    const purchases=state.purchases.filter(r=>matchesFilters(r,'purchase')),consumption=state.consumption.filter(r=>matchesFilters(r,'consumption'));
+    state.filters.from=oldFrom;state.filters.to=oldTo;return {purchases,consumption};
   }
-
-  function weightedCosts(){
-    const map={};
-    state.purchases.forEach(r=>{
-      const p=norm(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(p,unit),q=num(r['الكمية']),v=num(r['السعر قبل الضريبة']);
-      if(!map[k])map[k]={product:p,unit,qty:0,value:0};
-      map[k].qty+=q;map[k].value+=q*v;
-    });
-    Object.values(map).forEach(x=>x.avg=x.qty?x.value/x.qty:0);
-    return map;
+  function mapAdd(map,k,seed,field,value){const x=map[k]||(map[k]={...seed});x[field]=(x[field]||0)+value;return x;}
+  function stockAsOf(to=state.filters.to){
+    const purchases=state.purchases.filter(r=>{const d=dateKey(r['تاريخ الفاتورة']);return d&&(!to||d<=to)&&matchesFilters(r,'purchase',true);});
+    const consumption=state.consumption.filter(r=>{const d=dateKey(r['التاريخ']);return d&&(!to||d<=to)&&matchesFilters(r,'consumption',true);});
+    const groups=new Map();
+    purchases.forEach(r=>{const product=clean(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit),x=groups.get(k)||{product,unit,purchase:0,consumption:0};x.purchase+=num(r['الكمية']);groups.set(k,x);});
+    consumption.forEach(r=>{const product=clean(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit),x=groups.get(k)||{product,unit,purchase:0,consumption:0};x.consumption+=num(r['الكمية']);groups.set(k,x);});
+    return [...groups.entries()].map(([stockKey,x])=>({...x,stockKey,balance:x.purchase-x.consumption}));
   }
-
-  function unitTotals(rows,qtyField='الكمية'){
-    const map={};
-    rows.forEach(r=>{const u=unitOf(r);map[u]=(map[u]||0)+num(r[qtyField]);});
-    return Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0],'ar')).map(([u,q])=>`${fmt(q)} ${u}`).join(' • ')||'0';
+  function weightedCosts(to=state.filters.to){
+    const map=Object.create(null);
+    state.purchases.forEach(r=>{const d=dateKey(r['تاريخ الفاتورة']);if(!d||(to&&d>to)||!matchesFilters(r,'purchase',true))return;const product=clean(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit),q=num(r['الكمية']),price=num(r['السعر قبل الضريبة']);map[k]??={product,unit,qty:0,value:0};map[k].qty+=q;map[k].value+=q*price;});
+    Object.values(map).forEach(x=>x.avg=x.qty?x.value/x.qty:0);return map;
   }
-
-  function unitTotalsFromStock(rows,field='balance'){
-    const map={};
-    rows.forEach(r=>{const u=unitOf(r);map[u]=(map[u]||0)+num(r[field]);});
-    return Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0],'ar')).map(([u,q])=>`${fmt(q)} ${u}`).join(' • ')||'0';
-  }
-
-  function unitOf(r){
-    if(!r) return 'غير محدد';
-    return norm(r['الوحدة'] ?? r['وحدة'] ?? r['وحدة القياس'] ?? r.unit ?? r.Unit ?? '') || 'غير محدد';
-  }
-
-  function model(){
-    const {purchases,consumption}=filterBase(), costs=weightedCosts();
-    const totalPurchaseQty=purchases.reduce((a,r)=>a+num(r['الكمية']),0),totalConsumptionQty=consumption.reduce((a,r)=>a+num(r['الكمية']),0);
-    const purchaseBefore=purchases.reduce((a,r)=>a+num(r['الكمية'])*num(r['السعر قبل الضريبة']),0);
-    const tax=purchases.reduce((a,r)=>a+num(r['الضريبة 15%']),0),purchaseTotal=purchases.reduce((a,r)=>a+num(r['الإجمالي مع الضريبة']),0);
-    const stock=stockAsOf(state.filters.to||'');
+  function unitTotals(rows,field){const map=new Map();rows.forEach(r=>{const u=unitOf(r);map.set(u,(map.get(u)||0)+num(r[field]));});return [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ar')).map(([u,q])=>`${fmt(q)} ${u}`).join(' • ')||'0';}
+  function sumBy(rows,fn){return rows.reduce((a,r)=>a+fn(r),0);}
+  function buildModel(){
+    const f=state.filters,{purchases,consumption}=filterBase(),costs=weightedCosts(f.to),stock=stockAsOf(f.to);
     stock.forEach(x=>{const c=costs[x.stockKey];x.avgCost=c?.avg||0;x.value=x.balance*x.avgCost;});
-    const negative=stock.filter(x=>x.balance<0);
-
-    const byEquipment={};
+    const purchaseBefore=sumBy(purchases,r=>lineNet(r)),tax=sumBy(purchases,r=>lineTax(r)),purchaseTotal=sumBy(purchases,r=>lineGross(r));
+    const byEquipment=Object.create(null),byProduct=Object.create(null),bySupplier=Object.create(null),monthly=Object.create(null),invoices=Object.create(null),products=Object.create(null),supPrice=Object.create(null);
     consumption.forEach(r=>{
-      const equipment=norm(r['المعدة'])||'غير محدد',unit=unitOf(r),k=key(equipment,unit);
-      (byEquipment[k]??={equipment,unit,qty:0,count:0});byEquipment[k].qty+=num(r['الكمية']);byEquipment[k].count++;
+      const equipment=clean(r['المعدة'])||'غير محدد',unit=unitOf(r),product=clean(r['إسم الصنف'])||'غير محدد',q=num(r['الكمية']),d=dateKey(r['التاريخ']),ek=key(equipment,unit),pk=key(product,unit);
+      const e=byEquipment[ek]||(byEquipment[ek]={equipment,unit,qty:0,count:0,products:Object.create(null),last:''});e.qty+=q;e.count++;e.products[pk]??={product,qty:0};e.products[pk].qty+=q;if(d&&d>e.last)e.last=d;
+      const p=byProduct[pk]||(byProduct[pk]={product,unit,qty:0,count:0});p.qty+=q;p.count++;
+      const md=d.slice(0,7);if(md){const mk=key(md,unit),v=monthly[mk]||(monthly[mk]={month:md,unit,purchase:0,consumption:0,purchaseValue:0});v.consumption+=q;}
+      const prod=products[pk]||(products[pk]={product,unit,purchase:0,consumption:0,value:0,lastPurchase:'',lastConsumption:''});prod.consumption+=q;if(d>prod.lastConsumption)prod.lastConsumption=d;
     });
-
-    const byProduct={};
-    consumption.forEach(r=>{
-      const product=norm(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),k=key(product,unit);
-      (byProduct[k]??={product,unit,qty:0,count:0});byProduct[k].qty+=num(r['الكمية']);byProduct[k].count++;
-    });
-
-    const bySupplier={};
     purchases.forEach(r=>{
-      const supplier=norm(r['إسم المورد'])||'غير محدد',unit=unitOf(r),k=key(supplier,unit);
-      (bySupplier[k]??={supplier,unit,qty:0,value:0,invoices:new Set()});
-      bySupplier[k].qty+=num(r['الكمية']);bySupplier[k].value+=num(r['الكمية'])*num(r['السعر قبل الضريبة']);bySupplier[k].invoices.add(norm(r['رقم الفاتورة']));
+      const supplier=clean(r['إسم المورد'])||'غير محدد',product=clean(r['إسم الصنف'])||'غير محدد',unit=unitOf(r),q=num(r['الكمية']),lineValue=q*num(r['السعر قبل الضريبة']),d=dateKey(r['تاريخ الفاتورة']),sk=key(supplier,unit),pk=key(product,unit),mk=d.slice(0,7),ik=key(r['رقم الفاتورة'],supplier,unit);
+      const s=bySupplier[sk]||(bySupplier[sk]={supplier,unit,qty:0,value:0,invoices:new Set(),last:''});s.qty+=q;s.value+=lineValue;s.invoices.add(normKey(r['رقم الفاتورة']));if(d>s.last)s.last=d;
+      const prod=products[pk]||(products[pk]={product,unit,purchase:0,consumption:0,value:0,lastPurchase:'',lastConsumption:''});prod.purchase+=q;prod.value+=lineValue;if(d>prod.lastPurchase)prod.lastPurchase=d;
+      if(mk){const k=key(mk,unit),v=monthly[k]||(monthly[k]={month:mk,unit,purchase:0,consumption:0,purchaseValue:0});v.purchase+=q;v.purchaseValue+=lineValue;}
+      const inv=invoices[ik]||(invoices[ik]={supplier,invoice:clean(r['رقم الفاتورة'])||'—',unit,date:clean(r['تاريخ الفاتورة']),lines:0,qty:0,before:0,tax:0,total:0});inv.lines++;inv.qty+=q;inv.before+=lineValue;inv.tax+=lineTax(r);inv.total+=lineGross(r);
+      const priceKey=key(supplier,product,unit),sp=supPrice[priceKey]||(supPrice[priceKey]={supplier,product,unit,firstDate:'',lastDate:'',firstPrice:null,lastPrice:null});if(d&&(!sp.firstDate||d<sp.firstDate)){sp.firstDate=d;sp.firstPrice=num(r['السعر قبل الضريبة']);}if(d&&(!sp.lastDate||d>sp.lastDate)){sp.lastDate=d;sp.lastPrice=num(r['السعر قبل الضريبة']);}
     });
+    const periodDays=daysBetween(f.from,f.to||f.from),totalByUnit=Object.create(null);consumption.forEach(r=>{const u=unitOf(r);totalByUnit[u]=(totalByUnit[u]||0)+num(r['الكمية']);});
+    const stockByKey=new Map(stock.map(x=>[x.stockKey,x]));stock.forEach(s=>{const k=s.stockKey;products[k]??={product:s.product,unit:s.unit,purchase:0,consumption:0,value:0,lastPurchase:'',lastConsumption:''};});
+    Object.values(products).forEach(p=>{const k=key(p.product,p.unit),s=stockByKey.get(k)||{};p.balance=s.balance||0;p.avgCost=costs[k]?.avg||0;p.stockValue=s.value||0;p.daysCover=p.consumption&&p.balance>=0?p.balance/(p.consumption/periodDays):null;p.share=totalByUnit[p.unit]?p.consumption/totalByUnit[p.unit]*100:0;p.status=p.balance<0?'سالب':p.daysCover!=null&&p.daysCover<=Math.max(1,Number(f.coverDays)||15)?'منخفض':'متاح';});
+    stock.forEach(x=>{const p=products[x.stockKey];x.daysCover=p?.daysCover??null;x.status=p?.status||(x.balance<0?'سالب':'متاح');});
+    const productPrices=Object.create(null),supplierPrices=Object.create(null);Object.values(supPrice).forEach(p=>{const pk=key(p.product,p.unit),sk=key(p.supplier,p.unit);(productPrices[pk]??=[]).push(p);(supplierPrices[sk]??=[]).push(p);});
+    const totalConsumptionByUnit=Object.values(totalByUnit).reduce((a,b)=>a+b,0);
+    const equipmentRows=Object.values(byEquipment).map(e=>{const top=Object.values(e.products).sort((a,b)=>b.qty-a.qty)[0]||null;const total=totalByUnit[e.unit]||0;e.topProduct=top?.product||'—';e.topQty=top?.qty||0;e.share=total?e.qty/total*100:0;return e;});
+    const purchaseHistory=state.purchases.filter(r=>{const d=dateKey(r['تاريخ الفاتورة']);return d&&(!f.to||d<=f.to)&&matchesFilters(r,'purchase',true);});
+    const consumptionHistory=state.consumption.filter(r=>{const d=dateKey(r['التاريخ']);return d&&(!f.to||d<=f.to)&&matchesFilters(r,'consumption',true);});
+    const purchaseKeys=new Set(purchaseHistory.map(r=>key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],unitOf(r))));
+    const unmatchedConsumption=consumption.filter(r=>!purchaseKeys.has(key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],unitOf(r))));
+    const consumedKeys=new Set(consumptionHistory.map(r=>key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],unitOf(r))));
+    const unusedPurchases=purchases.filter(r=>!consumedKeys.has(key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],unitOf(r))));
 
-    const monthly={};
-    purchases.forEach(r=>{const k=dateKey(r['تاريخ الفاتورة']).slice(0,7),u=unitOf(r);if(!k)return;const keyMonth=key(k,u);(monthly[keyMonth]??={month:k,unit:u,purchase:0,consumption:0});monthly[keyMonth].purchase+=num(r['الكمية']);});
-    consumption.forEach(r=>{const k=dateKey(r['التاريخ']).slice(0,7),u=unitOf(r);if(!k)return;const keyMonth=key(k,u);(monthly[keyMonth]??={month:k,unit:u,purchase:0,consumption:0});monthly[keyMonth].consumption+=num(r['الكمية']);});
-
-    const purchaseKeys=new Set(purchases.map(r=>key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],r['الوحدة'])));
-    const unmatchedConsumption=consumption.filter(r=>!purchaseKeys.has(key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],r['الوحدة'])));
-    const consumedKeys=new Set(consumption.map(r=>key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],r['الوحدة'])));
-    const unusedPurchases=purchases.filter(r=>!consumedKeys.has(key(r['رقم الفاتورة'],r['إسم المورد'],r['إسم الصنف'],r['الوحدة'])));
-
+    const negative=stock.filter(x=>x.balance<0),lowCover=Object.values(products).filter(x=>x.balance>=0&&x.daysCover!=null&&x.daysCover<=Math.max(1,Number(f.coverDays)||15));
     const dataIssues=[];
-    purchases.forEach((r,i)=>{
-      if(!dateKey(r['تاريخ الفاتورة']))dataIssues.push(`فاتورة بدون تاريخ: ${norm(r['رقم الفاتورة'])||i+1}`);
-      if(num(r['الكمية'])<=0)dataIssues.push(`كمية شراء غير صالحة في الفاتورة ${norm(r['رقم الفاتورة'])||i+1}`);
-      if(!norm(r['إسم الصنف']))dataIssues.push(`فاتورة بدون صنف: ${norm(r['رقم الفاتورة'])||i+1}`);
-      if(!norm(r['الوحدة']))dataIssues.push(`فاتورة بدون وحدة: ${norm(r['رقم الفاتورة'])||i+1}`);
-    });
-    consumption.forEach((r,i)=>{
-      if(!dateKey(r['التاريخ']))dataIssues.push(`استهلاك بدون تاريخ: ${i+1}`);
-      if(num(r['الكمية'])<=0)dataIssues.push(`كمية استهلاك غير صالحة: ${i+1}`);
-      if(!norm(r['المعدة']))dataIssues.push(`استهلاك بدون معدة: ${dateLabel(r['التاريخ'])}`);
-      if(!norm(r['الوحدة']))dataIssues.push(`استهلاك بدون وحدة: ${dateLabel(r['التاريخ'])}`);
-    });
-
-    return {purchases,consumption,totalPurchaseQty,totalConsumptionQty,purchaseBefore,tax,purchaseTotal,stock,negative,byEquipment,byProduct,bySupplier,monthly,costs,unmatchedConsumption,unusedPurchases,dataIssues,
-      purchaseQtyLabel:unitTotals(purchases),consumptionQtyLabel:unitTotals(consumption),stockQtyLabel:unitTotalsFromStock(stock)};
+    state.purchases.forEach((r,i)=>{const date=dateKey(r['تاريخ الفاتورة']);if((!date||inRange(r['تاريخ الفاتورة'],f.from,f.to))&&matchesFilters(r,'purchase',true)){if(!date)dataIssues.push(`فاتورة بدون تاريخ: ${clean(r['رقم الفاتورة'])||i+1}`);if(num(r['الكمية'])<=0)dataIssues.push(`كمية شراء غير صالحة في الفاتورة ${clean(r['رقم الفاتورة'])||i+1}`);if(!clean(r['إسم الصنف']))dataIssues.push(`فاتورة بدون صنف: ${clean(r['رقم الفاتورة'])||i+1}`);if(!unitOf(r)||unitOf(r)==='غير محدد')dataIssues.push(`فاتورة بدون وحدة: ${clean(r['رقم الفاتورة'])||i+1}`);}});
+    state.consumption.forEach((r,i)=>{const date=dateKey(r['التاريخ']);if((!date||inRange(r['التاريخ'],f.from,f.to))&&matchesFilters(r,'consumption',true)){if(!date)dataIssues.push(`استهلاك بدون تاريخ: ${i+1}`);if(num(r['الكمية'])<=0)dataIssues.push(`كمية استهلاك غير صالحة: ${i+1}`);if(!clean(r['المعدة']))dataIssues.push(`استهلاك بدون معدة: ${dateLabel(r['التاريخ'])}`);if(!clean(r['الوحدة']))dataIssues.push(`استهلاك بدون وحدة: ${dateLabel(r['التاريخ'])}`);}});
+    state.purchases.forEach((r,i)=>{if(inRange(r['تاريخ الفاتورة'],f.from,f.to)&&matchesFilters(r,'purchase',true)&&taxMismatch(r))dataIssues.push(`ضريبة لا تتوافق مع الإجمالي في الفاتورة ${clean(r['رقم الفاتورة'])||i+1}`);});
+    const estimatedCost=sumBy(consumption,r=>num(r['الكمية'])*(costs[key(r['إسم الصنف'],unitOf(r))]?.avg||0));
+    return {purchases,consumption,totalPurchaseQty:sumBy(purchases,r=>num(r['الكمية'])),totalConsumptionQty:sumBy(consumption,r=>num(r['الكمية'])),purchaseBefore,tax,purchaseTotal,stock,negative,lowCover,byEquipment,byProduct,bySupplier,monthly,invoices,products,supPrice,productPrices,supplierPrices,costs,unmatchedConsumption,unusedPurchases,dataIssues,equipmentRows,estimatedCost,stockValue:sumBy(stock,x=>x.value),periodDays,purchaseQtyLabel:unitTotals(purchases,'الكمية'),consumptionQtyLabel:unitTotals(consumption,'الكمية'),stockQtyLabel:unitTotals(stock,'balance'),totalConsumptionByUnit};
   }
+  function model(){const cacheKey=JSON.stringify([state.filters,state.loadedAt,state.purchases.length,state.consumption.length]);if(modelCache&&cacheKey===modelCacheKey)return modelCache;modelCacheKey=cacheKey;modelCache=buildModel();return modelCache;}
 
   function options(){
-    const products=uniqueSorted([...state.purchases.map(r=>norm(r['إسم الصنف'])),...state.consumption.map(r=>norm(r['إسم الصنف']))]);
-    const units=uniqueSorted([...state.purchases.map(r=>norm(r['الوحدة'])),...state.consumption.map(r=>norm(r['الوحدة']))]);
-    const equipment=uniqueSorted(state.consumption.map(r=>norm(r['المعدة'])));
-    const suppliers=uniqueSorted([...state.purchases.map(r=>norm(r['إسم المورد'])),...state.consumption.map(r=>norm(r['إسم المورد']))]);
-    const invoices=uniqueSorted([...state.purchases.map(r=>norm(r['رقم الفاتورة'])),...state.consumption.map(r=>norm(r['رقم الفاتورة']))]);
+    const uniq=xs=>[...new Map(xs.filter(Boolean).map(x=>[normKey(x),clean(x)])).values()].sort((a,b)=>a.localeCompare(b,'ar'));
     const dates=[...state.purchases.map(r=>dateKey(r['تاريخ الفاتورة'])),...state.consumption.map(r=>dateKey(r['التاريخ']))].filter(Boolean).sort();
-    return {products,units,equipment,suppliers,invoices,min:dates[0]||'',max:dates[dates.length-1]||''};
+    const now=new Date(),today=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const available=dates.filter(d=>d<=today),defaultTo=available.at(-1)||dates.at(-1)||'',min=dates[0]||'',max=dates.at(-1)||'';
+    const candidate=defaultTo?addDays(defaultTo,-29):'';
+    const defaultFrom=defaultTo?(min&&min>candidate?min:candidate):'';
+    return {products:uniq([...state.purchases.map(r=>r['إسم الصنف']),...state.consumption.map(r=>r['إسم الصنف'])]),units:uniq([...state.purchases.map(unitOf),...state.consumption.map(unitOf)]),equipment:uniq(state.consumption.map(r=>r['المعدة'])),suppliers:uniq([...state.purchases.map(r=>r['إسم المورد']),...state.consumption.map(r=>r['إسم المورد'])]),invoices:uniq([...state.purchases.map(r=>r['رقم الفاتورة']),...state.consumption.map(r=>r['رقم الفاتورة'])]),min,max,defaultFrom,defaultTo};
   }
 
-  function table(headers,rows){
+
+  const c=(value,cls='',raw=null)=>({text:String(value??'—'),cls,raw});
+  const nc=(value,formatter=fmt)=>({text:formatter(value),cls:'num',raw:Number(value)||0});
+  const snc=(value,formatter=fmt)=>{const cell=nc(value,formatter);if(Number(value)<0)cell.cls+=' oil-negative';return cell;};
+  const hc=(html,cls='')=>({text:String(html),cls,html:true});
+  const rowHtml=row=>`<tr>${row.map(cell=>{const x=typeof cell==='object'&&cell!==null?cell:c(cell);return `<td${x.cls?` class="${attr(x.cls)}"`:''}>${x.html?x.text:esc(x.text)}</td>`;}).join('')}</tr>`;
+  function totalsFor(headers,rows,opts={}){
+    const cols=opts.sumCols||[];if(!rows.length||!cols.length)return [];
+    const groups=new Map();if(opts.groupByUnitCol!=null){rows.forEach(r=>{const u=String(r[opts.groupByUnitCol]?.text??r[opts.groupByUnitCol]??'غير محدد');if(!groups.has(u))groups.set(u,[]);groups.get(u).push(r);});}else groups.set('',rows);
+    return [...groups.entries()].map(([unit,items])=>{const cells=Array(headers.length).fill(null).map(()=>c('—'));const labelCol=opts.labelCol??0;cells[labelCol]=c(opts.groupByUnitCol!=null?`الإجمالي — ${unit}`:'الإجمالي','total-label');cols.forEach(i=>{const total=sumBy(items,r=>Number(r[i]?.raw??num(r[i]?.text??r[i]??0)));const fn=opts.formats?.[i]||fmt;cells[i]=nc(total,fn);cells[i].cls='num oil-total-number';});return cells;});
+  }
+  function table(headers,rows,opts={}){
     if(!rows.length)return '<div class="oil-empty">لا توجد بيانات ضمن النطاق المحدد.</div>';
-
-    const n=headers.length;
-    const firstWidth=n>=7?'19%':(n>=6?'22%':'24%');
-    const rest=((100-parseFloat(firstWidth))/(n-1)).toFixed(3)+'%';
-    const cols=headers.map((_,i)=>`<col style="width:${i===0?firstWidth:rest}">`).join('');
-
-    // صف إجمالي موحّد لكل جداول مركز الزيوت.
-    // يتم جمع الأعمدة الرقمية فقط، مع استثناء المتوسطات والتواريخ
-    // وحقول "آخر..." و"أعلى..." والحالات لأنها ليست مجاميع حسابية.
-    const skipTotal=(h)=>{
-      const s=String(h||'').trim();
-      return /متوسط|سعر الوحدة|آخر |آخر$|تاريخ|حالة|الحالة|أعلى |الصنف|المعدة|المورد|الفاتورة|رقم|الشهر|#/.test(s);
-    };
-
-    const temp=document.createElement('tbody');
-    temp.innerHTML=rows.join('');
-    const trs=[...temp.querySelectorAll('tr')];
-    const totals=new Array(n).fill(0);
-    const numeric=new Array(n).fill(false);
-
-    trs.forEach(tr=>{
-      const cells=[...tr.children];
-      cells.forEach((cell,i)=>{
-        if(i===0 || skipTotal(headers[i])) return;
-        const raw=cell.textContent.trim();
-        if(!raw) return;
-        const value=num(raw);
-        // لا نعتبر النصوص غير الرقمية أرقامًا.
-        const normalized=raw.replace(/[,٬\s]/g,'').replace(/[٫]/g,'.').replace(/[^\d.+-]/g,'');
-        if(normalized!=='' && /^[-+]?\d*\.?\d+$/.test(normalized)){
-          totals[i]+=value;
-          numeric[i]=true;
-        }
-      });
-    });
-
-    const totalCells=headers.map((h,i)=>{
-      if(i===0) return '<td class="total-label">الإجمالي</td>';
-      if(numeric[i]){
-        return `<td class="num oil-total-number">${fmt(totals[i])}</td>`;
-      }
-      return '<td class="oil-total-empty">—</td>';
-    }).join('');
-
-    const totalRow=`<tr class="oil-total-row">${totalCells}</tr>`;
-
-    return `<div class="oil-table-wrap"><table class="oil-table" dir="rtl"><colgroup>${cols}</colgroup><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}${totalRow}</tbody></table></div>`;
+    const limit=opts.unlimited?rows.length:200,visible=rows.slice(0,limit),remainder=rows.slice(limit),moreId=remainder.length?String(++nextMoreId):'';if(moreId)moreRowsById[moreId]=remainder;
+    const totals=opts.totalRows||totalsFor(headers,rows,opts),includeTotal=opts.includeTotal===undefined?!opts.unlimited:opts.includeTotal,body=visible.map(rowHtml).join('')+(includeTotal&&totals.length?totals.map(r=>rowHtml(r).replace('<tr>','<tr class="total">')).join(''):'' );
+    return `<div class="amc-report-table-wrap oil-table-wrap"><table class="amc-report-table oil-table" dir="rtl"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>${remainder.length&&!opts.unlimited?`<button class="oil-more-button" type="button" data-oil-more="${moreId}">عرض المزيد (${fmt(remainder.length)})</button>`:''}</div>`;
   }
-  function kpis(items){return `<div class="oil-kpis">${items.map(x=>`<div class="oil-kpi"><label>${x[0]}</label><strong>${x[1]}</strong>${x[2]?`<small>${x[2]}</small>`:''}</div>`).join('')}</div>`;}
-  function card(title,content,full=false){return `<section class="oil-card${full?' full':''}"><h3>${title}</h3>${content}</section>`;}
-  function barList(obj,unit=''){
-    const arr=Object.entries(obj).sort((a,b)=>Number(b[1].qty??b[1])-Number(a[1].qty??a[1])).slice(0,10);
-    if(!arr.length)return '<div class="oil-empty">لا توجد بيانات.</div>';
-    const max=Math.max(1,...arr.map(x=>Number(x[1].qty??x[1])));
-    return `<div class="oil-bars">${arr.map(([k,v])=>{
-      const val=Number(v.qty??v),label=v?.equipment?`${v.equipment} — ${v.unit}`:v?.product?`${v.product} — ${v.unit}`:k;
-      return `<div class="oil-bar-row"><span class="oil-bar-label" title="${escapeHtmlAttr(label)}">${esc(label)}</span><span class="oil-bar-track"><span class="oil-bar-fill" style="width:${Math.max(2,val/max*100)}%"></span></span><span class="oil-bar-value">${fmt(val)} ${unit||v?.unit||''}</span></div>`;
-    }).join('')}</div>`;
+  function kpis(items){return `<div class="oil-kpis">${items.map(x=>`<div class="oil-kpi ${attr(x[3]||'navy')}"><label>${esc(x[0])}</label><strong>${x[1]}</strong>${x[2]?`<small>${esc(x[2])}</small>`:''}</div>`).join('')}</div>`;}
+  function card(title,content,full=false){return `<section class="oil-card${full?' full':''}"><h3>${esc(title)}</h3>${content}</section>`;}
+  function deltaHtml(a,b){const d=diff(a,b);if(d.diff==null)return '—';if(d.pct==null&&Number(b)===0&&Number(a)!==0)return `<span class="amc-mf-pos">جديد</span>`;const arrow=d.diff>0?'▲ ':d.diff<0?'▼ ':'',cls=d.diff>=0?'amc-mf-pos':'amc-mf-neg';return `<span class="${cls}">${arrow}${pct(Math.abs(d.pct??0))}</span>`;}
+  function barList(rows,labelField='equipment',limit=5){
+    const arr=rows.slice().sort((a,b)=>b.qty-a.qty).slice(0,limit);if(!arr.length)return '<div class="oil-empty">لا توجد بيانات ضمن الفترة المحددة.</div>';const max=Math.max(1,...arr.map(x=>x.qty));
+    return `<div class="oil-bars">${arr.map(x=>{const label=`${x[labelField]||x.product||'غير محدد'} — ${x.unit||''}`;return `<div class="oil-bar-row"><span class="oil-bar-label" title="${attr(label)}">${esc(label)}</span><span class="oil-bar-track"><span class="oil-bar-fill" style="width:${Math.max(2,Math.min(100,x.qty/max*100))}%"></span></span><span class="oil-bar-value">${fmt(x.qty)} ${esc(x.unit||'')}</span></div>`;}).join('')}</div>`;
   }
+  function periodBase(from,to){const keep={from:state.filters.from,to:state.filters.to};const b=filterBase(from,to);state.filters.from=keep.from;state.filters.to=keep.to;return b;}
+  function previousRange(){const f=state.filters;if(f.compare==='none'||!f.from)return null;const len=daysBetween(f.from,f.to||f.from),to=addDays(f.from,-1);return {from:addDays(to,-(len-1)),to};}
+  function compareModel(m){
+    const range=previousRange();if(!range)return {range:null,base:null,previousStock:null,previousCosts:null,stockValue:null,estimatedCost:null};
+    const base=periodBase(range.from,range.to),previousStock=stockAsOf(range.to),previousCosts=weightedCosts(range.to);
+    previousStock.forEach(x=>x.value=x.balance*(previousCosts[x.stockKey]?.avg||0));
+    const estimatedCost=sumBy(base.consumption,r=>num(r['الكمية'])*(previousCosts[key(r['إسم الصنف'],unitOf(r))]?.avg||0));
+    return {range,base,previousStock,previousCosts,stockValue:sumBy(previousStock,x=>x.value),estimatedCost};
+  }
+
+  function countUnique(rows,fn){return new Set(rows.map(fn).filter(Boolean)).size;}
+  const supplierCount=rows=>countUnique(rows,r=>normKey(r['إسم المورد']));
+  const invoiceCount=rows=>countUnique(rows,r=>{const invoice=normKey(r['رقم الفاتورة']);return invoice?key(invoice,r['إسم المورد']):'';});
+  function unitComparisonHtml(current,previous,valueOf){
+    if(!previous)return 'بدون مقارنة';
+    const values=rows=>{const map=new Map();rows.forEach(r=>{const unit=unitOf(r);map.set(unit,(map.get(unit)||0)+Number(valueOf(r)||0));});return map;},a=values(current),b=values(previous),units=[...new Set([...a.keys(),...b.keys()])].sort((x,y)=>x.localeCompare(y,'ar'));
+    return units.map(unit=>'<span class="oil-comparison-unit">'+esc(unit)+': '+fmt(a.get(unit)||0)+' مقابل '+fmt(b.get(unit)||0)+' '+deltaHtml(a.get(unit)||0,b.get(unit)||0)+'</span>').join(' • ')||'لا توجد كميات للمقارنة';
+  }
+
+  function currentPeriodLabel(){const f=state.filters;return f.from||f.to?`من ${dateLabel(f.from)} إلى ${dateLabel(f.to)}`:'غير محددة';}
+  function comparePeriodLabel(cmp){return cmp.range?`من ${dateLabel(cmp.range.from)} إلى ${dateLabel(cmp.range.to)}`:'بدون مقارنة';}
+  function comparisonHtml(cur,prev,format=fmt){if(prev==null)return 'بدون مقارنة';return `${format(cur)} مقابل ${format(prev)} — ${deltaHtml(cur,prev)}`;}
 
   function renderToolbar(){
-    const o=options(),f=state.filters;
-    const select=(id,label,arr,val)=>`<div class="oil-filter"><label>${label}</label><select id="${id}"><option value="">الكل</option>${arr.map(x=>`<option value="${escapeHtmlAttr(x)}" ${x===val?'selected':''}>${esc(x)}</option>`).join('')}</select></div>`;
-    document.getElementById('reportToolbar').innerHTML=`<div class="oil-report-toolbar"><div class="oil-filter"><label>من تاريخ</label><input id="oilFrom" type="date" value="${escapeHtmlAttr(f.from)}" min="${o.min}" max="${o.max}"></div><div class="oil-filter"><label>إلى تاريخ</label><input id="oilTo" type="date" value="${escapeHtmlAttr(f.to)}" min="${o.min}" max="${o.max}"></div>${select('oilProduct','الصنف',o.products,f.product)}${select('oilUnit','الوحدة',o.units,f.unit)}${select('oilEquipment','المعدة',o.equipment,f.equipment)}${select('oilSupplier','المورد',o.suppliers,f.supplier)}${select('oilInvoice','رقم الفاتورة',o.invoices,f.invoice)}<button class="oil-btn" id="oilApply" type="button">تطبيق</button><button class="oil-btn secondary" id="oilReset" type="button">إعادة ضبط</button><button class="oil-btn secondary" id="oilPrint" type="button">طباعة التقرير</button></div>`;
-    document.getElementById('oilApply').addEventListener('click',()=>{state.filters={from:document.getElementById('oilFrom').value,to:document.getElementById('oilTo').value,product:document.getElementById('oilProduct').value,unit:document.getElementById('oilUnit').value,equipment:document.getElementById('oilEquipment').value,supplier:document.getElementById('oilSupplier').value,invoice:document.getElementById('oilInvoice').value};render();});
-    document.getElementById('oilReset').addEventListener('click',()=>{state.filters={from:o.min,to:o.max,product:'',unit:'',equipment:'',supplier:'',invoice:''};render();});
-    document.getElementById('oilPrint').addEventListener('click',()=>print());
-  }
-
-  function renderTabs(){
-    return [
-      ['overview','نظرة عامة'],
-      ['stock','المخزون'],
-      ['consumption','الاستهلاك'],
-      ['equipment','المعدات'],
-      ['purchases','المشتريات'],
-      ['invoices','الفواتير'],
-      ['suppliers','الموردون'],
-      ['products','الأصناف'],
-      ['cost','التكلفة'],
-      ['quality','التنبيهات وجودة البيانات']
-    ].map(([id,label]) =>
-      `<button class="oil-tab ${state.tab===id?'active':''}" type="button" data-oil-tab="${id}">${label}</button>`
-    ).join('');
-  }
-
-  function renderOverview(m){
-    const stockValue=m.stock.reduce((a,r)=>a+r.value,0);
-    const equipment=new Set(m.consumption.map(r=>norm(r['المعدة'])).filter(Boolean)).size;
-    const products=new Set([...m.purchases.map(r=>key(r['إسم الصنف'],r['الوحدة'])),...m.consumption.map(r=>key(r['إسم الصنف'],r['الوحدة']))].filter(Boolean)).size;
-    const suppliers=Object.keys(m.bySupplier).length,invoices=new Set(m.purchases.map(r=>key(r['رقم الفاتورة'],r['إسم المورد']))).size;
-    const topEq=m.byEquipment,topProd=m.byProduct;
-    const monthlyRows=Object.values(m.monthly).sort((a,b)=>`${a.month}¦${a.unit}`.localeCompare(`${b.month}¦${b.unit}`)).map(v=>`<tr><td>${esc(v.month)}</td><td>${esc(v.unit)}</td><td class="num">${fmt(v.purchase)}</td><td class="num">${fmt(v.consumption)}</td><td class="num">${fmt(v.purchase-v.consumption)}</td></tr>`);
-    return kpis([['مشتريات الفترة',m.purchaseQtyLabel,'حسب الوحدة'],['استهلاك الفترة',m.consumptionQtyLabel,'حسب الوحدة'],['الرصيد المحسوب',m.stockQtyLabel,'حسب الوحدة حتى نهاية الفترة'],['قيمة المشتريات قبل الضريبة',money(m.purchaseBefore)+' SAR'],['إجمالي شامل الضريبة',money(m.purchaseTotal)+' SAR'],['الأصناف',fmt(products),'صنف + وحدة'],['المعدات',fmt(equipment),'معدة'],['الموردون / الفواتير',`${fmt(suppliers)} / ${fmt(invoices)}`,'مورد / فاتورة']])+
-      card('أعلى المعدات استهلاكًا',barList(topEq))+
-      card('أعلى الأصناف استهلاكًا',barList(topProd))+
-      card('المشتريات مقابل الاستهلاك شهريًا',table(['الشهر','الوحدة','المشتريات','الاستهلاك','صافي الحركة'],monthlyRows),true)+
-      card('ملخص الرصيد',table(['الصنف','الوحدة','المشتريات حتى التاريخ','الاستهلاك حتى التاريخ','الرصيد','متوسط التكلفة','قيمة الرصيد'],m.stock.sort((a,b)=>b.balance-a.balance).map(r=>`<tr><td>${esc(r.product)}</td><td>${esc(r.unit)}</td><td class="num">${fmt(r.purchase)}</td><td class="num">${fmt(r.consumption)}</td><td class="num">${fmt(r.balance)}</td><td class="num">${money(r.avgCost)}</td><td class="num">${money(r.value)}</td></tr>`)),true);
-  }
-
-  function renderStock(m){
-    const rows=m.stock.sort((a,b)=>a.product.localeCompare(b.product,'ar')||a.unit.localeCompare(b.unit,'ar')).map(r=>`<tr><td>${esc(r.product)}</td><td>${esc(r.unit)}</td><td class="num">${fmt(r.purchase)}</td><td class="num">${fmt(r.consumption)}</td><td class="num">${fmt(r.balance)}</td><td class="num">${money(r.avgCost)}</td><td class="num">${money(r.value)}</td><td>${r.balance<0?'<span class="oil-badge bad">سالب</span>':'<span class="oil-badge good">متاح</span>'}</td></tr>`);
-    return card('المخزون المحسوب حسب الصنف والوحدة',table(['الصنف','الوحدة','المشتريات','الاستهلاك','الرصيد','متوسط التكلفة','قيمة الرصيد','الحالة'],rows),true)+`<div class="oil-mini-note">الرصيد هنا محسوب من الحركات المسجلة حتى تاريخ «${esc(state.filters.to||'آخر تاريخ متاح')}»، مع فصل كل وحدة عن الأخرى، وليس جردًا فعليًا للمستودع.</div>`;
-  }
-
-  function renderConsumption(m){
-    const rows=m.consumption.slice().sort((a,b)=>(dateKey(b['التاريخ'])||'').localeCompare(dateKey(a['التاريخ'])||'')).map(r=>`<tr><td>${dateLabel(r['التاريخ'])}</td><td>${esc(r['المعدة']||'—')}</td><td>${esc(r['إسم الصنف']||'—')}</td><td>${esc(r['الوحدة']||'—')}</td><td class="num">${fmt(num(r['الكمية']))}</td><td>${esc(r['إسم المورد']||'—')}</td><td>${esc(r['رقم الفاتورة']||'—')}</td></tr>`);
-    return kpis([['عدد حركات الاستهلاك',fmt(m.consumption.length)],['إجمالي الكمية',m.consumptionQtyLabel],['عدد المعدات',fmt(Object.keys(m.byEquipment).length)],['أعلى استهلاك',m.consumption.length?(()=>{const x=m.consumption.slice().sort((a,b)=>num(b['الكمية'])-num(a['الكمية']))[0];return `${fmt(num(x['الكمية']))} ${esc(x['الوحدة']||'')}`})():'0']])+card('سجل استهلاك الزيوت',table(['التاريخ','المعدة','الصنف','الوحدة','الكمية','المورد','رقم الفاتورة'],rows),true);
-  }
-
-  function renderEquipment(m){
-    const rows=Object.entries(m.byEquipment).sort((a,b)=>b[1].qty-a[1].qty).map(([k,v],i)=>{
-      const products={};
-      m.consumption.filter(r=>norm(r['المعدة'])===v.equipment&&norm(r['الوحدة'])===v.unit).forEach(r=>{const p=norm(r['إسم الصنف'])||'غير محدد';products[p]=(products[p]||0)+num(r['الكمية']);});
-      const top=Object.entries(products).sort((a,b)=>b[1]-a[1])[0];
-      const last=m.consumption.filter(r=>norm(r['المعدة'])===v.equipment&&norm(r['الوحدة'])===v.unit).map(r=>dateKey(r['التاريخ'])).filter(Boolean).sort().pop()||'';
-      return `<tr><td>${i+1}</td><td>${esc(v.equipment)}</td><td>${esc(v.unit)}</td><td class="num">${fmt(v.qty)}</td><td class="num">${fmt(v.count)}</td><td>${esc(top?.[0]||'—')}</td><td class="num">${fmt(top?.[1]||0)}</td><td>${dateLabel(last)}</td></tr>`;
+    const root=document.getElementById('reportToolbar');if(!root)return;const o=options(),f=state.filters;
+    const select=(id,label,arr,val)=>`<div class="oil-filter"><label for="${id}">${label}</label><select id="${id}"><option value="">الكل</option>${arr.map(x=>`<option value="${attr(x)}" ${normKey(x)===normKey(val)?'selected':''}>${esc(x)}</option>`).join('')}</select></div>`;
+    root.innerHTML=`<div class="oil-filter-console">
+      <div class="oil-filter-console-head"><div><span>REPORT CONTROLS</span><h3>إعداد نطاق التقرير</h3><p>حدّد الفترة ثم طبّق عوامل التصفية لعرض قراءة متسقة للمخزون والحركة.</p></div><div class="oil-active-range"><span>الفترة النشطة</span><strong>${esc(currentPeriodLabel())}</strong></div></div>
+      <section class="oil-toolbar-group"><div class="oil-toolbar-heading"><span class="oil-toolbar-index">01</span><div><b>الفترة والمقارنة</b><small>تحدد الفترة المشتريات والاستهلاك، ويظل رصيد المخزون تراكميًا حتى تاريخ النهاية.</small></div></div><div class="oil-toolbar-fields oil-date-fields">
+        <div class="oil-filter"><label for="oilFrom">من تاريخ</label><input id="oilFrom" type="text" inputmode="numeric" placeholder="يوم/شهر/سنة" autocomplete="off" value="${attr(f.from?dateLabel(f.from):'')}"></div>
+        <div class="oil-filter"><label for="oilTo">إلى تاريخ</label><input id="oilTo" type="text" inputmode="numeric" placeholder="يوم/شهر/سنة" autocomplete="off" value="${attr(f.to?dateLabel(f.to):'')}"></div>
+        <div class="oil-filter"><label for="oilCompare">المقارنة</label><select id="oilCompare"><option value="previous" ${f.compare!=='none'?'selected':''}>الفترة السابقة (نفس المدة)</option><option value="none" ${f.compare==='none'?'selected':''}>بدون مقارنة</option></select></div>
+        <div class="oil-filter"><label for="oilCoverDays">حد التغطية بالأيام</label><input id="oilCoverDays" type="number" min="1" step="1" value="${attr(f.coverDays||15)}"></div>
+      </div></section>
+      <section class="oil-toolbar-group"><div class="oil-toolbar-heading"><span class="oil-toolbar-index">02</span><div><b>عوامل التصفية</b><small>استخدمها لتضييق النتائج حسب الصنف أو الوحدة أو مرجع الحركة.</small></div></div><div class="oil-toolbar-fields oil-filter-fields">
+        ${select('oilProduct','الصنف',o.products,f.product)}${select('oilUnit','الوحدة',o.units,f.unit)}${select('oilEquipment','المعدة',o.equipment,f.equipment)}${select('oilSupplier','المورد',o.suppliers,f.supplier)}${select('oilInvoice','رقم الفاتورة',o.invoices,f.invoice)}
+      </div></section>
+      <div class="oil-toolbar-error" role="alert" hidden></div>
+      <div class="oil-toolbar-footer"><div class="oil-period-hint"><strong>قاعدة قراءة الرصيد:</strong> يُحسب من أول حركة مسجلة حتى تاريخ النهاية؛ تاريخ البداية يحدد الحركة المعروضة في الفترة فقط.</div><div class="oil-toolbar-actions"><button class="oil-btn" id="oilApply" type="button">تطبيق الفلاتر</button><button class="oil-btn secondary" id="oilReset" type="button">إعادة ضبط</button><button class="oil-btn secondary" id="oilPrint" type="button">طباعة التقرير</button></div></div>
+    </div>`;
+    root.querySelector('#oilApply').addEventListener('click',()=>{
+      const fromRaw=root.querySelector('#oilFrom').value.trim(),toRaw=root.querySelector('#oilTo').value.trim(),from=fromRaw?dateKey(fromRaw):'',to=toRaw?dateKey(toRaw):'',error=root.querySelector('.oil-toolbar-error');
+      if((fromRaw&&!from)||(toRaw&&!to)){error.textContent='اكتب التاريخ بصيغة يوم/شهر/سنة، مثل 18/10/2026.';error.hidden=false;return;}
+      if(from&&to&&from>to){error.textContent='تاريخ البداية يجب أن يسبق تاريخ النهاية.';error.hidden=false;return;}
+      error.hidden=true;error.textContent='';
+      state.filters={...state.filters,from,to,product:root.querySelector('#oilProduct').value,unit:root.querySelector('#oilUnit').value,equipment:root.querySelector('#oilEquipment').value,supplier:root.querySelector('#oilSupplier').value,invoice:root.querySelector('#oilInvoice').value,compare:root.querySelector('#oilCompare').value,coverDays:Math.max(1,Number(root.querySelector('#oilCoverDays').value)||15)};
+      render();
     });
-    return card('تحليل استهلاك المعدات حسب الوحدة',table(['#','المعدة','الوحدة','الكمية','الحركات','أعلى صنف','كمية أعلى صنف','آخر استهلاك'],rows),true);
+    root.querySelector('#oilReset').addEventListener('click',()=>{state.filters={from:o.defaultFrom,to:o.defaultTo,product:'',unit:'',equipment:'',supplier:'',invoice:'',compare:'previous',coverDays:15};render();});
+    root.querySelector('#oilPrint').addEventListener('click',()=>print());
+  }
+
+  const tabs=[['overview','نظرة عامة'],['stock','المخزون'],['consumption','الاستهلاك'],['equipment','المعدات'],['purchases','المشتريات'],['invoices','الفواتير'],['suppliers','الموردون'],['products','الأصناف'],['cost','التكلفة'],['quality','التنبيهات وجودة البيانات']];
+  function renderTabs(){
+    const groups=[['لوحة المتابعة',['overview']],['المخزون والتشغيل',['stock','consumption','equipment']],['التوريد',['purchases','invoices','suppliers']],['التحليل والرقابة',['products','cost','quality']]];
+    return `<nav class="oil-tabs" role="tablist" aria-label="أقسام مركز الزيوت">${groups.map(([label,ids])=>`<div class="oil-tab-group"><span class="oil-tab-group-label">${esc(label)}</span><div class="oil-tab-list">${ids.map(id=>{const item=tabs.find(x=>x[0]===id);return `<button class="oil-tab ${state.tab===id?'active':''}" type="button" data-oil-tab="${attr(id)}" role="tab" aria-selected="${state.tab===id?'true':'false'}">${esc(item?.[1]||id)}</button>`;}).join('')}</div></div>`).join('')}</nav>`;
+  }
+
+  function dashboardKpis(items){return `<div class="oil-kpis oil-dashboard-kpis">${items.map(x=>`<article class="oil-kpi ${attr(x[3]||'navy')}"><label>${esc(x[0])}</label><strong>${x[1]}</strong><small>${x[2]}</small></article>`).join('')}</div>`;}
+  function monthlyMovement(unit,rows){
+    if(rows.length>1)return monthlyChart(unit,rows);
+    if(!rows.length)return '<div class="oil-empty">لا توجد حركة شهرية ضمن الفترة المحددة.</div>';
+    const x=rows[0],max=Math.max(1,x.purchase,x.consumption),net=x.purchase-x.consumption,bar=(label,value,tone)=>`<div class="oil-flow-line ${tone}"><div class="oil-flow-label"><span>${label}</span><strong>${fmt(value)} ${esc(unit)}</strong></div><div class="oil-flow-track"><i style="width:${Math.max(2,value/max*100)}%"></i></div></div>`;
+    return `<div class="oil-flow-summary"><div class="oil-flow-head"><span>الشهر ضمن الفترة</span><strong dir="ltr">${esc(x.month)}</strong></div>${bar('المشتريات',x.purchase,'gold')}${bar('الاستهلاك',x.consumption,'navy')}<div class="oil-flow-net"><span>صافي الحركة</span><strong class="${net<0?'amc-mf-neg':'amc-mf-pos'}">${fmt(net)} ${esc(unit)}</strong></div><p>يعرض هذا الملخص القيم للفترة المختارة؛ لا توجد أشهر متعددة لعرض اتجاه زمني.</p></div>`;
+  }
+  function renderOverview(m){
+    const cmp=compareModel(m),supplierTotals=Object.values(m.bySupplier).reduce((acc,x)=>{const k=normKey(x.supplier);acc[k]??={supplier:x.supplier,value:0};acc[k].value+=x.value;return acc;},Object.create(null));
+    const compareValue=(current,previous,formatter)=>previous==null?'<span>لا تتوفر فترة مقارنة</span>':`${esc(formatter(current))} مقابل ${esc(formatter(previous))} ${deltaHtml(current,previous)}`;
+    const consumptionCompare=cmp.base?unitComparisonHtml(m.consumption,cmp.base.consumption,r=>num(r['الكمية'])):'لا تتوفر فترة مقارنة';
+    const stockCompare=cmp.previousStock?unitComparisonHtml(m.stock,cmp.previousStock,r=>r.balance):'لا تتوفر فترة مقارنة';
+    const metrics=[
+      ['مشتريات الفترة — قبل الضريبة',`${money(m.purchaseBefore)} ريال`,`كمية ${esc(m.purchaseQtyLabel)}<br>ضريبة ${money(m.tax)} • شامل ${money(m.purchaseTotal)} ريال<span class="oil-kpi-comparison">مقارنة القيمة: ${compareValue(m.purchaseBefore,cmp.base?.purchaseBefore,v=>`${money(v)} ريال`)}</span>`,'gold'],
+      ['استهلاك الفترة',esc(m.consumptionQtyLabel),`${fmt(m.consumption.length)} حركة مسجلة<span class="oil-kpi-comparison">مقارنة الكمية: ${consumptionCompare}</span>`,'navy'],
+      ['الرصيد حتى تاريخ النهاية',esc(m.stockQtyLabel),`رصيد تراكمي حتى ${esc(dateLabel(state.filters.to)||'آخر حركة') }<span class="oil-kpi-comparison">مقارنة الرصيد: ${stockCompare}</span>`,'navy'],
+      ['قيمة المخزون التقديرية',`${money(m.stockValue)} ريال`,`متوسط تكلفة مرجح حتى تاريخ النهاية<span class="oil-kpi-comparison">مقارنة القيمة: ${compareValue(m.stockValue,cmp.stockValue,v=>`${money(v)} ريال`)}</span>`,'gold']
+    ];
+    const counts=[['الموردون',supplierCount(m.purchases)],['الفواتير',invoiceCount(m.purchases)],['المعدات',countUnique(m.consumption,r=>key(r['المعدة'],unitOf(r)))],['الأصناف والوحدات',countUnique([...m.purchases,...m.consumption],r=>key(r['إسم الصنف'],unitOf(r)))]];
+    const alerts=[];
+    if(m.negative.length){const first=m.negative.slice(0,2).map(x=>`${x.product} — ${fmt(x.balance)} ${x.unit}`).join('، ');alerts.push(['red','!','رصيد سالب',`${fmt(m.negative.length)} صنف/وحدة. ${first}`]);}
+    if(m.lowCover.length){const first=m.lowCover.slice(0,2).map(x=>`${x.product} — ${fmt(x.daysCover)} يوم`).join('، ');alerts.push(['gold','!','تغطية منخفضة',`${fmt(m.lowCover.length)} صنف/وحدة عند حد ${fmt(state.filters.coverDays)} يومًا. ${first}`]);}
+    if(m.unmatchedConsumption.length)alerts.push(['gold','↗','حركات تحتاج مطابقة',`${fmt(m.unmatchedConsumption.length)} حركة استهلاك لا ترتبط بفاتورة شراء مطابقة حتى تاريخ النهاية.`]);
+    if(m.dataIssues.length)alerts.push(['red','!','ملاحظات جودة البيانات',`${fmt(m.dataIssues.length)} ملاحظة في التواريخ أو الكميات أو الحقول المطلوبة.`]);
+    if(!alerts.length)alerts.push(['green','✓','لا توجد تنبيهات مفتوحة','لم تُرصد أرصدة سالبة أو حركات غير مطابقة ضمن الفلاتر الحالية.']);
+    if(m.unusedPurchases.length)alerts.push(['navy','i','مشتريات بلا استهلاك مطابق',`${fmt(m.unusedPurchases.length)} بند شراء دون حركة استهلاك مطابقة حتى تاريخ النهاية.`]);
+    const alertsHtml=`<div class="oil-alert-list">${alerts.slice(0,5).map(x=>`<div class="oil-alert-row ${attr(x[0])}"><span class="oil-alert-symbol">${esc(x[1])}</span><div><strong>${esc(x[2])}</strong><p>${esc(x[3])}</p></div></div>`).join('')}</div>`;
+    const chartsByUnit=new Map();Object.values(m.monthly).forEach(x=>{if(!chartsByUnit.has(x.unit))chartsByUnit.set(x.unit,[]);chartsByUnit.get(x.unit).push(x);});
+    const charts=[...chartsByUnit.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ar')).slice(0,3).map(([unit,rows])=>monthlyMovement(unit,rows.sort((a,b)=>a.month.localeCompare(b.month)).slice(-12))).join('');
+    const supplier=Object.values(supplierTotals).sort((a,b)=>b.value-a.value)[0];
+    const headline=cmp.range?`من ${dateLabel(state.filters.from)} إلى ${dateLabel(state.filters.to)} — المقارنة ${comparePeriodLabel(cmp)}`:currentPeriodLabel();
+    const header=`<div class="oil-overview-intro"><div><span class="oil-view-overline">EXECUTIVE DASHBOARD</span><h3>مؤشرات الزيوت والمخزون</h3><p>${esc(headline)}</p></div><span class="oil-overview-chip">الكميات مفصولة حسب وحدة القياس</span></div>`;
+    const unitNote=new Set(Object.values(m.monthly).map(x=>x.unit)).size>3?'<div class="oil-mini-note">يعرض الرسم أول ثلاث وحدات حسب الاسم؛ بقية الوحدات متاحة في قسم الحركة الشهرية بالطباعة.</div>':'';
+    return header+dashboardKpis(metrics)+`<div class="oil-count-grid">${counts.map(x=>`<div class="oil-count-item"><span>${esc(x[0])}</span><strong>${fmt(x[1])}</strong></div>`).join('')}</div>`+
+      `<div class="oil-overview-grid">${card('حالة المخزون والتنبيهات',alertsHtml)}${card('الاستهلاك حسب المعدة',barList(m.equipmentRows,'equipment'))}</div>`+
+      `<div class="oil-overview-grid">${card('اتجاه المشتريات والاستهلاك',charts||'<div class="oil-empty">لا توجد حركة شهرية ضمن الفترة المحددة.</div>',true)}</div>`+
+      `<div class="oil-overview-grid">${card('الأصناف الأعلى استهلاكًا',barList(Object.values(m.byProduct),'product'))}${card('قراءة الموردين',supplier?`<div class="oil-alert-row"><span class="oil-alert-symbol">↗</span><div><strong>أعلى مورد في الفترة</strong><p>${esc(supplier.supplier)} — ${money(supplier.value)} ريال قبل الضريبة (${pct(m.purchaseBefore?supplier.value/m.purchaseBefore*100:0)} من القيمة).</p></div></div><div class="oil-mini-note">يُحسب المورد عبر وحداته مع إبقاء كميات كل وحدة مستقلة.</div>`:'<div class="oil-empty">لا توجد مشتريات ضمن الفترة المحددة.</div>')}</div>${unitNote}`;
+  }
+  function renderStock(m){
+    const rows=m.stock.slice().sort((a,b)=>a.product.localeCompare(b.product,'ar')||a.unit.localeCompare(b.unit,'ar')).map(x=>[c(x.product),c(x.unit),nc(x.purchase),nc(x.consumption),snc(x.balance),nc(x.avgCost,money),snc(x.value,money),nc(x.daysCover,x=>x==null?'—':fmt(x)),hc(`<span class="oil-badge ${x.status==='سالب'?'bad':x.status==='منخفض'?'warn':'good'}">${esc(x.status)}</span>`)]);
+    return card('الرصيد المحسوب حسب الصنف والوحدة',table(['الصنف','الوحدة','شراء تراكمي','استهلاك تراكمي','الرصيد حتى التاريخ','متوسط التكلفة (ريال)','قيمة الرصيد (ريال)','تغطية الاستهلاك (يوم)','الحالة'],rows,{sumCols:[2,3,4,6],groupByUnitCol:1,formats:{6:money}}),true)+`<div class="oil-mini-note">الرصيد تراكمي من أول حركة مسجلة وحتى ${esc(dateLabel(state.filters.to)||'آخر تاريخ متاح')}، ولا يتأثر بتاريخ البداية. عند اختيار مورد أو فاتورة يُحتسب رصيد الحركات المطابقة فقط؛ وعند اختيار معدة تبقى المشتريات كما هي ويُقتصر الاستهلاك على المعدة المحددة. هذا رصيد حركات مسجلة وليس جردًا فعليًا.</div>`;
+  }
+
+  function renderConsumption(m){const rows=m.consumption.slice().sort((a,b)=>(dateKey(b['التاريخ'])||'').localeCompare(dateKey(a['التاريخ'])||'')).map(r=>[c(dateLabel(r['التاريخ'])),c(r['المعدة']||'—'),c(r['إسم الصنف']||'—'),c(unitOf(r)),nc(num(r['الكمية'])),c(r['إسم المورد']||'—'),c(r['رقم الفاتورة']||'—')]);const top=m.consumption.slice().sort((a,b)=>num(b['الكمية'])-num(a['الكمية']))[0];return kpis([['عدد الحركات',fmt(m.consumption.length),'حركة','navy'],['إجمالي الكمية',esc(m.consumptionQtyLabel),'حسب الوحدة','gold'],['عدد المعدات',fmt(Object.keys(m.byEquipment).length),'معدة + وحدة','navy'],['أعلى حركة',top?`${fmt(num(top['الكمية']))} ${esc(unitOf(top))}`:'0','ضمن الفترة','green']])+card('سجل استهلاك الزيوت',table(['التاريخ','المعدة','الصنف','الوحدة','الكمية','المورد','رقم الفاتورة'],rows,{sumCols:[4],groupByUnitCol:3}),true);}
+  function renderEquipment(m){
+    const oldByKey=Object.create(null),prev=compareModel(m).base?.consumption||[],unitSum=Object.create(null);
+    prev.forEach(r=>{const k=key(r['المعدة'],unitOf(r));oldByKey[k]=(oldByKey[k]||0)+num(r['الكمية']);});
+    m.equipmentRows.forEach(x=>{(unitSum[x.unit]??={sum:0,count:0}).sum+=x.qty;unitSum[x.unit].count++;});
+    const rows=m.equipmentRows.slice().sort((a,b)=>b.qty-a.qty).map(x=>{const old=oldByKey[key(x.equipment,x.unit)]||0,group=unitSum[x.unit],peerAvg=group&&group.count>1?(group.sum-x.qty)/(group.count-1):0,out=!!group&&group.count>1&&x.qty>1.5*peerAvg;return [c(x.equipment),c(x.unit),nc(x.qty),nc(x.count),c(x.topProduct),nc(x.topQty),c(dateLabel(x.last)),nc(x.share,pct),hc(deltaHtml(x.qty,old)),hc(out?'<span class="oil-badge warn">مرتفع</span>':'—')];});
+    return card('استهلاك المعدات حسب الوحدة',table(['المعدة','الوحدة','استهلاك الفترة','عدد الحركات','أعلى صنف','كمية الصنف الأعلى','آخر استهلاك بالفترة','حصة الوحدة %','مقارنة الفترة','تنبيه'],rows,{sumCols:[2],groupByUnitCol:1}),true)+`<div class="oil-mini-note">يظهر التنبيه عندما يتجاوز استهلاك المعدة 1.5 مرة متوسط استهلاك المعدات الأخرى في الوحدة نفسها.</div>`;
   }
 
   function renderPurchases(m){
-    const rows=m.purchases.slice().sort((a,b)=>(dateKey(b['تاريخ الفاتورة'])||'').localeCompare(dateKey(a['تاريخ الفاتورة'])||'')).map(r=>`<tr><td>${dateLabel(r['تاريخ الفاتورة'])}</td><td>${esc(r['إسم المورد'])}</td><td>${esc(r['رقم الفاتورة'])}</td><td>${esc(r['إسم الصنف'])}</td><td>${esc(r['الوحدة']||'—')}</td><td class="num">${fmt(r['الكمية'])}</td><td class="num">${money(num(r['السعر قبل الضريبة']))}</td><td class="num">${money(num(r['الضريبة 15%']))}</td><td class="num">${money(num(r['الإجمالي مع الضريبة']))}</td></tr>`);
-    return kpis([['عدد بنود الشراء',fmt(m.purchases.length)],['الكمية المشتراة',m.purchaseQtyLabel],['قبل الضريبة',money(m.purchaseBefore)+' SAR'],['الضريبة',money(m.tax)+' SAR'],['شامل الضريبة',money(m.purchaseTotal)+' SAR']])+card('مشتريات الزيوت',table(['التاريخ','المورد','رقم الفاتورة','الصنف','الوحدة','الكمية','السعر قبل الضريبة','الضريبة 15%','الإجمالي'],rows),true);
+    const rows=m.purchases.slice().sort((a,b)=>(dateKey(b['تاريخ الفاتورة'])||'').localeCompare(dateKey(a['تاريخ الفاتورة'])||'')).map(r=>[c(dateLabel(r['تاريخ الفاتورة'])),c(r['إسم المورد']||'—'),c(r['رقم الفاتورة']||'—'),c(r['إسم الصنف']||'—'),c(unitOf(r)),nc(num(r['الكمية'])),nc(num(r['السعر قبل الضريبة']),money),nc(lineTax(r),money),nc(lineGross(r),money)]);
+    return kpis([['بنود الشراء',fmt(m.purchases.length),'بند','navy'],['الكمية',esc(m.purchaseQtyLabel),'حسب الوحدة','gold'],['قبل الضريبة',`${money(m.purchaseBefore)} ريال`,'','gold'],['ضريبة القيمة المضافة',`${money(m.tax)} ريال`,'','navy'],['شامل الضريبة',`${money(m.purchaseTotal)} ريال`,'','gold']])+card('بنود مشتريات الفترة',table(['التاريخ','المورد','رقم الفاتورة','الصنف','الوحدة','الكمية','سعر الوحدة قبل الضريبة (ريال)','الضريبة (ريال)','الإجمالي شامل الضريبة (ريال)'],rows,{sumCols:[5,7,8],groupByUnitCol:4,formats:{7:money,8:money}}),true)+`<div class="oil-mini-note">ضريبة القيمة المضافة = الإجمالي شامل الضريبة ناقص القيمة قبل الضريبة عند توفر الإجمالي؛ وتُستخدم نسبة العمود عند غياب الإجمالي.</div>`;
   }
 
   function renderInvoices(m){
-    const groups={};
-    m.purchases.forEach(r=>{
-      const k=key(r['رقم الفاتورة'],r['إسم المورد'],r['الوحدة']);
-      (groups[k]??={supplier:norm(r['إسم المورد']),invoice:norm(r['رقم الفاتورة']),unit:unitOf(r),date:r['تاريخ الفاتورة'],qty:0,before:0,tax:0,total:0,lines:0});
-      const g=groups[k];g.qty+=num(r['الكمية']);g.before+=num(r['الكمية'])*num(r['السعر قبل الضريبة']);g.tax+=num(r['الضريبة 15%']);g.total+=num(r['الإجمالي مع الضريبة']);g.lines++;
-    });
-    const rows=Object.values(groups).sort((a,b)=>(dateKey(b.date)||'').localeCompare(dateKey(a.date)||'')).map(g=>`<tr><td>${dateLabel(g.date)}</td><td>${esc(g.supplier)}</td><td>${esc(g.invoice)}</td><td>${esc(g.unit)}</td><td class="num">${fmt(g.lines)}</td><td class="num">${fmt(g.qty)}</td><td class="num">${money(g.before)}</td><td class="num">${money(g.tax)}</td><td class="num">${money(g.total)}</td></tr>`);
-    return card('ملخص فواتير الزيوت حسب الوحدة',table(['التاريخ','المورد','الفاتورة','الوحدة','البنود','الكمية','قبل الضريبة','الضريبة','الإجمالي'],rows),true);
+    const rows=Object.values(m.invoices).sort((a,b)=>(dateKey(b.date)||'').localeCompare(dateKey(a.date)||'')).map(x=>[c(dateLabel(x.date)),c(x.supplier),c(x.invoice),c(x.unit),nc(x.lines),nc(x.qty),nc(x.before,money),nc(x.tax,money),nc(x.total,money)]);
+    return card('تفاصيل الفواتير حسب الوحدة',table(['التاريخ','المورد','رقم الفاتورة','الوحدة','بنود الوحدة','الكمية','قبل الضريبة (ريال)','الضريبة (ريال)','شامل الضريبة (ريال)'],rows,{sumCols:[5,6,7,8],groupByUnitCol:3,formats:{6:money,7:money,8:money}}),true)+`<div class="oil-mini-note">قد يظهر رقم الفاتورة في أكثر من صف إذا احتوت على وحدات مختلفة؛ عدد الفواتير في الملخص يحسب كل رقم مع المورد مرة واحدة.</div>`;
   }
 
   function renderSuppliers(m){
-    const rows=Object.entries(m.bySupplier).sort((a,b)=>b[1].value-a[1].value).map(([k,v],i)=>`<tr><td>${i+1}</td><td>${esc(v.supplier)}</td><td>${esc(v.unit)}</td><td class="num">${fmt(v.invoices.size)}</td><td class="num">${fmt(v.qty)}</td><td class="num">${money(v.value)}</td></tr>`);
-    return card('تحليل الموردين حسب الوحدة',table(['#','المورد','الوحدة','عدد الفواتير','الكمية','قيمة الشراء قبل الضريبة'],rows),true);
+    const total=m.purchaseBefore,oldByKey=Object.create(null);(compareModel(m).base?.purchases||[]).forEach(r=>{const k=key(r['إسم المورد'],unitOf(r));oldByKey[k]=(oldByKey[k]||0)+lineNet(r);});
+    const rows=Object.values(m.bySupplier).sort((a,b)=>b.value-a.value).map(x=>{const prices=(m.supplierPrices[key(x.supplier,x.unit)]||[]).filter(p=>p.firstDate!==p.lastDate).map(p=>`${esc(p.product)}: ${deltaHtml(p.lastPrice,p.firstPrice)}`).slice(0,3).join(' • ')||'—',previous=oldByKey[key(x.supplier,x.unit)]||0;return [c(x.supplier),c(x.unit),nc(x.invoices.size),nc(x.qty),nc(x.value,money),nc(total?x.value/total*100:0,pct),c(dateLabel(x.last)),hc(prices),hc(deltaHtml(x.value,previous))];});
+    return card('مشتريات المورد حسب الوحدة',table(['المورد','الوحدة','الفواتير','الكمية','المشتريات قبل الضريبة (ريال)','الحصة من القيمة %','آخر شراء بالفترة','تغيّر سعر الصنف','مقارنة الفترة'],rows,{sumCols:[3,4],groupByUnitCol:1,formats:{4:money}}),true)+`<div class="oil-mini-note">قد يظهر المورد أكثر من مرة إذا وردت له وحدات مختلفة. القيمة والحصة تخصان المورد والوحدة في الفترة المحددة؛ وتغيّر السعر يقارن أول وآخر سعر مسجلين للصنف لدى المورد ضمن الفترة.</div>`;
   }
 
   function renderProducts(m){
-    const map={};
-    m.purchases.forEach(r=>{const p=norm(r['إسم الصنف'])||'غير محدد',u=unitOf(r),k=key(p,u);(map[k]??={product:p,unit:u,purchase:0,consumption:0,value:0,lastPurchase:'',lastConsumption:''});map[k].purchase+=num(r['الكمية']);map[k].value+=num(r['الكمية'])*num(r['السعر قبل الضريبة']);const d=dateKey(r['تاريخ الفاتورة']);if(d>map[k].lastPurchase)map[k].lastPurchase=d;});
-    m.consumption.forEach(r=>{const p=norm(r['إسم الصنف'])||'غير محدد',u=unitOf(r),k=key(p,u);(map[k]??={product:p,unit:u,purchase:0,consumption:0,value:0,lastPurchase:'',lastConsumption:''});map[k].consumption+=num(r['الكمية']);const d=dateKey(r['التاريخ']);if(d>map[k].lastConsumption)map[k].lastConsumption=d;});
-    const rows=Object.values(map).sort((a,b)=>b.purchase-a.purchase).map(v=>`<tr><td>${esc(v.product)}</td><td>${esc(v.unit)}</td><td class="num">${fmt(v.purchase)}</td><td class="num">${fmt(v.consumption)}</td><td class="num">${fmt(v.purchase-v.consumption)}</td><td class="num">${money(v.purchase?v.value/v.purchase:0)}</td><td class="num">${money(v.value)}</td><td>${dateLabel(v.lastPurchase)}</td><td>${dateLabel(v.lastConsumption)}</td></tr>`);
-    return card('تحليل الأصناف حسب الوحدة',table(['الصنف','الوحدة','المشتريات','الاستهلاك','الرصيد','متوسط التكلفة','قيمة الشراء','آخر شراء','آخر استهلاك'],rows),true);
+    const rows=Object.values(m.products).sort((a,b)=>b.consumption-a.consumption).map(x=>[c(x.product),c(x.unit),nc(x.purchase),nc(x.consumption),snc(x.balance),nc(x.avgCost,money),nc(x.value,money),c(dateLabel(x.lastPurchase)),c(dateLabel(x.lastConsumption)),nc(x.share,pct)]);
+    return card('تحليل الصنف والوحدة',table(['الصنف','الوحدة','شراء الفترة','استهلاك الفترة','الرصيد حتى نهاية الفترة','متوسط التكلفة التراكمي (ريال)','قيمة شراء الفترة (ريال)','آخر شراء بالفترة','آخر استهلاك بالفترة','حصة الاستهلاك ضمن الوحدة'],rows,{sumCols:[2,3,4,6],groupByUnitCol:1,formats:{6:money}}),true)+`<div class="oil-mini-note">شراء الفترة واستهلاكها ضمن التاريخين المختارين؛ الرصيد ومتوسط التكلفة تراكميان حتى تاريخ النهاية. لا تُجمع الكميات بين الوحدات.</div>`;
   }
 
   function renderCost(m){
-    const rows=Object.entries(m.costs).sort((a,b)=>b[1].value-a[1].value).map(([k,c])=>{const consumed=m.byProduct[k]?.qty||0;return `<tr><td>${esc(c.product)}</td><td>${esc(c.unit)}</td><td class="num">${fmt(c.qty)}</td><td class="num">${money(c.value)}</td><td class="num">${money(c.avg)}</td><td class="num">${fmt(consumed)}</td><td class="num">${money(consumed*c.avg)}</td></tr>`});
-    const estimated=m.consumption.reduce((a,r)=>{const k=key(r['إسم الصنف'],r['الوحدة']);return a+num(r['الكمية'])*(m.costs[k]?.avg||0);},0);
-    return kpis([['قيمة المشتريات قبل الضريبة',money(m.purchaseBefore)+' SAR'],['متوسط قيمة الشراء / وحدة','يظهر حسب الصنف والوحدة'],['التكلفة التقديرية للاستهلاك',money(estimated)+' SAR']])+card('متوسط التكلفة المرجح حسب الصنف والوحدة',table(['الصنف','الوحدة','كمية الشراء','قيمة الشراء','متوسط الوحدة','الاستهلاك','تكلفة الاستهلاك التقديرية'],rows),true)+`<div class="oil-mini-note">التكلفة هنا تقديرية باستخدام متوسط تكلفة الشراء قبل الضريبة لكل صنف ووحدة، وليست تقييمًا محاسبيًا رسميًا بطريقة FIFO أو المتوسط المرجح على مستوى كل حركة.</div>`;
+    const rows=Object.entries(m.costs).map(([k,x])=>{const p=m.products[k]||{},sp=m.productPrices[k]||[],prices=sp.flatMap(v=>[{date:v.firstDate,value:v.firstPrice},{date:v.lastDate,value:v.lastPrice}]).filter(v=>v.value!=null).sort((a,b)=>a.date.localeCompare(b.date));const first=prices[0],last=prices.at(-1);return [c(x.product),c(x.unit),nc(x.qty),nc(x.value,money),nc(x.avg,money),nc(p.consumption||0),nc((p.consumption||0)*x.avg,money),hc(first&&last?deltaHtml(last.value,first.value):'—')];}).sort((a,b)=>(b[3].raw||0)-(a[3].raw||0));
+    return kpis([['قيمة الشراء التراكمي',`${money(m.purchaseBefore)} ريال`,'حتى تاريخ النهاية','gold'],['متوسط تكلفة الوحدة','حسب الصنف والوحدة','متوسط مرجح تراكمي','navy'],['تكلفة استهلاك الفترة',`${money(m.estimatedCost)} ريال`,'تقدير وليس FIFO','gold']])+card('التكلفة المرجحة حتى تاريخ النهاية',table(['الصنف','الوحدة','كمية شراء تراكمية','قيمة شراء تراكمية (ريال)','متوسط الوحدة (ريال)','استهلاك الفترة','تكلفة الاستهلاك التقديرية (ريال)','تغيّر السعر'],rows,{sumCols:[2,3,5,6],groupByUnitCol:1,formats:{3:money,6:money}}),true)+`<div class="oil-mini-note">متوسط التكلفة مرجح من المشتريات المسجلة منذ بداية البيانات حتى تاريخ النهاية. تكلفة الاستهلاك تقديرية وليست FIFO؛ ولا تُجمع الكميات بين الوحدات.</div>`;
   }
 
-  function renderQuality(m){
-    const alerts=[];
-    if(m.negative.length)alerts.push(`<div class="oil-alert bad"><b>رصيد سالب:</b> ${m.negative.length} صنف/وحدة لديها استهلاك أكبر من المشتريات المسجلة حتى تاريخ نهاية الفترة.</div>`);
-    if(m.unmatchedConsumption.length)alerts.push(`<div class="oil-alert warn"><b>استهلاك غير مرتبط مباشرة:</b> ${m.unmatchedConsumption.length} حركة لا تطابق مفتاح (رقم الفاتورة + المورد + الصنف + الوحدة) في المشتريات.</div>`);
-    if(m.unusedPurchases.length)alerts.push(`<div class="oil-alert warn"><b>مشتريات بلا حركة استهلاك مرتبطة:</b> ${m.unusedPurchases.length} بند شراء لم يظهر له استهلاك مرتبط بالمفتاح نفسه.</div>`);
-    if(m.dataIssues.length)alerts.push(`<div class="oil-alert bad"><b>مشكلات بيانات:</b> ${m.dataIssues.length} ملاحظة تحتاج مراجعة.</div>`);
-    if(!alerts.length)alerts.push(`<div class="oil-alert good"><b>✓ فحص أولي سليم:</b> لم يتم رصد مشكلات واضحة ضمن الاختبارات الحالية.</div>`);
-    const details=m.dataIssues.slice(0,30).map(x=>`<tr><td>${esc(x)}</td></tr>`);
-    return kpis([['أرصدة سالبة',fmt(m.negative.length)],['استهلاك غير مرتبط',fmt(m.unmatchedConsumption.length)],['مشتريات بلا استهلاك مرتبط',fmt(m.unusedPurchases.length)],['ملاحظات جودة البيانات',fmt(m.dataIssues.length)]])+card('التنبيهات',alerts.join(''))+card('تفاصيل جودة البيانات',details.length?table(['الملاحظة'],details):'<div class="oil-empty">لا توجد ملاحظات إضافية.</div>',true)+card('قاعدة الربط',`<div class="oil-mini-note">تم فحص الربط باستخدام: رقم الفاتورة + اسم المورد + اسم الصنف + الوحدة. عدم التطابق لا يعني بالضرورة وجود خطأ محاسبي؛ قد يعني فقط أن سجل الاستهلاك لا يحمل نفس المرجع.</div>`);
+  function qualityItems(m){
+    return [...m.negative.map(x=>`رصيد سالب: ${x.product} — ${x.unit} (${fmt(x.balance)})`),...m.lowCover.map(x=>`تغطية منخفضة: ${x.product} — ${x.unit} (${x.daysCover==null?'—':fmt(x.daysCover)} يوم)`),...m.unmatchedConsumption.map(r=>`استهلاك بالفترة بلا فاتورة شراء مطابقة حتى تاريخ النهاية: ${dateLabel(r['التاريخ'])} — ${clean(r['المعدة'])} — ${clean(r['إسم الصنف'])} — ${clean(r['رقم الفاتورة'])}`),...m.unusedPurchases.map(r=>`شراء بالفترة بلا حركة استهلاك مطابقة حتى تاريخ النهاية: ${dateLabel(r['تاريخ الفاتورة'])} — ${clean(r['إسم المورد'])} — ${clean(r['إسم الصنف'])} — ${clean(r['رقم الفاتورة'])}`),...m.dataIssues];
   }
 
+  function renderQuality(m){const items=qualityItems(m),alerts=[m.negative.length?`<div class="amc-mf-alert crit"><b>أرصدة سالبة</b> ${fmt(m.negative.length)} صنف/وحدة.</div>`:'',m.lowCover.length?`<div class="amc-mf-alert warn"><b>تغطية منخفضة</b> ${fmt(m.lowCover.length)} صنف/وحدة تحت حد ${fmt(state.filters.coverDays)} يومًا.</div>`:'',m.unmatchedConsumption.length?`<div class="amc-mf-alert warn"><b>استهلاك غير مرتبط</b> ${fmt(m.unmatchedConsumption.length)} حركة لا تطابق فاتورة شراء.</div>`:'',m.unusedPurchases.length?`<div class="amc-mf-alert info"><b>مشتريات غير مستهلكة</b> ${fmt(m.unusedPurchases.length)} بند بلا حركة مرتبطة.</div>`:''].filter(Boolean);if(!alerts.length)alerts.push('<div class="amc-mf-alert info">لم تُرصد مشكلات ضمن الفحوص الحالية.</div>');const rows=items.map(x=>[c(x)]);return kpis([['أرصدة سالبة',fmt(m.negative.length),'','red'],['تغطية منخفضة',fmt(m.lowCover.length),'','gold'],['استهلاك غير مرتبط',fmt(m.unmatchedConsumption.length),'','red'],['مشتريات بلا حركة استهلاك مطابقة حتى النهاية',fmt(m.unusedPurchases.length),'','navy'],['ملاحظات جودة البيانات',fmt(m.dataIssues.length),'','gold']])+card('التنبيهات',alerts.join(''))+card('تفاصيل التنبيهات وجودة البيانات',table(['الملاحظة'],rows),true)+card('قاعدة المطابقة',`<div class="oil-mini-note">المطابقة تستخدم رقم الفاتورة والمورد والصنف والوحدة بعد تنظيف المسافات والتطويل والتشكيل وتوحيد أشكال الحروف العربية. تُطابق حركات الفترة مع فواتير الشراء المسجلة حتى تاريخ النهاية؛ وقد يعني عدم التطابق اختلاف المرجع في المصدر ويحتاج مراجعة.</div>`);}
+
+  function viewContext(){
+    const current=tabs.find(x=>x[0]===state.tab),meta={
+      stock:['المخزون والتشغيل','الرصيد المحسوب تراكمي حتى تاريخ النهاية، مع إظهار الكميات والقيم حسب الوحدة.'],
+      consumption:['المخزون والتشغيل','حركات الاستهلاك المسجلة خلال الفترة المختارة.'],
+      equipment:['المخزون والتشغيل','مقارنة استهلاك المعدات داخل وحدات قياس متجانسة.'],
+      purchases:['التوريد','بنود الشراء المسجلة خلال الفترة مع فصل صافي القيمة والضريبة والإجمالي.'],
+      invoices:['التوريد','ملخص الفواتير مجمّع حسب المورد ورقم الفاتورة ووحدة القياس.'],
+      suppliers:['التوريد','حصة الموردين واتجاه قيمة مشترياتهم خلال الفترة.'],
+      products:['التحليل والرقابة','مقارنة حركة كل صنف مع رصيده التراكمي وتكلفته التقديرية.'],
+      cost:['التحليل والرقابة','تقدير تكلفة المخزون والاستهلاك باستخدام متوسط تكلفة مرجح.'],
+      quality:['التحليل والرقابة','تنبيهات الأرصدة والتغطية ومطابقة الحركات وجودة المصدر.']
+    }[state.tab];
+    if(!current||!meta)return '';
+    return `<header class="oil-view-context"><div><span class="oil-view-overline">${esc(meta[0])}</span><h3>${esc(current[1])}</h3><p>${esc(meta[1])}</p></div><span class="oil-view-period">${esc(currentPeriodLabel())}</span></header>`;
+  }
   function renderBody(){
-    const body=document.getElementById('reportBody');
-    if(!body)return;
-    body.innerHTML='<div class="oil-loading">جاري تجهيز التقرير…</div>';
+    const body=document.getElementById('reportBody');if(!body)return;moreRowsById=Object.create(null);const m=model(),html=state.tab==='overview'?renderOverview(m):state.tab==='stock'?renderStock(m):state.tab==='consumption'?renderConsumption(m):state.tab==='equipment'?renderEquipment(m):state.tab==='purchases'?renderPurchases(m):state.tab==='invoices'?renderInvoices(m):state.tab==='suppliers'?renderSuppliers(m):state.tab==='products'?renderProducts(m):state.tab==='cost'?renderCost(m):renderQuality(m);
+    body.innerHTML=`<div class="oil-report-module">${renderTabs()}${viewContext()}<div class="oil-report-content">${html}</div></div>`;
+    body.onclick=e=>{const tab=e.target.closest('[data-oil-tab]');if(tab){state.tab=tab.dataset.oilTab;renderBody();return;}const more=e.target.closest('[data-oil-more]');if(more){const id=more.dataset.oilMore,remaining=moreRowsById[id],wrap=more.closest('.oil-table-wrap'),tbody=wrap?.querySelector('tbody');if(!remaining||!tbody)return;const chunk=remaining.splice(0,200),html=chunk.map(rowHtml).join(''),total=tbody.querySelector('tr.total');if(total)total.insertAdjacentHTML('beforebegin',html);else tbody.insertAdjacentHTML('beforeend',html);if(remaining.length)more.textContent=`عرض المزيد (${fmt(remaining.length)})`;else{delete moreRowsById[id];more.remove();}}};
+  }
+  function render(){invalidate();renderToolbar();renderBody();}
+  function open(){activeReport='oil';window.AMC_CURRENT_REPORT_INDEX='oil';registerTemplate();document.querySelectorAll('.dashboard-content > *:not(#reportWorkspace)').forEach(x=>x.style.display='none');document.querySelectorAll('.report-item').forEach(x=>x.classList.toggle('active',x.classList.contains('oil-report-item')));const title=document.getElementById('reportTitle'),desc=document.getElementById('reportDescription');if(title)title.textContent='مركز الزيوت والمخزون';if(desc)desc.textContent='المشتريات والاستهلاك والمخزون والمعدات والموردون والتكلفة وجودة البيانات.';const ws=document.getElementById('reportWorkspace');if(ws)ws.hidden=false;const body=document.getElementById('reportBody');if(body)body.innerHTML='<div class="oil-loading">جاري قراءة ورقتي «الفواتير» و«الزيوت»…</div>';Promise.resolve().then(()=>loadData(false)).then(()=>{const o=options();if(!state.filters.from)state.filters.from=o.defaultFrom;if(!state.filters.to)state.filters.to=o.defaultTo;render();}).catch(e=>{if(body)body.innerHTML=`<div class="oil-report-error"><strong>تعذر تحميل بيانات الزيوت</strong><div>${esc(e.message)}</div><div class="oil-source">المصدر: Google Apps Script — ${esc(CFG.purchasesSheet)} / ${esc(CFG.consumptionSheet)}.</div></div>`;});}
 
-    const m=model();
-    let html='';
-    if(state.tab==='overview')html=renderOverview(m);
-    else if(state.tab==='stock')html=renderStock(m);
-    else if(state.tab==='consumption')html=renderConsumption(m);
-    else if(state.tab==='equipment')html=renderEquipment(m);
-    else if(state.tab==='purchases')html=renderPurchases(m);
-    else if(state.tab==='invoices')html=renderInvoices(m);
-    else if(state.tab==='suppliers')html=renderSuppliers(m);
-    else if(state.tab==='products')html=renderProducts(m);
-    else if(state.tab==='cost')html=renderCost(m);
-    else html=renderQuality(m);
-
-    body.innerHTML=`<div class="oil-tabs" role="tablist">${renderTabs()}</div>${html}`;
-    body.querySelectorAll('[data-oil-tab]').forEach(b=>{
-      b.addEventListener('click',()=>{
-        state.tab=b.dataset.oilTab;
-        renderBody();
-      });
-    });
+  function compactKpis(items){return `<div class="amc-daily-kpis">${items.map(x=>`<div class="amc-daily-kpi ${attr(x[2]||'navy')}"><label>${esc(x[0])}</label><strong>${x[1]}</strong>${x[3]?`<small>${x[3]}</small>`:''}</div>`).join('')}</div>`;}
+  function oilHeader(title,period,n,total){const logo=attr(document.querySelector('.hero-logo')?.getAttribute('src')||'');return `<div class="amc-report-header"><div class="amc-report-brand"><img src="${logo}" alt="Assaf Metals Crusher"><div><div class="amc-report-brand-name">كسارة العساف</div><div class="amc-report-brand-en">ASSAF METALS CRUSHER</div></div></div><div class="amc-report-meta"><strong>${esc(title)}</strong><span>${esc(period)}</span><span>صفحة ${n} من ${total}</span></div></div>`;}
+  function oilFooter(period){return `<div class="amc-report-footer"><span>كسارة العساف — ${esc(period)} — جميع المبالغ بالريال السعودي</span><span>Generated from Assaf Metals Crusher Management System</span></div>`;}
+  function oilPage(content,title,period,n,total,cover=false){return `<section class="amc-report-page amc-mf-oil-print${cover?' amc-mf-oil-cover-page':''}">${oilHeader(title,period,n,total)}${content}${oilFooter(period)}</section>`;}
+  function paginateRows(rows,rowsPerFirstPage=28,rowsPerPage=30){const out=[];if(!rows.length)return [[]];let i=0,first=true;while(i<rows.length){const size=first?rowsPerFirstPage:rowsPerPage;out.push(rows.slice(i,i+size));i+=size;first=false;}return out;}
+  function addTablePages(pages,title,headers,rows,opts={}){const first=opts.firstRows||28,per=opts.rowsPerPage||30,chunks=paginateRows(rows,first,per),totalRows=totalsFor(headers,rows,opts);chunks.forEach((chunk,i)=>{const last=i===chunks.length-1,continued=i?' (تابع)':'';let content=`<div class="amc-mf-print-section"><h1 class="amc-report-title">${esc(title+continued)}</h1>${i===0&&opts.note?`<p class="amc-report-note">${opts.note}</p>`:''}${table(headers,chunk,{...opts,unlimited:true,includeTotal:last,totalRows})}</div>`;pages.push({key:opts.key,title:title+continued,content});});}
+  function monthlyChart(unit,rows){if(!rows.length)return '<div class="amc-mf-chart-empty">لا توجد حركة شهرية.</div>';const w=900,h=235,left=42,right=20,top=22,bottom=42,max=Math.max(1,...rows.flatMap(x=>[x.purchase,x.consumption])),slot=(w-left-right)/rows.length,bw=Math.min(18,slot*.28);let shapes='';rows.forEach((x,i)=>{const cx=left+slot*(i+.5),ph=(h-top-bottom)*x.purchase/max,ch=(h-top-bottom)*x.consumption/max;shapes+=`<rect x="${(cx-bw-2).toFixed(1)}" y="${(h-bottom-ph).toFixed(1)}" width="${bw}" height="${ph}" rx="2" fill="#c79a28"><title>مشتريات ${esc(x.month)}: ${fmt(x.purchase)}</title></rect><rect x="${(cx+2).toFixed(1)}" y="${(h-bottom-ch).toFixed(1)}" width="${bw}" height="${ch}" rx="2" fill="#17294d"><title>استهلاك ${esc(x.month)}: ${fmt(x.consumption)}</title></rect><text x="${cx.toFixed(1)}" y="${h-22}" text-anchor="middle" direction="ltr">${esc(x.month.slice(5))}</text><text x="${cx.toFixed(1)}" y="${h-8}" text-anchor="middle" direction="ltr" fill="#8390a0">${esc(x.month.slice(2,4))}</text>`;});return `<div class="amc-mf-chart-box"><h3>المشتريات والاستهلاك — ${esc(unit)}</h3><svg class="amc-mf-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="الحركة الشهرية ${attr(unit)}"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#bfc9d5"/>${shapes}</svg><div class="amc-mf-legend"><span><i style="background:#c79a28"></i>المشتريات</span><span><i style="background:#17294d"></i>الاستهلاك</span></div></div>`;}
+  function comparisonSummary(m,cmp){
+    const b=cmp.base;if(!b)return {purchaseBefore:null,purchaseTax:null,purchaseTotal:null,purchaseQtyLabel:null,consumptionLabel:null,stockQtyLabel:null,stockValue:null,estimatedCost:null,suppliers:null,invoices:null,equipment:null,products:null,stock:null};
+    const previousStock=cmp.previousStock||stockAsOf(cmp.range.to),previousCosts=cmp.previousCosts||weightedCosts(cmp.range.to),pBefore=sumBy(b.purchases,lineNet),pTax=sumBy(b.purchases,lineTax),pTotal=sumBy(b.purchases,lineGross);
+    const pQty=unitTotals(b.purchases,'الكمية'),cLabel=unitTotals(b.consumption,'الكمية'),suppliers=supplierCount(b.purchases),invoices=invoiceCount(b.purchases),equipment=countUnique(b.consumption,r=>key(r['المعدة'],unitOf(r))),products=countUnique([...b.purchases,...b.consumption,...previousStock],r=>r.stockKey||key(r['إسم الصنف'],unitOf(r)));
+    const balanceLabel=unitTotals(previousStock,'balance'),stockValue=sumBy(previousStock,x=>x.value??x.balance*(previousCosts[x.stockKey]?.avg||0)),estimatedCost=sumBy(b.consumption,r=>num(r['الكمية'])*(previousCosts[key(r['إسم الصنف'],unitOf(r))]?.avg||0));
+    return {purchaseBefore:pBefore,purchaseTax:pTax,purchaseTotal:pTotal,purchaseQtyLabel:pQty,consumptionLabel:cLabel,stockQtyLabel:balanceLabel,stockValue,estimatedCost,suppliers,invoices,equipment,products,stock:previousStock};
   }
 
-  function render(){
-    renderToolbar();
-    renderBody();
-  }
-
-  function open(){
-    activeReport='oil';window.AMC_CURRENT_REPORT_INDEX='oil';
-    document.querySelectorAll('.dashboard-content > *:not(#reportWorkspace)').forEach(x=>x.style.display='none');
-    document.querySelectorAll('.report-item').forEach(x=>x.classList.toggle('active',x.classList.contains('oil-report-item')));
-    const title=document.getElementById('reportTitle'),desc=document.getElementById('reportDescription');
-    if(title)title.textContent='مركز الزيوت والمخزون';
-    if(desc)desc.textContent='المشتريات والاستهلاك والمخزون والمعدات والموردون والتكلفة وجودة البيانات.';
-    const ws=document.getElementById('reportWorkspace');if(ws)ws.hidden=false;
-    const body=document.getElementById('reportBody');if(body)body.innerHTML='<div class="oil-loading">جاري قراءة ورقتي «الفواتير» و«الزيوت»…</div>';
-    Promise.resolve().then(()=>loadData(false)).then(()=>{
-      const o=options();
-      if(!state.filters.from)state.filters.from=o.min;
-      if(!state.filters.to)state.filters.to=o.max;
-      render();
-    }).catch(e=>{if(body)body.innerHTML=`<div class="oil-report-error"><strong>تعذر تحميل بيانات الزيوت</strong><div>${esc(e.message)}</div><div class="oil-source">المصدر: Google Apps Script — oilPurchases / oilConsumption. تأكد من نشر Apps Script بالإصدار الذي يعيد حقلي بيانات الزيوت.</div></div>`;});
-  }
-
-  function print(){
-    const engine=window.AMCReportEngine;
-    if(!engine || !engine.build){
-      alert('محرك طباعة التقارير الرسمي غير متاح.');
-      return;
-    }
-
-    const selected=state.tab||'overview';
-    const m=model();
-
-    const sections=[
-      ['overview','نظرة عامة',renderOverview],
-      ['stock','تقرير المخزون المحسوب',renderStock],
-      ['consumption','تقرير استهلاك الزيوت',renderConsumption],
-      ['equipment','تقرير استهلاك المعدات',renderEquipment],
-      ['purchases','تقرير مشتريات الزيوت',renderPurchases],
-      ['invoices','تقرير فواتير الزيوت',renderInvoices],
-      ['suppliers','تقرير الموردين',renderSuppliers],
-      ['products','تقرير تحليل الأصناف',renderProducts],
-      ['cost','تقرير تكلفة الزيوت',renderCost],
-      ['quality','التنبيهات وجودة البيانات',renderQuality]
+  function executivePages(m){
+    const cmp=compareModel(m),prev=comparisonSummary(m,cmp),base=cmp.base,previousText=comparePeriodLabel(cmp),items=[
+      ['كمية المشتريات',esc(m.purchaseQtyLabel),'navy',base?`السابق: ${unitComparisonHtml(m.purchases,base.purchases,r=>num(r['الكمية']))}`:'بدون مقارنة'],
+      ['قيمة المشتريات قبل الضريبة',`${money(m.purchaseBefore)} ريال`,'gold',prev.purchaseBefore==null?`ضريبة ${money(m.tax)} ريال • شامل ${money(m.purchaseTotal)} ريال`:`السابق ${money(prev.purchaseBefore)} ريال • ${deltaHtml(m.purchaseBefore,prev.purchaseBefore)} • ضريبة ${money(m.tax)}`],
+      ['الاستهلاك خلال الفترة',esc(m.consumptionQtyLabel),'navy',base?`السابق: ${unitComparisonHtml(m.consumption,base.consumption,r=>num(r['الكمية']))}`:'بدون مقارنة'],
+      ['الرصيد التراكمي حتى تاريخ النهاية',esc(m.stockQtyLabel),'navy',prev.stock?`السابق: ${unitComparisonHtml(m.stock,prev.stock,r=>num(r.balance))}`:'بدون مقارنة'],
+      ['قيمة الرصيد التقديرية',`${money(m.stockValue)} ريال`,'gold',prev.stockValue==null?'بدون مقارنة':`السابق ${money(prev.stockValue)} ريال • ${deltaHtml(m.stockValue,prev.stockValue)}`],
+      ['تكلفة الاستهلاك التقديرية',`${money(m.estimatedCost)} ريال`,'gold',prev.estimatedCost==null?'بدون مقارنة':`السابق ${money(prev.estimatedCost)} ريال • ${deltaHtml(m.estimatedCost,prev.estimatedCost)}`],
+      ['الموردون / الفواتير',`${fmt(supplierCount(m.purchases))} / ${fmt(invoiceCount(m.purchases))}`,'navy',prev.suppliers==null?'بدون مقارنة':`السابق ${fmt(prev.suppliers)} / ${fmt(prev.invoices)} • الموردون ${deltaHtml(supplierCount(m.purchases),prev.suppliers)} • الفواتير ${deltaHtml(invoiceCount(m.purchases),prev.invoices)}`],
+      ['المعدات / الأصناف',`${fmt(countUnique(m.consumption,r=>key(r['المعدة'],unitOf(r))))} / ${fmt(countUnique([...m.purchases,...m.consumption],r=>key(r['إسم الصنف'],unitOf(r))))}`,'navy',prev.equipment==null?'بدون مقارنة':`السابق ${fmt(prev.equipment)} / ${fmt(prev.products)} • المعدات ${deltaHtml(countUnique(m.consumption,r=>key(r['المعدة'],unitOf(r))),prev.equipment)} • الأصناف ${deltaHtml(countUnique([...m.purchases,...m.consumption],r=>key(r['إسم الصنف'],unitOf(r))),prev.products)}`]
     ];
-
-    /*
-     * نظرة عامة = صفحتان ثابتتان لأن محتواها أكبر من بقية التقارير.
-     * الصفحة الأولى: المؤشرات + أعلى المعدات + أعلى الأصناف.
-     * الصفحة الثانية: الحركة الشهرية + ملخص الرصيد.
-     * بقية التقارير: صفحة واحدة لكل تقرير.
-     */
-    const overviewSplit=(m)=>{
-      const full=renderOverview(m);
-      const root=document.createElement('div');
-      root.innerHTML=full;
-      const blocks=[...root.children];
-
-      // renderOverview يتكون من:
-      // 1) KPI block
-      // 2) أعلى المعدات
-      // 3) أعلى الأصناف
-      // 4) الحركة الشهرية
-      // 5) ملخص الرصيد
-      if(blocks.length>=5){
-        const page1=blocks.slice(0,3).map(x=>x.outerHTML).join('');
-        const page2=blocks.slice(3).map(x=>x.outerHTML).join('');
-        return [
-          ['overview-1','نظرة عامة — الصفحة 1',()=>page1],
-          ['overview-2','نظرة عامة — الصفحة 2',()=>page2]
-        ];
-      }
-
-      // احتياط إذا تغير تركيب التقرير مستقبلًا.
-      const mid=Math.ceil(blocks.length/2);
-      return [
-        ['overview-1','نظرة عامة — الصفحة 1',()=>blocks.slice(0,mid).map(x=>x.outerHTML).join('')],
-        ['overview-2','نظرة عامة — الصفحة 2',()=>blocks.slice(mid).map(x=>x.outerHTML).join('')]
-      ];
-    };
-
-    const selectedSections=selected==='overview'
-      ? [
-          ...overviewSplit(m),
-          ...sections.filter(x=>x[0]!=='overview')
-        ]
-      : sections.filter(x=>x[0]===selected);
-
-    const logo=(document.querySelector('.hero-logo')||{}).src||'';
-    const today=(()=>{
-      const d=new Date();
-      return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-    })();
-
-    const filteredPeriod=(()=>{
-      const f=state.filters||{};
-      let from=f.from||'',to=f.to||'';
-      if(!from||!to){
-        const base=filterBase(),dates=[];
-        base.purchases.forEach(r=>{const k=dateKey(r['تاريخ الفاتورة']);if(k)dates.push(k);});
-        base.consumption.forEach(r=>{const k=dateKey(r['التاريخ']);if(k)dates.push(k);});
-        if(dates.length){
-          dates.sort();
-          if(!from)from=dates[0];
-          if(!to)to=dates[dates.length-1];
-        }
-      }
-      const fmt=v=>{
-        if(!v)return 'غير محدد';
-        const d=dateObj(v);
-        return d?`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`:String(v);
-      };
-      return {label:(from||to)?`من ${fmt(from)} إلى ${fmt(to)}`:'غير محددة'};
-    })();
-
-    // غلاف واحد، ثم صفحة واحدة ثابتة لكل تقرير.
-    const cover=`
-      <section class="amc-report-page oil-amc-page oil-amc-cover">
-        <div class="amc-report-header">
-          <div class="amc-report-brand">
-            <img src="${esc(logo)}" alt="">
-            <div>
-              <div class="amc-report-brand-name">كسارة العساف</div>
-              <div class="amc-report-brand-en">ASSAF METALS CRUSHER</div>
-            </div>
-          </div>
-          <div class="amc-report-meta">
-            <strong>تقرير مركز الزيوت والمخزون</strong>
-            <span>${today}</span>
-          </div>
-        </div>
-        <div class="amc-report-cover">
-          <img class="amc-report-cover-logo" src="${esc(logo)}" alt="">
-          <h1>مركز الزيوت والمخزون</h1>
-          <div class="en">OIL &amp; INVENTORY CENTER</div>
-          <div class="amc-report-info">
-            <div class="amc-report-info-row"><b>الشركة</b><strong>شركة كسارة العساف للمعادن</strong></div>
-            <div class="amc-report-info-row"><b>فترة التقرير</b><strong>${esc(filteredPeriod.label)}</strong></div>
-            <div class="amc-report-info-row"><b>نوع التقرير</b><strong>${selected==='overview'?'التقرير الشامل لمركز الزيوت والمخزون':'تقرير مركز الزيوت والمخزون'}</strong></div>
-            <div class="amc-report-info-row"><b>عدد صفحات التقرير</b><strong>${selectedSections.length}</strong></div>
-            <div class="amc-report-info-row"><b>تاريخ الإصدار</b><strong>${today}</strong></div>
-            <div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div>
-          </div>
-        </div>
-        <div class="amc-report-footer">
-          <span>شركة كسارة العساف للمعادن — مركز الزيوت والمخزون</span><span>${today}</span>
-        </div>
-      </section>`;
-
-    const pages=selectedSections.map(([id,title,renderer],i)=>`
-      <section class="amc-report-page oil-amc-page oil-single-report-page" data-oil-page>
-        <div class="amc-report-header">
-          <div class="amc-report-brand">
-            <img src="${esc(logo)}" alt="">
-            <div>
-              <div class="amc-report-brand-name">كسارة العساف</div>
-              <div class="amc-report-brand-en">ASSAF METALS CRUSHER</div>
-            </div>
-          </div>
-          <div class="amc-report-meta">
-            <strong>${esc(title)}</strong>
-            <span>مركز الزيوت والمخزون</span>
-            <span>صفحة ${i+2}</span>
-          </div>
-        </div>
-
-        <div class="oil-report-heading">
-          <h1 class="amc-report-title">${esc(title)}</h1>
-          <p class="amc-report-subtitle">شركة كسارة العساف للمعادن — مركز الزيوت والمخزون | فترة التقرير: ${esc(filteredPeriod.label)}</p>
-        </div>
-
-        <div class="oil-fit-viewport">
-          <div class="oil-fit-content">${renderer(m)}</div>
-        </div>
-
-        <div class="amc-report-footer">
-          <span>شركة كسارة العساف للمعادن — مركز الزيوت والمخزون</span><span>${today}</span>
-        </div>
-      </section>`).join('');
-
-    const seed=engine.build('FinancialQuarterlyTemplate',{
-      from:'',
-      to:'',
-      title:'مركز الزيوت والمخزون'
-    });
-
-    const stage=seed?.querySelector('.amc-report-stage');
-    if(!stage){
-      alert('تعذر تجهيز معاينة التقرير الرسمية.');
-      return;
-    }
-
-    stage.innerHTML=cover+pages;
-    seed.classList.add('is-open');
-    engine.fileName=`Assaf_Metals_Crusher_Oil_Inventory_${new Date().getFullYear()}`;
-
-    /*
-     * Fit-to-page:
-     * كل تقرير يبقى داخل صفحة واحدة. نقيس المحتوى الحقيقي ثم نضغط
-     * المحتوى فقط عند الحاجة، بينما الترويسة والتذييل يظلان بحجمهما
-     * الطبيعي. لا توجد أي صفحات متابعة.
-     */
-    const fitPages=()=>{
-      const all=[...stage.querySelectorAll('[data-oil-page]')];
-      all.forEach(page=>{
-        const viewport=page.querySelector('.oil-fit-viewport');
-        const content=page.querySelector('.oil-fit-content');
-        if(!viewport||!content)return;
-
-        content.style.transform='none';
-        content.style.width='100%';
-        content.style.height='auto';
-
-        // قياسات الصفحة بعد اكتمال خطوط/جداول التقرير.
-        const pageHeight=page.clientHeight;
-        const header=page.querySelector('.amc-report-header');
-        const heading=page.querySelector('.oil-report-heading');
-        const footer=page.querySelector('.amc-report-footer');
-
-        const usedBefore=(
-          (header?.offsetHeight||0)+
-          (heading?.offsetHeight||0)+
-          (footer?.offsetHeight||0)+
-          18
-        );
-
-        const available=Math.max(80,pageHeight-usedBefore);
-        const natural=Math.max(content.scrollHeight,content.offsetHeight);
-
-        // هامش أمان بسيط يمنع لمس التذييل.
-        let scale=Math.min(1,(available-8)/natural);
-
-        // لا نضغط إلا بقدر الضرورة. الحد الأدنى يظل مقروءًا نسبيًا.
-        scale=Math.max(0.54,Math.min(1,scale));
-
-        content.style.transformOrigin='top right';
-        content.style.transform=`scale(${scale})`;
-        content.style.width=`${100/scale}%`;
-        content.style.height=`${natural*scale}px`;
-        viewport.style.height=`${Math.min(available,natural*scale)}px`;
-        viewport.dataset.scale=scale.toFixed(3);
-      });
-    };
-
-    // ننتظر دورة رسم حتى تكون أحجام الخطوط والجداول النهائية محسوبة.
-    requestAnimationFrame(()=>{
-      requestAnimationFrame(()=>{
-        fitPages();
-
-        // بعض المتصفحات تحتاج دورة إضافية بعد تحميل الصور/الخطوط.
-        setTimeout(fitPages,120);
-        setTimeout(fitPages,350);
-
-        if(seed._amcPrint)seed._amcPrint();
-        else{
-          document.body.classList.add('amc-print-active');
-          try{window.print();}
-          finally{setTimeout(()=>document.body.classList.remove('amc-print-active'),800);}
-        }
-      });
-    });
+    const topEq=m.equipmentRows.slice().sort((a,b)=>b.qty-a.qty)[0],supTotals=Object.values(m.bySupplier).reduce((a,x)=>{const k=normKey(x.supplier);a[k]??={supplier:x.supplier,value:0};a[k].value+=x.value;return a;},Object.create(null)),topSup=Object.values(supTotals).sort((a,b)=>b.value-a.value)[0],low=m.lowCover.length,monthlyValue=Object.create(null);
+    m.purchases.forEach(r=>{const d=dateKey(r['تاريخ الفاتورة']);if(d){const k=d.slice(0,7);monthlyValue[k]=(monthlyValue[k]||0)+lineNet(r);}});
+    const monthKeys=Object.keys(monthlyValue).sort(),last=monthKeys.at(-1),prior=monthKeys.at(-2),ins=[topEq?`أعلى استهلاك للمعدات: ${topEq.equipment}، ${pct(topEq.share)} من استهلاك وحدتها.`:'لا تتوفر حركة استهلاك للمعدات.',topSup&&m.purchaseBefore?`أعلى مورد: ${topSup.supplier}، ${pct(topSup.value/m.purchaseBefore*100)} من قيمة المشتريات قبل الضريبة.`:'لا توجد مشتريات خلال الفترة.',low?`${fmt(low)} صنف/وحدة بتغطية ${fmt(state.filters.coverDays)} يومًا أو أقل.`:'لا توجد أصناف تحت حد التغطية المحدد.',m.negative.length?`${fmt(m.negative.length)} رصيد سالب يستلزم المطابقة.`:'لا توجد أرصدة سالبة.',last&&prior?`تغيّرت قيمة مشتريات ${last} عن ${prior} بمقدار ${money(monthlyValue[last]-monthlyValue[prior])} ريال.`:'لا تتوفر بيانات شهرين للمقارنة الشهرية.'];
+    return `<div class="amc-mf-print-section"><h1 class="amc-report-title">الملخص التنفيذي</h1><p class="amc-report-subtitle">${esc(currentPeriodLabel())} — مقارنة مع ${esc(previousText)}</p>${compactKpis(items)}<h2 class="amc-report-section-title">ملاحظات آلية</h2><ul class="oil-print-insights">${ins.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="amc-report-note">المشتريات والاستهلاك تخص الفترة المختارة؛ الرصيد وقيمة المخزون تراكميان حتى تاريخ النهاية. قيمة المخزون والتكلفة تقدير بمتوسط تكلفة مرجح، وليستا تقييمًا محاسبيًا FIFO. الكميات لا تُجمع بين الوحدات.</p></div>`;
   }
 
-  function addMenuItem(){
-    const nav=document.querySelector('.report-list');if(!nav||nav.querySelector('.oil-report-item'))return;
-    const btn=document.createElement('button');btn.className='report-item oil-report-item';btn.type='button';btn.innerHTML='<span class="report-icon">🛢</span><span><strong>مركز الزيوت والمخزون</strong><span>المشتريات والاستهلاك والمخزون والمعدات والتكلفة</span></span><b class="report-arrow">‹</b>';
-    nav.appendChild(btn);
-    btn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();open();},true);
+  function buildSectionPages(m){
+    const pages=[];
+    pages.push({key:'overview',title:'الملخص التنفيذي',content:executivePages(m)});
+    const stockRows=m.stock.slice().sort((a,b)=>a.product.localeCompare(b.product,'ar')).map(x=>[c(x.product),c(x.unit),nc(x.purchase),nc(x.consumption),snc(x.balance),nc(x.avgCost,money),snc(x.value,money),nc(x.daysCover,x=>x==null?'—':fmt(x)),hc(`<span class="oil-badge ${x.status==='سالب'?'bad':x.status==='منخفض'?'warn':'good'}">${esc(x.status)}</span>`)]);
+    addTablePages(pages,'المخزون الحالي',['الصنف','الوحدة','شراء تراكمي','استهلاك تراكمي','الرصيد حتى نهاية الفترة','متوسط التكلفة (ريال)','قيمة الرصيد (ريال)','تغطية الاستهلاك (يوم)','الحالة'],stockRows,{key:'stock',sumCols:[2,3,4,6],groupByUnitCol:1,formats:{6:money},rowsPerPage:28,note:`الرصيد تراكمي من بداية السجلات حتى ${esc(dateLabel(state.filters.to))} مع تجاهل تاريخ البداية. أيام التغطية = الرصيد ÷ متوسط الاستهلاك اليومي للفترة؛ عند رصيد سالب أو دون استهلاك تظهر —.`});
+    const monthlyByUnit=new Map();Object.values(m.monthly).forEach(x=>{if(!monthlyByUnit.has(x.unit))monthlyByUnit.set(x.unit,[]);monthlyByUnit.get(x.unit).push(x);});
+    if(!monthlyByUnit.size)monthlyByUnit.set('غير محدد',[]);for(const [unit,all] of monthlyByUnit){all.sort((a,b)=>a.month.localeCompare(b.month));const chunks=paginateRows(all,24,28);chunks.forEach((chunk,i)=>{const rows=chunk.map(x=>[c(x.month),nc(x.purchase),nc(x.consumption),nc(x.purchase-x.consumption)]),last=i===chunks.length-1;const totalRows=totalsFor(['الشهر','المشتريات','الاستهلاك','صافي الحركة'],all,{sumCols:[1,2,3]});const content=`<div class="amc-mf-print-section"><h1 class="amc-report-title">الحركة الشهرية — ${esc(unit)}${i?' (تابع)':''}</h1>${i===0?monthlyChart(unit,all):''}${table(['الشهر','المشتريات','الاستهلاك','صافي الحركة'],rows,{unlimited:true,sumCols:[1,2,3],includeTotal:last,totalRows})}${i===0&&new Set(Object.values(m.monthly).map(x=>x.unit)).size>1?'<p class="amc-report-note">يعرض هذا القسم الحركة منفصلة حسب وحدة القياس.</p>':''}</div>`;pages.push({key:'monthly',title:`الحركة الشهرية — ${unit}${i?' (تابع)':''}`,content});});}
+    const cmp=compareModel(m),prev=cmp.base?.consumption||[],unitSum=Object.create(null),prevEq=Object.create(null);m.equipmentRows.forEach(x=>{(unitSum[x.unit]??={sum:0,count:0}).sum+=x.qty;unitSum[x.unit].count++;});prev.forEach(r=>{const k=key(r['المعدة'],unitOf(r));prevEq[k]=(prevEq[k]||0)+num(r['الكمية']);});
+    const eqRows=m.equipmentRows.slice().sort((a,b)=>b.qty-a.qty).map(x=>{const old=prevEq[key(x.equipment,x.unit)]||0,avg=(unitSum[x.unit]?.sum||0)/(unitSum[x.unit]?.count||1);return [c(x.equipment),c(x.unit),nc(x.qty),nc(x.count),c(x.topProduct),nc(x.topQty),c(dateLabel(x.last)),nc(x.share,pct),hc(deltaHtml(x.qty,old)),hc(x.qty>1.5*avg?'<span class="oil-badge warn">مرتفع</span>':'—')];});
+    addTablePages(pages,'استهلاك المعدات',['المعدة','الوحدة','الكمية','الحركات','أعلى صنف','كمية أعلى صنف','آخر استهلاك','الحصة %','مقارنة الفترة','التنبيه'],eqRows,{key:'equipment',sumCols:[2],groupByUnitCol:1,rowsPerPage:24,note:'تُحسب الحصة والمقارنة داخل الوحدة. يظهر «مرتفع» عندما يتجاوز استهلاك المعدة 1.5 مرة متوسط بقية معدات الوحدة.'});
+    const prodRows=Object.values(m.products).sort((a,b)=>b.consumption-a.consumption).map(x=>[c(x.product),c(x.unit),nc(x.purchase),nc(x.consumption),snc(x.balance),nc(x.avgCost,money),nc(x.value,money),c(dateLabel(x.lastPurchase)),c(dateLabel(x.lastConsumption)),nc(x.share,pct)]);
+    addTablePages(pages,'الأصناف والتحليل',['الصنف','الوحدة','شراء الفترة','استهلاك الفترة','الرصيد حتى نهاية الفترة','متوسط التكلفة التراكمي (ريال)','قيمة شراء الفترة (ريال)','آخر شراء بالفترة','آخر استهلاك بالفترة','حصة الاستهلاك ضمن الوحدة'],prodRows,{key:'products',sumCols:[2,3,4,6],groupByUnitCol:1,formats:{6:money},rowsPerPage:22});
+    const invoices=Object.values(m.invoices).sort((a,b)=>(dateKey(b.date)||'').localeCompare(dateKey(a.date)||'')).map(x=>[c(dateLabel(x.date)),c(x.supplier),c(x.invoice),c(x.unit),nc(x.lines),nc(x.qty),nc(x.before,money),nc(x.tax,money),nc(x.total,money)]);
+    addTablePages(pages,'ملخص الفواتير',['التاريخ','المورد','رقم الفاتورة','الوحدة','بنود الوحدة','الكمية','قبل الضريبة (ريال)','الضريبة (ريال)','شامل الضريبة (ريال)'],invoices,{key:'invoices',sumCols:[5,6,7,8],groupByUnitCol:3,formats:{6:money,7:money,8:money},rowsPerPage:22});
+    const purchaseRows=m.purchases.slice().sort((a,b)=>(dateKey(b['تاريخ الفاتورة'])||'').localeCompare(dateKey(a['تاريخ الفاتورة'])||'')).map(r=>[c(dateLabel(r['تاريخ الفاتورة'])),c(r['إسم المورد']||'—'),c(r['رقم الفاتورة']||'—'),c(r['إسم الصنف']||'—'),c(unitOf(r)),nc(num(r['الكمية'])),nc(num(r['السعر قبل الضريبة']),money),nc(lineTax(r),money),nc(lineGross(r),money)]);
+    addTablePages(pages,'بنود المشتريات',['التاريخ','المورد','رقم الفاتورة','الصنف','الوحدة','الكمية','سعر الوحدة قبل الضريبة (ريال)','الضريبة (ريال)','شامل الضريبة (ريال)'],purchaseRows,{key:'purchases',sumCols:[5,7,8],groupByUnitCol:4,formats:{7:money,8:money},rowsPerPage:20});
+    const totalValue=m.purchaseBefore,oldSupplierValues=Object.create(null);(cmp.base?.purchases||[]).forEach(r=>{const k=key(r['إسم المورد'],unitOf(r));oldSupplierValues[k]=(oldSupplierValues[k]||0)+lineNet(r);});const supplierRows=Object.values(m.bySupplier).sort((a,b)=>b.value-a.value).map(x=>{const prices=(m.supplierPrices[key(x.supplier,x.unit)]||[]).filter(p=>p.firstPrice!=null&&p.lastPrice!=null).map(p=>`${esc(p.product)}: ${deltaHtml(p.lastPrice,p.firstPrice)}`).slice(0,3).join(' • ')||'—';const previous=oldSupplierValues[key(x.supplier,x.unit)]||0;return [c(x.supplier),c(x.unit),nc(x.invoices.size),nc(x.qty),nc(x.value,money),nc(totalValue?x.value/totalValue*100:0,pct),c(dateLabel(x.last)),hc(prices),hc(deltaHtml(x.value,previous))];});
+    addTablePages(pages,'الموردون',['المورد','الوحدة','الفواتير','الكمية','المشتريات قبل الضريبة (ريال)','الحصة من القيمة %','آخر شراء بالفترة','تغيّر سعر الصنف','مقارنة الفترة'],supplierRows,{key:'suppliers',sumCols:[3,4],groupByUnitCol:1,formats:{4:money},rowsPerPage:22,note:'تغيّر السعر يقارن أول وآخر سعر مسجل للصنف لدى المورد ضمن البيانات المتاحة حتى نهاية الفترة.'});
+    const costRows=Object.entries(m.costs).map(([k,x])=>{const p=m.products[k]||{},all=(m.productPrices[k]||[]).flatMap(v=>[{date:v.firstDate,value:v.firstPrice},{date:v.lastDate,value:v.lastPrice}]).filter(v=>v.value!=null).sort((a,b)=>a.date.localeCompare(b.date));return [c(x.product),c(x.unit),nc(x.qty),nc(x.value,money),nc(x.avg,money),nc(p.consumption||0),nc((p.consumption||0)*x.avg,money),hc(all.length>1?deltaHtml(all.at(-1).value,all[0].value):'—')];});
+    addTablePages(pages,'التكلفة التقديرية',['الصنف','الوحدة','كمية شراء تراكمية','قيمة شراء تراكمية (ريال)','متوسط الوحدة (ريال)','استهلاك الفترة','تكلفة الاستهلاك التقديرية (ريال)','تغير السعر'],costRows,{key:'cost',sumCols:[2,3,5,6],groupByUnitCol:1,formats:{3:money,6:money},rowsPerPage:24,note:`متوسط تكلفة مرجح تراكمي للمشتريات حتى ${esc(dateLabel(state.filters.to))}، وتكلفة الاستهلاك تقديرية وليست FIFO.`});
+    const issues=qualityItems(m).map(x=>[c(x)]);const alertContent=`<div class="oil-print-alerts">${m.negative.length?`<div class="amc-mf-alert crit"><b>أرصدة سالبة</b> ${fmt(m.negative.length)} صنف/وحدة.</div>`:''}${m.lowCover.length?`<div class="amc-mf-alert warn"><b>تغطية منخفضة</b> ${fmt(m.lowCover.length)} صنف/وحدة عند حد ${fmt(state.filters.coverDays)} يومًا.</div>`:''}${m.unmatchedConsumption.length?`<div class="amc-mf-alert warn"><b>استهلاك غير مرتبط</b> ${fmt(m.unmatchedConsumption.length)} حركة.</div>`:''}${m.unusedPurchases.length?`<div class="amc-mf-alert info"><b>مشتريات بلا حركة استهلاك مطابقة حتى النهاية</b> ${fmt(m.unusedPurchases.length)} بند.</div>`:''}${m.dataIssues.length?`<div class="amc-mf-alert crit"><b>مشكلات بيانات</b> ${fmt(m.dataIssues.length)} ملاحظة.</div>`:''}${!qualityItems(m).length?'<div class="amc-mf-alert info">لم تُرصد مشكلات واضحة في الفحوص الحالية.</div>':''}</div>`;
+    addTablePages(pages,'التنبيهات وجودة البيانات',['التفصيل'],issues,{key:'quality',rowsPerPage:30,note:alertContent});
+    const logRows=m.consumption.slice().sort((a,b)=>(dateKey(b['التاريخ'])||'').localeCompare(dateKey(a['التاريخ'])||'')).map(r=>[c(dateLabel(r['التاريخ'])),c(r['المعدة']||'—'),c(r['إسم الصنف']||'—'),c(unitOf(r)),nc(num(r['الكمية'])),c(r['إسم المورد']||'—'),c(r['رقم الفاتورة']||'—')]);
+    addTablePages(pages,'سجل الاستهلاك',['التاريخ','المعدة','الصنف','الوحدة','الكمية','المورد','رقم الفاتورة'],logRows,{key:'consumption',sumCols:[4],groupByUnitCol:3,rowsPerPage:28});
+    return pages;
   }
-
-  function bindPrintCapture(){
-    const btn=document.getElementById('reportPrint');if(!btn||btn.dataset.oilCapture==='1')return;btn.dataset.oilCapture='1';btn.addEventListener('click',e=>{if(window.AMC_CURRENT_REPORT_INDEX==='oil'){e.preventDefault();e.stopImmediatePropagation();print();}},true);
-  }
-
+  function buildReportHtml(){const m=model(),all=buildSectionPages(m),selected=state.tab;let chosen=selected==='overview'?all:all.filter(p=>p.key===selected||(selected==='purchases'&&p.key==='invoices'));if(!chosen.length)chosen=[{key:selected,title:'مركز الزيوت والمخزون',content:'<div class="amc-report-note">لا توجد بيانات لهذا القسم.</div>'}];const total=chosen.length+1,period=currentPeriodLabel(),cmp=compareModel(m),comparison=comparePeriodLabel(cmp),today=formatDate(new Date()),toc=chosen.map(p=>p.title).join(' • ');const info=(label,value)=>`<div class="amc-report-info-row"><b>${esc(label)}</b><strong>${esc(value)}</strong></div>`;const coverContent=`<div class="amc-report-cover amc-mf-cover amc-mf-oil-cover"><img class="amc-report-cover-logo" src="${attr(document.querySelector('.hero-logo')?.getAttribute('src')||'')}" alt=""><h1>مركز الزيوت والمخزون</h1><div class="en">Oil &amp; Inventory Report</div><div class="amc-report-info">${info('المنشأة / الكسارة','شركة كسارة العساف للمعادن')}${info('فترة التقرير',period)}${info('فترة المقارنة',comparison)}${info('تاريخ الإعداد',today)}${info('إعداد','أ. محمد فوزي')}${info('عدد الصفحات',String(total))}</div><p class="amc-report-note oil-toc"><b>فهرس التقرير:</b> ${esc(toc)}</p></div>`;const cover=oilPage(coverContent,'مركز الزيوت والمخزون',period,1,total,true);const body=chosen.map((p,i)=>oilPage(p.content,p.title,period,i+2,total)).join('');return cover+body;}
+  function oilTemplate(){return buildReportHtml();}
+  function registerTemplate(){const engine=window.AMCReportEngine;if(!engine?.Templates)return false;try{if(!engine.Templates.OilTemplate)engine.Templates.OilTemplate=oilTemplate;return engine.Templates.OilTemplate===oilTemplate;}catch(e){return false;}}
+  function scheduleTemplateRegistration(){if(registerTemplate())return;if(templatePoll++<40)setTimeout(scheduleTemplateRegistration,150);}
+  function print(attempt=0){const engine=window.AMCReportEngine;if(!engine?.build){if(attempt===0){setTimeout(()=>print(1),300);return;}alert('محرك طباعة التقارير الرسمي غير متاح.');return;}const registered=registerTemplate();let overlay;if(registered){overlay=engine.build('OilTemplate',{from:state.filters.from,to:state.filters.to,title:'مركز الزيوت والمخزون',period:currentPeriodLabel()});}else{overlay=engine.build('FinancialQuarterlyTemplate',{from:'',to:'',title:'مركز الزيوت والمخزون'});const stage=overlay?.querySelector('.amc-report-stage');if(stage)stage.innerHTML=buildReportHtml();}if(!overlay?.querySelector('.amc-report-stage')){alert('تعذر تجهيز معاينة التقرير الرسمية.');return;}engine.fileName=`Assaf_Metals_Crusher_Oil_Inventory_${new Date().getFullYear()}`;overlay.classList.add('is-open');if(overlay._amcPrint)overlay._amcPrint();else{document.body.classList.add('amc-print-active');try{window.print();}finally{setTimeout(()=>document.body.classList.remove('amc-print-active'),800);}}}
+  function addMenuItem(){const nav=document.querySelector('.report-list');if(!nav||nav.querySelector('.oil-report-item'))return;const btn=document.createElement('button');btn.className='report-item oil-report-item';btn.type='button';btn.innerHTML='<span class="report-icon">🛢</span><span><strong>مركز الزيوت والمخزون</strong><span>المشتريات والاستهلاك والمخزون والمعدات والتكلفة</span></span><b class="report-arrow">‹</b>';nav.appendChild(btn);btn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();open();},true);}
+  function bindPrintCapture(){const btn=document.getElementById('reportPrint');if(!btn||btn.dataset.oilCapture==='1')return;btn.dataset.oilCapture='1';btn.addEventListener('click',e=>{if(window.AMC_CURRENT_REPORT_INDEX==='oil'){e.preventDefault();e.stopImmediatePropagation();print();}},true);}
   window.OilInventoryReport={state,open,loadData,render,print};
-  function init(){addMenuItem();bindPrintCapture();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  function init(){addMenuItem();bindPrintCapture();scheduleTemplateRegistration();}
+  scheduleTemplateRegistration();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
 
