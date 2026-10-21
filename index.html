@@ -4631,6 +4631,47 @@ const style=document.createElement('style');style.textContent=`.comparison-repor
 .inv-badge.partial{background:rgba(199,154,40,.18);color:#8a6b25}
 .inv-badge.unpaid{background:rgba(215,38,46,.12);color:#d7262e}
 @media(max-width:1000px){.inv-wrap{grid-template-columns:1fr}.inv-preview{position:relative;top:auto}}
+.inv-wrap{grid-template-columns:1fr}
+.inv-side{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:14px}
+.inv-side>.inv-panel{margin:0;box-shadow:0 1px 3px rgba(22,34,48,.04)}
+.inv-p-items,.inv-p-hist,.inv-side>.inv-actions{grid-column:1/-1}
+.inv-panel h3{padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid #eef2f6;font-size:14px;gap:9px;justify-content:flex-start}
+.inv-step{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#17294d;color:#c79a28;border:1px solid #c79a28;font-size:11px;font-weight:800;flex:none}
+.inv-req{color:#d7262e;font-weight:900;margin-inline-start:3px}
+@keyframes invBlink{0%,100%{box-shadow:0 0 0 0 rgba(223,77,87,0);background-color:#fff1f1}50%{box-shadow:0 0 0 4px rgba(223,77,87,.45);background-color:#ffd0d4}}
+.inv-invalid{animation:invBlink .8s ease-in-out infinite;border-color:#d7262e!important;border-radius:9px}
+.inv-panel{overflow:hidden}
+.inv-panel h3,.inv-sum{margin:-14px -16px 14px!important;padding:11px 16px!important;background:linear-gradient(112deg,#17294d 0%,#213a61 100%);color:#c79a28!important;border-bottom:3px solid #c79a28!important;font-size:14px;font-weight:800;display:flex;align-items:center;gap:10px}
+details[open]>.inv-sum{margin-bottom:14px!important}
+.inv-sum::before{color:#c79a28}
+.inv-panel:not([open]).inv-p-hist .inv-sum{margin-bottom:-14px!important}
+.inv-step{background:#c79a28!important;color:#17294d!important;border:0!important}
+.inv-field>label{font-size:11px;color:#516071}
+.inv-field input[type=text],.inv-field input[type=number],.inv-field input[type=date],.inv-field select{height:40px}
+.inv-p-info .inv-grid2{gap:2px 10px}
+.inv-banks{display:grid;gap:6px}
+.inv-bankrow{margin:0!important;padding:8px 10px;border:1px solid #dbe4ec;border-radius:9px;background:#f8fafc}
+.inv-bankrow:has(input:checked){border-color:#8fb6d7;background:#eaf2f9}
+.inv-sum{cursor:pointer;font-weight:800;font-size:14px;color:#162230;list-style:none}
+.inv-sum::-webkit-details-marker{display:none}
+.inv-sum::before{content:'◂ ';color:#2c6ba4}
+details[open]>.inv-sum::before{content:'▾ '}
+details[open]>.inv-sum{margin-bottom:10px}
+.inv-side>.inv-actions{position:sticky;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid #cbd7e2;border-radius:14px;padding:10px 14px;box-shadow:0 -6px 20px rgba(22,34,48,.10)}
+.inv-bar-info{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0;flex:1}
+.inv-bar-info .inv-totals{margin:0;display:flex;flex-wrap:wrap;gap:4px 16px;padding:6px 12px;font-size:11.5px}
+.inv-bar-info .inv-msg{margin:0;min-height:0}
+.inv-bar-btns{display:flex;gap:8px;flex-wrap:wrap}
+.inv-bar-btns .inv-btn2,.inv-bar-btns .btn{height:42px;padding:0 16px}
+.inv-p-items .inv-table{min-width:0}
+.inv-p-items .inv-table th:nth-child(1){width:auto}.inv-p-items .inv-table th:nth-child(2){width:90px}.inv-p-items .inv-table th:nth-child(3){width:90px}.inv-p-items .inv-table th:nth-child(4){width:100px}.inv-p-items .inv-table th:nth-child(5){width:110px}.inv-p-items .inv-table th:nth-child(6){width:34px}
+.inv-modal{position:fixed;inset:0;z-index:1000;background:rgba(15,25,40,.62);display:none;overflow:auto;padding:18px}
+.inv-modal.open{display:block}
+.inv-modal-card{width:min(900px,100%);margin:0 auto;background:#fff;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.inv-modal-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;color:#162230}
+.inv-modal-bar span{display:flex;gap:8px}
+.inv-modal .inv-preview{position:static}
+@media(max-width:1000px){.inv-side{grid-template-columns:1fr}.inv-p-items,.inv-p-hist,.inv-side>.inv-actions{grid-column:auto}}
 </style>
 
 <script id="amc-sales-invoice-script">
@@ -5098,7 +5139,7 @@ const style=document.createElement('style');style.textContent=`.comparison-repor
    const lastDateVal=rec?rec.lastDate:'—';
    balHtml=`<div style="margin-top:8px;border:1px solid ${LINE};border-radius:12px;padding:9px 14px;background:${SOFT};display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:4px;font-size:11.5px;font-variant-numeric:tabular-nums">
     ${boxHead('ملخص رصيد ومديونية العميل')}
-    <div style="color:${MUT}">المديونية المسجلة</div><div style="font-weight:800;color:${debtVal>0?RED:GREEN}">${money(debtVal)} SAR</div>
+    ${debtVal<0?`<div style="color:${GREEN};font-weight:800">له رصيد مدفوع مقدما</div><div style="font-weight:800;color:${GREEN}">${money(Math.abs(debtVal))} SAR</div>`:`<div style="color:${MUT}">المديونية المسجلة</div><div style="font-weight:800;color:${debtVal>0?RED:GREEN}">${money(debtVal)} SAR</div>`}
     <div style="color:${MUT}">آخر مبلغ سدد</div><div style="font-weight:700;color:${NAVY}">${lastPaidVal}</div>
     <div style="color:${MUT}">تاريخ آخر سداد</div><div style="font-weight:700;direction:ltr;text-align:right">${esc(lastDateVal)}</div>
    </div>`;
@@ -5329,6 +5370,13 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
  /* ---------- واجهة الإنشاء ---------- */
  const $=id=>document.getElementById(id);
  let undoState=null;
+ let previewOpen=false;
+ function setPreview(on){
+  previewOpen=!!on;
+  const m=$('invModal'); if(m)m.classList.toggle('open',previewOpen);
+  const h=$('invHost'); if(h&&!previewOpen)h.innerHTML='';
+  if(previewOpen)refresh();
+ }
  function msg(t,err,withUndo){
   const m=$('invMsg'); if(!m)return;
   m.className='inv-msg'+(err?' err':'');
@@ -5347,6 +5395,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   revRows().forEach(r=>{const n=norm(r['اسم العميل']);if(n)s.add(n)});
   recRows().forEach(r=>{const n=norm(r['اسم العميل']??r['العميل']);if(n)s.add(n)});
   Object.keys(getSavedCustomers()).forEach(n=>{if(norm(n))s.add(norm(n))});
+  PRESET_CUSTOMERS.forEach(c=>{if(![...s].some(x=>nameKey(x)===nameKey(c.name)))s.add(c.name)});
   return [...s].sort((a,b)=>a.localeCompare(b,'ar'));
  }
  function fillCustomers(){
@@ -5376,7 +5425,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
    return;
   }
   box.innerHTML=`
-   <div class="inv-bal-row"><span>المديونية المسجلة:</span><b style="color:${rec.debt>0?RED:GREEN}">${money(rec.debt)} SAR</b></div>
+   ${rec.debt<0?`<div class="inv-bal-row"><span style="color:${GREEN};font-weight:800">له رصيد مدفوع مقدما:</span><b style="color:${GREEN}">${money(Math.abs(rec.debt))} SAR</b></div>`:`<div class="inv-bal-row"><span>المديونية المسجلة:</span><b style="color:${rec.debt>0?RED:GREEN}">${money(rec.debt)} SAR</b></div>`}
    <div class="inv-bal-row"><span>آخر مبلغ سدد:</span><b>${rec.lastPaid>0?money(rec.lastPaid)+' SAR':'—'}</b></div>
    <div class="inv-bal-row"><span>تاريخ آخر سداد:</span><b style="direction:ltr">${esc(rec.lastDate)}</b></div>
    <div class="inv-bal-row"><span>تحصيلات الفترة المحددة:</span><b style="color:${GREEN}">${money(rec.periodCol)} SAR (${rec.colCount})</b></div>
@@ -5506,6 +5555,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
  }
 
  function fit(){
+  if(!previewOpen)return;
   const box=$('invPreview'),host=$('invHost'),sc=$('invScaler'); if(!box||!host||!sc)return;
   const s=Math.min(1,Math.max(.3,(box.clientWidth-28)/PAGE_W));
   host.style.transform=`scale(${s})`;
@@ -5516,7 +5566,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   const paidInput=$('invPaid'),paidWrap=$('invPaidWrap');
   if(paidWrap)paidWrap.hidden=(st.payStatus!=='partial');
   if(paidInput&&st.payStatus!=='partial')paidInput.value=t.paid;
-  const host=$('invHost'); if(host)host.innerHTML=sheetHtml();
+  const host=$('invHost'); if(host&&previewOpen)host.innerHTML=sheetHtml();
   const el=$('invTotals');
   if(el)el.innerHTML=`
    <div>الإجمالي: <b>${money(t.sub)}</b> &nbsp;•&nbsp; الخصم: <b>${money(t.disc)}</b></div>
@@ -5526,6 +5576,28 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   renderBalInfo();
   fit();
  }
+ const PRESET_CUSTOMERS=[
+  {name:'الشركة التضامنية للأليات',tax:'310931630300003',addr:'شارع التخصصي - المعذر الشمالي 11431 - الرياض'},
+  {name:'شركة زحل للخرسانة الجاهزة',tax:'312316606600003',addr:'خياصة - طريق الملك عبدالعزيز 65627 - بلجرشي'}
+ ];
+ const presetFor=n=>{const k=nameKey(norm(n));return PRESET_CUSTOMERS.find(c=>nameKey(c.name)===k)||null};
+ const LOAD_NAMES=[
+  ['تريلا 3/4','بحص متدرج مقاس - 3/4 بوصة (تريلا)'],
+  ['تريلا 3/8','بحص متدرج مقاس - 3/8 بوصة (تريلا)'],
+  ['سكس دفان','بحص متدرج مقاس - قلاب دفان'],
+  ['تريلا بناء','بحص متدرج مقاس - تريلا بناء'],
+  ['تريلا دفان','بحص متدرج مقاس - تريلا دفان'],
+  ['سكس 3/4','بحص متدرج مقاس - 3/4 بوصة (قلاب)'],
+  ['سكس 3/8','بحص متدرج مقاس - 3/8 بوصة (قلاب)'],
+  ['سكس بناء','بحص متدرج مقاس - قلاب بناء'],
+  ['قلاب دفان','بحص متدرج مقاس - قلاب دفان'],
+  ['سكس مباني','بحص متدرج مقاس - قلاب مباني'],
+  ['عايدي 3/4','بحص متدرج مقاس - 3/4 بوصة (عايدي)'],
+  ['عايدي بناء','بحص متدرج مقاس - عايدي بناء']
+ ];
+ const nameKey=v=>String(v??'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/\s+/g,' ').trim();
+ const LOAD_MAP=new Map(LOAD_NAMES.map(([a,b])=>[nameKey(a),b]));
+ const loadName=v=>{const t=norm(v);if(!t)return '—';return LOAD_MAP.get(nameKey(t))||t};
  function loadItems(){
   const cust=norm(st.customer);
   if(!cust){msg('اختر العميل أو اكتب اسمه أولاً.',true);return}
@@ -5535,14 +5607,14 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   if(st.group){
    const g=new Map();
    rows.forEach(r=>{
-    const type=norm(r['نوع التحميل'])||'—',q=num(r['الكمية']),a=num(r['المبلغ']),p=q?r2(a/q):0,key=type+'|'+p.toFixed(2);
+    const type=loadName(r['نوع التحميل']),q=num(r['الكمية']),a=num(r['المبلغ']),p=q?r2(a/q):0,key=type+'|'+p.toFixed(2);
     const x=g.get(key)||{desc:type,unit:DEFAULT_UNIT,qty:0,price:p,amount:0}; x.qty=r2(x.qty+q); x.amount=r2(x.amount+a); g.set(key,x);
    });
    items=[...g.values()].sort((a,b)=>a.desc.localeCompare(b.desc,'ar')||a.price-b.price);
   }else{
    items=rows.map(r=>({k:dateKey(r['التاريخ']),r})).sort((a,b)=>a.k.localeCompare(b.k)).map(({k,r})=>{
     const q=num(r['الكمية']),a=num(r['المبلغ']);
-    return {desc:`${norm(r['نوع التحميل'])||'—'} — ${fmtDate(k)}`,unit:DEFAULT_UNIT,qty:q,price:q?r2(a/q):0,amount:r2(a)};
+    return {desc:`${loadName(r['نوع التحميل'])} — ${fmtDate(k)}`,unit:DEFAULT_UNIT,qty:q,price:q?r2(a/q):0,amount:r2(a)};
    });
   }
   st.items=items; renderRows(); refresh();
@@ -5550,15 +5622,10 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
  }
 
  function applyCustomerMemory(custName){
-  const mem=recallCustomer(custName);
-  if(mem){
-   st.tax=mem.tax||'';
-   st.addr=mem.addr||'';
-   if(mem.deliverySite&&!st.deliverySite)st.deliverySite=mem.deliverySite;
-  }else{
-   st.tax='';
-   st.addr='';
-  }
+  const mem=recallCustomer(custName),pre=presetFor(custName);
+  st.tax=(mem&&mem.tax)||(pre?pre.tax:'');
+  st.addr=(mem&&mem.addr)||(pre?pre.addr:'');
+  if(mem&&mem.deliverySite&&!st.deliverySite)st.deliverySite=mem.deliverySite;
   if($('invTax'))$('invTax').value=st.tax;
   if($('invAddr'))$('invAddr').value=st.addr;
   if($('invDeliverySite'))$('invDeliverySite').value=st.deliverySite;
@@ -5566,6 +5633,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
 
  function buildUi(){
   const body=$('reportBody'); if(!body)return;
+  previewOpen=false;
   const per=defaultPeriod();
   if(!st.no)st.no=seqNo(lastSeq()+1);
   if(!st.issue)st.issue=ymd(new Date());
@@ -5575,30 +5643,31 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   body.innerHTML=`<div class="inv-wrap">
 <datalist id="invUnitsList">${UNITS.map(u=>`<option value="${esc(u)}">`).join('')}</datalist>
 <div class="inv-side">
- <section class="inv-panel"><h3>بيانات الفاتورة</h3><div class="inv-grid2">
-  <div class="inv-field"><label for="invNo">رقم الفاتورة</label><input id="invNo" type="text" value="${esc(st.no)}" style="direction:ltr;text-align:center"></div>
-  <div class="inv-field"><label for="invIssue">تاريخ الإصدار</label><input id="invIssue" type="date" value="${esc(st.issue)}"></div>
- </div>
- <div class="inv-field"><label>الحسابات البنكية الظاهرة في الفاتورة</label>${BANKS.map(b=>`<label class="inv-check"><input type="checkbox" data-bank="${esc(b.id)}" ${(st.bankIds||[]).includes(b.id)?'checked':''}> ${esc(b.label)}</label>`).join('')}</div>
- </section>
- <section class="inv-panel"><h3>العميل والفترة</h3>
-  <div class="inv-field"><label for="invCustomer">العميل</label><select id="invCustomer"></select></div>
-  <div class="inv-field" id="invManualWrap" ${st.manual?'':'hidden'}><label for="invManual">اسم العميل</label><input id="invManual" type="text" value="${esc(st.manual?st.customer:'')}"></div>
-  <div class="inv-field"><label for="invTax">الرقم الضريبي للعميل</label><input id="invTax" type="text" value="${esc(st.tax)}" style="direction:ltr;text-align:center"></div>
-  <div class="inv-field"><label for="invAddr">عنوان العميل</label><input id="invAddr" type="text" value="${esc(st.addr)}"></div>
+ <section class="inv-panel inv-p-cust"><h3><span class="inv-step">1</span>العميل</h3>
+  <div class="inv-field"><label for="invCustomer">اختر العميل<span class="inv-req">*</span></label><select id="invCustomer"></select></div>
+  <div class="inv-field" id="invManualWrap" ${st.manual?'':'hidden'}><label for="invManual">اسم العميل<span class="inv-req">*</span></label><input id="invManual" type="text" value="${esc(st.manual?st.customer:'')}"></div>
+  <div class="inv-grid2">
+   <div class="inv-field"><label for="invTax">الرقم الضريبي</label><input id="invTax" type="text" value="${esc(st.tax)}" style="direction:ltr;text-align:center"></div>
+   <div class="inv-field"><label for="invAddr">العنوان</label><input id="invAddr" type="text" value="${esc(st.addr)}"></div>
+  </div>
   <div class="inv-bal-card" id="invBalInfo"></div>
   <label class="inv-check"><input id="invShowBal" type="checkbox" ${st.showBalance?'checked':''}> إظهار ملخص رصيد ومديونية العميل في الفاتورة</label>
+ </section>
+ <section class="inv-panel inv-p-info"><h3><span class="inv-step">2</span>الفاتورة والفترة</h3>
   <div class="inv-grid2">
+   <div class="inv-field"><label for="invNo">رقم الفاتورة<span class="inv-req">*</span></label><input id="invNo" type="text" value="${esc(st.no)}" style="direction:ltr;text-align:center"></div>
+   <div class="inv-field"><label for="invIssue">تاريخ الإصدار<span class="inv-req">*</span></label><input id="invIssue" type="date" value="${esc(st.issue)}"></div>
    <div class="inv-field"><label for="invFrom">من تاريخ</label><input id="invFrom" type="date" value="${esc(st.from)}"></div>
    <div class="inv-field"><label for="invTo">إلى تاريخ</label><input id="invTo" type="date" value="${esc(st.to)}"></div>
   </div>
   <label class="inv-check"><input id="invGroup" type="checkbox" ${st.group?'checked':''}> تجميع البنود حسب نوع التحميل والسعر</label>
-  <button id="invLoad" class="btn" type="button">تحميل البنود من العمليات</button>
+  <button id="invLoad" class="btn" type="button" style="width:100%">⇩ تحميل البنود من العمليات</button>
  </section>
- <section class="inv-panel"><h3>البنود والدفع</h3>
-  <div class="inv-table-wrap"><table class="inv-table"><thead><tr><th>البيان</th><th>الوحدة</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th></th></tr></thead><tbody id="invRows"></tbody></table></div>
-  <div class="inv-row-actions"><button id="invAdd" class="inv-btn2" type="button">+ إضافة بند</button></div>
-  <div class="inv-grid2" style="margin-top:12px">
+ <section class="inv-panel inv-p-items"><h3><span class="inv-step">3</span>البنود <button id="invAdd" class="inv-btn2" type="button" style="margin-inline-start:auto">+ إضافة بند</button></h3>
+  <div class="inv-table-wrap"><table class="inv-table"><thead><tr><th>البيان<span class="inv-req">*</span></th><th>الوحدة</th><th>الكمية<span class="inv-req">*</span></th><th>السعر<span class="inv-req">*</span></th><th>الإجمالي</th><th></th></tr></thead><tbody id="invRows"></tbody></table></div>
+ </section>
+ <section class="inv-panel inv-p-pay"><h3><span class="inv-step">4</span>الخصم والسداد</h3>
+  <div class="inv-grid2">
    <div class="inv-field"><label for="invDisc">الخصم (SAR)</label><input id="invDisc" type="number" step="any" min="0" value="${esc(st.discount)}"></div>
    <div class="inv-field"><label for="invPayStatus">حالة السداد</label>
     <select id="invPayStatus">
@@ -5607,9 +5676,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
      <option value="paid" ${st.payStatus==='paid'?'selected':''}>مدفوعة بالكامل</option>
     </select>
    </div>
-  </div>
-  <div class="inv-grid2">
-   <div class="inv-field" id="invPaidWrap" ${st.payStatus==='partial'?'':'hidden'}><label for="invPaid">المبلغ المدفوع (SAR)</label><input id="invPaid" type="number" step="any" min="0" value="${esc(st.paid)}"></div>
+   <div class="inv-field" id="invPaidWrap" ${st.payStatus==='partial'?'':'hidden'}><label for="invPaid">المبلغ المدفوع (SAR)<span class="inv-req">*</span></label><input id="invPaid" type="number" step="any" min="0" value="${esc(st.paid)}"></div>
    <div class="inv-field"><label for="invPayMethod">طريقة الدفع (اختياري)</label>
     <select id="invPayMethod">
      <option value="" ${!st.payMethod?'selected':''}>— غير محدد —</option>
@@ -5620,22 +5687,22 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
     </select>
    </div>
   </div>
-  <div class="inv-row-actions" style="margin-top:2px">
-   <button id="invColLoad" class="inv-btn2" type="button">احتساب المدفوع من تحصيلات الفترة</button>
-  </div>
-  <div class="inv-totals" id="invTotals"></div><div class="inv-msg" id="invMsg"></div>
+  <button id="invColLoad" class="inv-btn2" type="button" style="width:100%">احتساب المدفوع من تحصيلات الفترة</button>
  </section>
- <section class="inv-panel"><h3>بيانات التوريد والملاحظات والباركود</h3>
+ <section class="inv-panel inv-p-deliv"><h3><span class="inv-step">5</span>التوريد والملاحظات</h3>
   <div class="inv-grid2">
    <div class="inv-field"><label for="invDeliverySite">موقع التسليم / المشروع</label><input id="invDeliverySite" type="text" value="${esc(st.deliverySite)}" placeholder="مثال: مشروع طريق الملك عبدالله"></div>
-   <div class="inv-field"><label for="invPoNo">رقم أمر الشراء / العقد</label><input id="invPoNo" type="text" value="${esc(st.poNo)}" placeholder="اختياري"></div>
+   <div class="inv-field"><label for="invPoNo">أمر الشراء / العقد</label><input id="invPoNo" type="text" value="${esc(st.poNo)}" placeholder="اختياري"></div>
   </div>
-  <div class="inv-field"><label for="invReceiver">اسم المستلم / بيان التوريد</label><input id="invReceiver" type="text" value="${esc(st.receiverName)}" placeholder="اختياري"></div>
+  <div class="inv-field"><label for="invReceiver">المستلم / بيان التوريد</label><input id="invReceiver" type="text" value="${esc(st.receiverName)}" placeholder="اختياري"></div>
   <div class="inv-field"><label for="invNotes">ملاحظات الفاتورة</label><textarea id="invNotes" placeholder="تظهر في الفاتورة عند كتابتها فقط...">${esc(st.notes)}</textarea></div>
+ </section>
+ <section class="inv-panel inv-p-opts"><h3><span class="inv-step">6</span>الحسابات البنكية وخيارات الطباعة</h3>
+  <div class="inv-field"><label>الحسابات الظاهرة في الفاتورة</label><div class="inv-banks">${BANKS.map(b=>`<label class="inv-check inv-bankrow"><input type="checkbox" data-bank="${esc(b.id)}" ${(st.bankIds||[]).includes(b.id)?'checked':''}> ${esc(b.label)}</label>`).join('')}</div></div>
   <label class="inv-check"><input id="invShowQr" type="checkbox" ${st.showQr?'checked':''}> إظهار رمز QR لبيانات الفاتورة (غير ضريبي)</label>
   <label class="inv-check"><input id="invDupCopy" type="checkbox" ${st.dupCopy?'checked':''}> طباعة نسختين (نسخة العميل + نسخة الأرشيف)</label>
  </section>
- <section class="inv-panel"><h3>الختم وتوقيع المدير</h3>
+ <section class="inv-panel inv-p-assets"><h3><span class="inv-step">7</span>الختم وتوقيع المدير</h3>
   <div class="inv-grid2">
    <div class="inv-asset-box">
     <div class="inv-asset-head"><span>ختم الشركة</span><button type="button" id="invStampDel" class="inv-btn2 danger" style="height:22px;padding:0 7px;font-size:10px">حذف</button></div>
@@ -5649,17 +5716,21 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
    </div>
   </div>
  </section>
- <div class="inv-actions">
-  <button id="invPrint" class="btn" type="button">▣ طباعة / PDF</button>
-  <button id="invSaveHist" class="inv-btn2" type="button" style="height:42px;padding:0 16px">حفظ في السجل</button>
- </div>
- <section class="inv-panel">
-  <h3><span>سجل الفواتير المحفوظة (<span id="invHistCount">0</span>)</span><button type="button" id="invHistClear" class="inv-btn2 danger" style="height:24px;padding:0 9px;font-size:10px">مسح السجل</button></h3>
-  <div class="inv-field" style="margin-bottom:6px"><input id="invHistSearch" type="text" placeholder="بحث برقم الفاتورة أو اسم العميل..."></div>
+ <details class="inv-panel inv-p-hist">
+  <summary class="inv-sum">سجل الفواتير المحفوظة (<span id="invHistCount">0</span>)</summary>
+  <div class="inv-row-actions"><div class="inv-field" style="margin:0;flex:1"><input id="invHistSearch" type="text" placeholder="بحث برقم الفاتورة أو اسم العميل..."></div><button type="button" id="invHistClear" class="inv-btn2 danger">مسح السجل</button></div>
   <div class="inv-hist-list" id="invHistList"></div>
- </section>
+ </details>
+ <div class="inv-actions">
+  <div class="inv-bar-info"><div class="inv-totals" id="invTotals"></div><div class="inv-msg" id="invMsg"></div></div>
+  <div class="inv-bar-btns">
+   <button id="invPreviewBtn" class="inv-btn2" type="button">👁 معاينة</button>
+   <button id="invSaveHist" class="inv-btn2" type="button">💾 حفظ في السجل</button>
+   <button id="invPrint" class="btn" type="button">▣ طباعة / PDF</button>
+  </div>
+ </div>
 </div>
-<div class="inv-preview" id="invPreview"><div class="inv-scaler" id="invScaler"><div class="inv-host" id="invHost"></div></div></div>
+<div class="inv-modal" id="invModal"><div class="inv-modal-card"><div class="inv-modal-bar"><strong>معاينة الفاتورة</strong><span><button id="invModalPrint" class="inv-btn2" type="button">▣ طباعة / PDF</button><button id="invModalClose" class="inv-btn2" type="button">إغلاق ✕</button></span></div><div class="inv-preview" id="invPreview"><div class="inv-scaler" id="invScaler"><div class="inv-host" id="invHost"></div></div></div></div></div>
 </div>`;
 
   fillCustomers(); renderRows(); renderAssetsUi(); renderHistory(); refresh();
@@ -5676,11 +5747,10 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   });
   bind('invManual','input',e=>{
    st.customer=e.target.value;
-   const mem=recallCustomer(st.customer);
-   if(mem){
-    if(!st.tax&&mem.tax){st.tax=mem.tax;if($('invTax'))$('invTax').value=st.tax}
-    if(!st.addr&&mem.addr){st.addr=mem.addr;if($('invAddr'))$('invAddr').value=st.addr}
-   }
+   const mem=recallCustomer(st.customer)||{},pre=presetFor(st.customer)||{};
+   const mt=mem.tax||pre.tax,ma=mem.addr||pre.addr;
+   if(!st.tax&&mt){st.tax=mt;if($('invTax'))$('invTax').value=st.tax}
+   if(!st.addr&&ma){st.addr=ma;if($('invAddr'))$('invAddr').value=st.addr}
    refresh();
   });
   bind('invTax','input',e=>{st.tax=e.target.value;if(norm(st.customer))rememberCustomer(st.customer,st.tax,st.addr,st.deliverySite);refresh()});
@@ -5752,6 +5822,11 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
 
   bind('invAdd','click',()=>{st.items.push({desc:'',unit:DEFAULT_UNIT,qty:1,price:0,amount:0});renderRows();refresh()});
   bind('invPrint','click',printInvoice);
+  bind('invPreviewBtn','click',()=>{if(guardInvoice())setPreview(true)});
+  if(!body.dataset.invClr){body.dataset.invClr='1';['input','change','click'].forEach(ev=>body.addEventListener(ev,e=>{const t=e.target;if(!t||!t.closest)return;const w=t.closest('.inv-table-wrap');if(ev==='click'&&t.id==='invAdd'){const x=document.querySelector('.inv-p-items .inv-table-wrap');if(x)x.classList.remove('inv-invalid')}if(ev!=='click'&&t.classList)t.classList.remove('inv-invalid')}))}
+  bind('invModalClose','click',()=>setPreview(false));
+  bind('invModalPrint','click',printInvoice);
+  bind('invModal','click',e=>{if(e.target.id==='invModal')setPreview(false)});
   bind('invSaveHist','click',()=>saveCurrentToHistory(false));
   bind('invHistSearch','input',renderHistory);
   bind('invHistClear','click',()=>{
@@ -5794,7 +5869,31 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   });
  }
 
+ function validateInvoice(){
+  const bad=[],empty=v=>!String(v??'').trim();
+  if(!norm(st.customer))bad.push($(st.manual?'invManual':'invCustomer'));
+  if(empty(st.no))bad.push($('invNo'));
+  if(empty(st.issue))bad.push($('invIssue'));
+  if(!st.items.length){const w=document.querySelector('.inv-p-items .inv-table-wrap');if(w)bad.push(w)}
+  else st.items.forEach((it,i)=>{
+   const tr=document.querySelector('#invRows tr[data-i="'+i+'"]'); if(!tr)return;
+   if(empty(it.desc))bad.push(tr.querySelector('[data-f="desc"]'));
+   if(!(num(it.qty)>0))bad.push(tr.querySelector('[data-f="qty"]'));
+   if(!(num(it.price)>0))bad.push(tr.querySelector('[data-f="price"]'));
+  });
+  if(st.payStatus==='partial'&&!(num(st.paid)>0))bad.push($('invPaid'));
+  return bad.filter(Boolean);
+ }
+ function guardInvoice(){
+  document.querySelectorAll('.inv-invalid').forEach(x=>x.classList.remove('inv-invalid'));
+  const bad=validateInvoice(); if(!bad.length)return true;
+  bad.forEach(el=>el.classList.add('inv-invalid'));
+  try{bad[0].scrollIntoView({behavior:'smooth',block:'center'});if(bad[0].focus&&bad[0].tagName!=='DIV')bad[0].focus({preventScroll:true})}catch(e){}
+  msg('أكمل الحقول الإلزامية المظللة بالأحمر قبل المعاينة أو الطباعة.',true);
+  return false;
+ }
  function printInvoice(){
+  if(!guardInvoice())return;
   if(!norm(st.customer)){msg('اختر العميل أو اكتب اسمه قبل الطباعة.',true);return}
   if(!st.items.length){msg('أضف بندًا واحدًا على الأقل قبل الطباعة.',true);return}
   saveCurrentToHistory(true);
@@ -5839,7 +5938,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
   const back=$('reportBack');
   if(back&&!back.dataset.invBack){back.dataset.invBack='1';back.addEventListener('click',()=>{if(window.AMC_CURRENT_REPORT_INDEX==='invoice')window.AMC_CURRENT_REPORT_INDEX=0})}
  }
- function init(){mount();bindShell();window.addEventListener('resize',fit)}
+ function init(){mount();bindShell();window.addEventListener('resize',fit);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&previewOpen)setPreview(false)})}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
