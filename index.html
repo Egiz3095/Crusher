@@ -5039,7 +5039,7 @@ details[open]>.inv-sum{margin-bottom:10px}
  function buildHeaderPage1Html(copyLabel){
   const dash='<span style="color:#9aa8b6">—</span>';
   const val=v=>norm(v)?esc(norm(v)):dash;
-  const period=(st.from&&st.to)?`<div style="color:${MUT}">فترة الفاتورة</div><div style="font-weight:700;direction:ltr;text-align:right;font-variant-numeric:tabular-nums">${fmtDate(st.from)} — ${fmtDate(st.to)}</div>`:'';
+  const period=(st.from&&st.to&&st.from!==st.to)?`<div style="color:${MUT}">فترة التحميل</div><div style="font-weight:700;direction:ltr;text-align:right;font-variant-numeric:tabular-nums">${fmtDate(st.from)} — ${fmtDate(st.to)}</div>`:'';
   const pm=payStatusMeta(st.payStatus);
   const copyBadge=copyLabel?`<div style="margin-top:4px;padding:3px 10px;border-radius:999px;background:rgba(199,154,40,.22);border:1px solid ${GOLD};color:#fff;font-size:11px;font-weight:800">${esc(copyLabel)}</div>`:'';
   const boxHead=x=>`<div style="grid-column:1 / span 2;font-size:12px;font-weight:800;color:${GOLD_D};padding-bottom:6px;border-bottom:1px solid ${LINE};margin-bottom:2px">${x}</div>`;
@@ -5069,7 +5069,7 @@ details[open]>.inv-sum{margin-bottom:10px}
  <div style="border:1px solid ${LINE};border-radius:12px;padding:11px 16px;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:6px;align-content:start;background:${SOFT}">
   ${boxHead('بيانات الفاتورة')}
   <div style="color:${MUT}">رقم الفاتورة</div><div style="font-weight:800;color:${NAVY};direction:ltr;text-align:right;font-variant-numeric:tabular-nums">${esc(st.no)||'—'}</div>
-  <div style="color:${MUT}">تاريخ الإصدار</div><div style="font-weight:700;direction:ltr;text-align:right;font-variant-numeric:tabular-nums">${fmtDate(st.issue)}</div>
+  <div style="color:${MUT}">تاريخ الفاتورة</div><div style="font-weight:700;direction:ltr;text-align:right;font-variant-numeric:tabular-nums">${fmtDate(st.issue)}</div>
   ${period}
   <div style="color:${MUT}">حالة السداد</div><div><span style="display:inline-block;padding:1px 9px;border-radius:999px;font-size:11px;font-weight:800;background:${pm.bg};color:${pm.fg};border:1px solid ${pm.border}">${pm.label}</span></div>
  </div>
@@ -5656,7 +5656,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:12px 44px 0;display:grid;grid-
  <section class="inv-panel inv-p-info"><h3><span class="inv-step">2</span>الفاتورة والفترة</h3>
   <div class="inv-grid2">
    <div class="inv-field"><label for="invNo">رقم الفاتورة<span class="inv-req">*</span></label><input id="invNo" type="text" value="${esc(st.no)}" style="direction:ltr;text-align:center"></div>
-   <div class="inv-field"><label for="invIssue">تاريخ الإصدار<span class="inv-req">*</span></label><input id="invIssue" type="date" value="${esc(st.issue)}"></div>
+   <div class="inv-field"><label for="invIssue">تاريخ الفاتورة<span class="inv-req">*</span></label><input id="invIssue" type="date" value="${esc(st.issue)}"></div>
    <div class="inv-field"><label for="invFrom">من تاريخ</label><input id="invFrom" type="date" value="${esc(st.from)}"></div>
    <div class="inv-field"><label for="invTo">إلى تاريخ</label><input id="invTo" type="date" value="${esc(st.to)}"></div>
   </div>
