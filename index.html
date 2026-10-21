@@ -990,6 +990,32 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
   .amc-report-page .amc-mf-exp-page .amc-report-table-wrap:nth-of-type(2) tbody tr:not(.total) td:first-child{text-align:right!important}
 }
 </style>
+<style id="expense-categories-style">
+.exp-cat-card{padding:0;overflow:hidden}
+.exp-cat-card>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;background:#f8fafc;border-bottom:1px solid var(--border)}
+.exp-cat-card>summary::-webkit-details-marker{display:none}
+.exp-cat-card>summary b{font-size:14px;color:var(--text)}
+.exp-cat-card>summary b:before{content:"▾ ";color:var(--muted)}
+.exp-cat-card:not([open])>summary b:before{content:"◂ "}
+.exp-cat-card>summary span{font-size:12px;color:var(--red);font-weight:700}
+.exp-cat-card .report-table-wrap{margin:0;padding:8px 12px 12px}
+.exp-cat-card tr.exp-cat-total td{font-weight:800;background:#f3f6f9;border-top:2px solid var(--border-strong)}
+.exp-cat-card th,.exp-cat-card td.nw{white-space:nowrap}
+.exp-cat-card td.desc{text-align:right;white-space:normal;width:100%}
+.exp-cat-card th{text-align:center!important}
+.exp-cat-card th:nth-child(3){width:100%}
+.exp-cat-card th:nth-child(2),.exp-cat-card th:nth-child(4){width:110px;min-width:110px}
+.exp-cat-card td:nth-child(4){text-align:center}
+.amc-report-page .amc-exp-cat-table .amc-report-table{table-layout:auto!important;width:100%!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table th,.amc-report-page .amc-exp-cat-table .amc-report-table td.nw{white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table td.desc{width:100%!important;text-align:right!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table th{text-align:center!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table th:nth-child(3){width:100%!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table th:nth-child(2),.amc-report-page .amc-exp-cat-table .amc-report-table th:nth-child(4){width:22mm!important;min-width:22mm!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table td:nth-child(4){text-align:center!important}
+.amc-report-page .amc-exp-cat-table .amc-report-table tr.total td:nth-child(3){text-align:right!important}
+.amc-report-page .amc-exp-cat-next{margin-top:16px!important}
+</style>
 </head>
 <body>
 <header class="top-header">
@@ -1021,21 +1047,13 @@ details.amc-mf-section>summary{cursor:pointer;list-style:none;font-size:17px;fon
       </div>
       <div class="report-collapsed-rail-label" aria-hidden="true">مركز التقارير</div>
       <nav class="report-list">
-        <button class="report-item active" type="button"><span class="report-icon">▦</span><span><strong>التقرير التنفيذي الشامل</strong><span>الإيرادات والمصروفات والصافي والكمية والهامش</span></span><b class="report-arrow">‹</b></button>
+        <button class="report-item active" type="button" data-legacy-index="0"><span class="report-icon">▦</span><span><strong>التقرير التنفيذي الشامل</strong><span>الإيرادات والمصروفات والصافي والكمية والهامش</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item daily-report-item" type="button" data-report-additive="daily"><span class="report-icon">◷</span><span><strong>التقرير اليومي التراكمي</strong><span>تقرير مستقل لليوم المحدد وحركة الشهر حتى تاريخه</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">↗</span><span><strong>تقرير الإيرادات</strong><span>حسب اليوم والشهر والفترة والعميل ونوع التحميل</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">↘</span><span><strong>تقرير المصروفات</strong><span>الإجمالي والتصنيفات ونسب كل بند</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">±</span><span><strong>تقرير الأرباح والخسائر</strong><span>الإيرادات ناقص المصروفات وصافي التشغيل الشهري</span></span><b class="report-arrow">‹</b></button>
+        <button class="report-item" type="button" data-legacy-index="1"><span class="report-icon">↗</span><span><strong>تقرير الإيرادات</strong><span>حسب اليوم والشهر والفترة والعميل ونوع التحميل</span></span><b class="report-arrow">‹</b></button>
+        <button class="report-item" type="button" data-legacy-index="2"><span class="report-icon">↘</span><span><strong>تقرير المصروفات</strong><span>الإجمالي والتصنيفات ونسب كل بند</span></span><b class="report-arrow">‹</b></button>
+        <button class="report-item" type="button" data-legacy-index="3"><span class="report-icon">±</span><span><strong>تقرير الأرباح والخسائر</strong><span>الإيرادات ناقص المصروفات وصافي التشغيل الشهري</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item comparison-report-item" type="button" data-report-additive="comparison"><span class="report-icon">⇄</span><span><strong>تقرير المقارنات</strong><span>مقارنة شهر بشهر حسب المؤشرات والعملاء والتصنيفات وأنواع التحميل</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item receivables-report-item" type="button" data-report-additive="receivables"><span class="report-icon">▤</span><span><strong>تقرير المديونية</strong><span>مديونية العملاء وآخر عمليات السداد</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">%</span><span><strong>تقرير الربحية</strong><span>صافي التشغيل وهامش التشغيل ومتوسط سعر البيع</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">♙</span><span><strong>تقرير العملاء</strong><span>الكميات والإيرادات وترتيب العملاء</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">★</span><span><strong>تقرير أفضل العملاء</strong><span>Top 5 / Top 10 حسب الإيرادات أو الكمية</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">≋</span><span><strong>تقرير أنواع التحميل</strong><span>الإيرادات والكمية لكل نوع تحميل</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">▥</span><span><strong>تقرير الأداء الشهري</strong><span>الإيرادات والمصروفات والصافي والمقارنة الشهرية</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">◈</span><span><strong>تقرير مؤشرات التشغيل</strong><span>ربح الوحدة وتكلفة الوحدة ومتوسط السعر والهامش</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">!</span><span><strong>تقرير التنبيهات الإدارية</strong><span>الأشهر الخاسرة وأكبر المصروفات والحالات للمراجعة</span></span><b class="report-arrow">‹</b></button>
-        <button class="report-item" type="button"><span class="report-icon">↔</span><span><strong>تقرير حركة الفترة</strong><span>كل العمليات خلال فترة زمنية محددة</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item daily-brief-report-item" type="button" data-report-additive="dailybrief"><span class="report-icon">◔</span><span><strong>التقرير اليومي المختصر</strong><span>غلاف + ورقة واحدة: مبيعات وتحصيلات ومصروفات اليوم</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item monthly-full-report-item" type="button" data-report-additive="monthlyfull"><span class="report-icon">▥</span><span><strong>التقرير الشهري الشامل</strong><span>تحليل شهري كامل ومقارنة بشهر تختاره</span></span><b class="report-arrow">‹</b></button>
         <button class="report-item weekly-report-item" type="button" data-report-additive="weekly"><span class="report-icon">▤</span><span><strong>التقرير الأسبوعي</strong><span>أداء أسبوع من السبت إلى الجمعة ومقارنة بأسبوع تختاره</span></span><b class="report-arrow">‹</b></button>
@@ -2238,16 +2256,17 @@ function renderReport(index){
   const ws=document.getElementById("reportWorkspace"), dash=document.querySelector(".dashboard-content");
   ws.hidden=false; document.querySelectorAll(".dashboard-content > *:not(#reportWorkspace)").forEach(x=>x.style.display="none");
   document.querySelectorAll(".report-item").forEach((x)=>{
-    const legacyIndex=Array.from(document.querySelectorAll(".report-item")).filter(b=>!b.classList.contains("daily-report-item")&&!b.classList.contains("comparison-report-item")&&!b.classList.contains("receivables-report-item")).indexOf(x);
+    const legacyIndex=(x.dataset.legacyIndex!=null?Number(x.dataset.legacyIndex):-1);
     x.classList.toggle("active",!x.classList.contains("daily-report-item") && !x.classList.contains("receivables-report-item") && legacyIndex===index);
   });
   const rev=reportData.rev,exp=reportData.exp;
   let toolbar=reportFilters(), body="";
   if(index===1){toolbar=reportFilters(`<div class="report-filter"><label>تجميع الإيرادات</label><select id="rRevenueGroup"><option value="month">شهري</option><option value="day">يومي</option><option value="customer">حسب العميل</option><option value="type">حسب نوع التحميل</option></select></div>`);}
+  if(index===2){toolbar=reportFilters(`<div class="report-filter"><label>التصنيف</label><select id="rExpCat"><option value="">كل التصنيفات</option></select></div>`);}
   if(index===6){toolbar=reportFilters(`<div class="report-filter"><label>الترتيب حسب</label><select id="rTopMetric"><option value="revenue">الإيرادات</option><option value="qty">الكمية</option></select></div><div class="report-filter"><label>عدد العملاء</label><select id="rTopN"><option>5</option><option>10</option></select></div>`);}
   if(index===11){toolbar=reportFilters(`<div class="report-filter"><label>نوع الحركة</label><select id="rMoveType"><option value="all">الكل</option><option value="revenue">الإيرادات</option><option value="expense">المصروفات</option></select></div>`);}
   document.getElementById("reportToolbar").innerHTML=toolbar;document.getElementById("reportBody").innerHTML="";
-  const run=()=>buildReport(index);document.getElementById("rApply")?.addEventListener("click",run);setTimeout(run,0);
+  const run=()=>buildReport(index);document.getElementById("rApply")?.addEventListener("click",run);document.getElementById("rExpCat")?.addEventListener("change",run);setTimeout(run,0);
 }
 function executiveScreenSummary(rev,exp,revenue,expenses,quantityTotal,net,margin,average){const ms=monthlyData(rev,exp),activeDays=new Set(rev.map(r=>dateValue(r['التاريخ'])).filter(Boolean)).size,collections=(reportData.col||[]).filter(r=>{const d=parseDate(r['التاريخ']);return d&&(!reportPeriod().from||dateValue(d)>=reportPeriod().from)&&(!reportPeriod().to||dateValue(d)<=reportPeriod().to)}).reduce((a,r)=>a+parseNum(r['المبلغ']),0),collectionRate=revenue?collections/revenue*100:null;const rows=ms.map(x=>`<tr><td>${esc(x.name)}</td><td class="green">${money(x.revenue)}</td><td style="color:#2476a8">${money(x.expenses)}</td><td class="${x.net>=0?'green':'red'}">${money(x.net)}</td><td>${x.margin.toFixed(1)+'%'}</td></tr>`);rows.push(`<tr class="total"><td>إجمالي الفترة</td><td class="green">${money(revenue)}</td><td style="color:#2476a8">${money(expenses)}</td><td class="${net>=0?'green':'red'}">${money(net)}</td><td>${margin.toFixed(1)+'%'}</td></tr>`);return kpis([['إجمالي الإيرادات',money(revenue)+' ريال','green'],['إجمالي المصروفات',money(expenses)+' ريال','blue'],['صافي التشغيل',money(net)+' ريال',net>=0?'green':'red'],['هامش التشغيل',margin.toFixed(1)+'%',margin>=0?'green':'red'],['الكمية المباعة',num(quantityTotal)+' رد'],['متوسط سعر الرد',money(average)+' ريال'],['أيام التشغيل',num(activeDays)+' يوم'],['معدل التحصيل إلى المبيعات',collectionRate===null?'—':collectionRate.toFixed(1)+'%']])+card('الأداء الشهري',table(['الشهر','الإيرادات','المصروفات','الصافي','الهامش'],rows));}
 function buildReport(index){
@@ -2255,7 +2274,7 @@ function buildReport(index){
  let body="";
  if(index===0){body=executiveScreenSummary(rev,exp,revenue,expenses,qty,net,margin,avg)}
  if(index===1){const g=document.getElementById("rRevenueGroup")?.value||"month";let rows=[];if(g==="customer"){const o={};rev.forEach(r=>{const k=(r["اسم العميل"]||"غير محدد").trim()||"غير محدد";(o[k]??={qty:0,amount:0,count:0});o[k].qty+=parseNum(r["الكمية"]);o[k].amount+=parseNum(r["المبلغ"]);o[k].count++;});rows=Object.entries(o).sort((a,b)=>b[1].amount-a[1].amount).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${num(v.qty)}</td><td>${money(v.amount)}</td><td>${num(v.count)}</td></tr>`);body=card("الإيرادات حسب العميل",table(["العميل","الكمية","الإيرادات","العمليات"],rows));}else if(g==="type"){const o={};rev.forEach(r=>{const k=(r["نوع التحميل"]||"غير محدد").trim()||"غير محدد";(o[k]??={qty:0,amount:0});o[k].qty+=parseNum(r["الكمية"]);o[k].amount+=parseNum(r["المبلغ"]);});rows=Object.entries(o).sort((a,b)=>b[1].amount-a[1].amount).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${num(v.qty)}</td><td>${money(v.amount)}</td></tr>`);body=card("الإيرادات حسب نوع التحميل",table(["نوع التحميل","الكمية","الإيرادات"],rows));}else if(g==="day"){const o={};rev.forEach(r=>{const d=parseDate(r["التاريخ"]);if(!d)return;const k=dateValue(d);(o[k]??={qty:0,amount:0});o[k].qty+=parseNum(r["الكمية"]);o[k].amount+=parseNum(r["المبلغ"]);});rows=Object.entries(o).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>`<tr><td>${fmtDate(k)}</td><td>${num(v.qty)}</td><td>${money(v.amount)}</td></tr>`);body=card("الإيرادات اليومية",table(["التاريخ","الكمية","الإيرادات"],rows));}else{const ms=monthlyData(rev,[]);body=card("الإيرادات الشهرية",table(["الشهر","الكمية","الإيرادات"],ms.map(v=>`<tr><td>${v.name}</td><td>${num(v.qty)}</td><td>${money(v.revenue)}</td></tr>`)));}body=kpis([["الإيرادات",money(revenue)+" SAR"],["الكمية",num(qty)+" رد"],["متوسط السعر",avg.toFixed(2)+" SAR/رد"],["عدد العمليات",num(rev.length)]])+body;}
- if(index===2){const o={};exp.forEach(r=>{const k=(r["التصنيف"]||"غير مصنف").trim()||"غير مصنف";(o[k]??=0);o[k]+=parseNum(r["المبلغ"]);});const rows=Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td><td>${expenses?((v/expenses)*100).toFixed(2):"0.00"}%</td></tr>`);body=kpis([["إجمالي المصروفات",money(expenses)+" SAR"],["عدد الحركات",num(exp.length)],["أكبر بند",Object.keys(o).length?esc(Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0]):"—"],["متوسط الحركة",exp.length?(expenses/exp.length).toFixed(2):"0.00"]])+card("المصروفات حسب التصنيف",table(["التصنيف","المبلغ","النسبة"],rows));}
+ if(index===2){const catOf=r=>(r["التصنيف"]||"غير مصنف").trim()||"غير مصنف",pc=(a,b)=>b?((a/b)*100).toFixed(2):"0.00",o={};exp.forEach(r=>{const k=catOf(r);(o[k]??={sum:0,rows:[]});o[k].sum+=parseNum(r["المبلغ"]);o[k].rows.push(r);});const ents=Object.entries(o).sort((a,b)=>b[1].sum-a[1].sum);const sel=document.getElementById("rExpCat");if(sel){const cur=sel.value;sel.innerHTML='<option value="">كل التصنيفات</option>'+ents.map(([k])=>`<option value="${esc(k)}">${esc(k)}</option>`).join("");sel.value=ents.some(([k])=>k===cur)?cur:"";}const pick=sel?.value||"";const rows=ents.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${num(v.rows.length)}</td><td>${money(v.sum)}</td><td>${pc(v.sum,expenses)}%</td></tr>`);const details=ents.filter(([k])=>!pick||k===pick).map(([k,v])=>{const list=v.rows.slice().sort((a,b)=>(parseDate(a["التاريخ"])?.getTime()||0)-(parseDate(b["التاريخ"])?.getTime()||0));const tr=list.map((r,i)=>`<tr><td class="nw">${i+1}</td><td class="nw">${esc(fmtDate(r["التاريخ"]))}</td><td class="desc">${esc(r["البيان"]||"—")}</td><td class="nw">${money(parseNum(r["المبلغ"]))}</td></tr>`);tr.push(`<tr class="exp-cat-total"><td class="nw"></td><td class="nw"></td><td class="desc">إجمالي التصنيف</td><td class="nw">${money(v.sum)}</td></tr>`);return `<details class="report-card exp-cat-card" open><summary><b>${esc(k)}</b><span>${money(v.sum)} SAR • ${pc(v.sum,expenses)}% من المصروفات • ${num(v.rows.length)} حركة</span></summary>${table(["م","التاريخ","البيان","المبلغ (ريال)"],tr)}</details>`;}).join("");body=kpis([["إجمالي المصروفات",money(expenses)+" SAR"],["عدد الحركات",num(exp.length)],["أكبر بند",ents.length?esc(ents[0][0]):"—"],["متوسط الحركة",exp.length?(expenses/exp.length).toFixed(2):"0.00"]])+card("المصروفات حسب التصنيف",table(["التصنيف","عدد الحركات","المبلغ","النسبة"],rows))+details;}
  if(index===3||index===8){const ms=monthlyData(rev,exp);body=card(index===3?"الأرباح والخسائر الشهرية":"الأداء الشهري والمقارنة",table(["الشهر","الإيرادات","المصروفات","الصافي","الهامش"],ms.map(v=>`<tr><td>${v.name}</td><td>${money(v.revenue)}</td><td>${money(v.expenses)}</td><td class="${v.net>=0?"green":"red"}">${money(v.net)}</td><td>${v.margin.toFixed(2)}%</td></tr>`)));}
  if(index===4||index===9){body=kpis([["متوسط سعر البيع",avg.toFixed(2)+" SAR"],["هامش التشغيل",margin.toFixed(2)+"%",margin>=0?"green":"red"]]);body+=card(index===4?"تفاصيل الربحية":"مؤشرات التشغيل",table(["المؤشر","القيمة","طريقة الاحتساب"],[["الإيرادات",money(revenue)+" SAR","إجمالي المبالغ"],["المصروفات",money(expenses)+" SAR","إجمالي المصروفات"],["صافي التشغيل",money(net)+" SAR","الإيرادات − المصروفات"],["الكمية",num(qty)+" رد","إجمالي الكمية"],["متوسط السعر",avg.toFixed(2)+" SAR","الإيرادات ÷ الكمية"],["هامش التشغيل",margin.toFixed(2)+"%","صافي التشغيل ÷ الإيرادات"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`)));}
  if(index===5||index===6){const o={};rev.forEach(r=>{const k=(r["اسم العميل"]||"غير محدد").trim()||"غير محدد";(o[k]??={qty:0,revenue:0,count:0});o[k].qty+=parseNum(r["الكمية"]);o[k].revenue+=parseNum(r["المبلغ"]);o[k].count++;});let arr=Object.entries(o);if(index===6){const metric=document.getElementById("rTopMetric")?.value||"revenue",n=+(document.getElementById("rTopN")?.value||5);arr.sort((a,b)=>b[1][metric]-a[1][metric]);arr=arr.slice(0,n);}else arr.sort((a,b)=>b[1].revenue-a[1].revenue);const rows=arr.map(([k,v],i)=>`<tr><td>${i+1}</td><td>${esc(k)}</td><td>${num(v.qty)}</td><td>${money(v.revenue)}</td><td>${num(v.count)}</td></tr>`);body=kpis([["عدد العملاء",num(arr.length)],["إيرادات العملاء",money(revenue)+" SAR"],["كمية العملاء",num(qty)+" رد"],["متوسط العميل",arr.length?(revenue/arr.length).toFixed(2):"0.00"]])+card(index===6?"أفضل العملاء":"جميع العملاء مرتبين حسب الإيرادات",table(["#","العميل","الكمية","الإيرادات","العمليات"],rows));}
@@ -2272,7 +2291,7 @@ document.querySelectorAll(".report-item").forEach((btn)=>btn.addEventListener("c
   if(btn.classList.contains("comparison-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderComparisonReport(); return; }
   if(btn.classList.contains("monthly-full-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderMonthlyFullReport(); return; }
   if(btn.classList.contains("weekly-report-item")){ ev.preventDefault(); ev.stopPropagation(); renderWeeklyReport(); return; }
-  const legacyIndex=Array.from(document.querySelectorAll(".report-item")).filter(x=>!x.classList.contains("daily-report-item")&&!x.classList.contains("comparison-report-item")&&!x.classList.contains("receivables-report-item")).indexOf(btn);
+  const legacyIndex=(btn.dataset.legacyIndex!=null?Number(btn.dataset.legacyIndex):-1);
   renderReport(legacyIndex);
 }));
 document.getElementById("reportBack")?.addEventListener("click",openDashboard);
@@ -3416,6 +3435,54 @@ function executiveReceivablesSection(ctx){
     return sections.map((section,index)=>page(section(ctx),title,ctx.period,index+1,total)).join('');
   }
 
+  /* تقرير المصروفات فقط: غلاف، ملخص التصنيفات، ثم جدول مستقل لكل تصنيف بكل حركاته. لا يغيّر ExpenseSection المشترك. */
+  function expenseCategoryPages(ctx){
+    const title=ctx.title||'تقرير المصروفات';
+    const exp=ctx.exp||[];
+    const expenses=exp.reduce((a,r)=>a+parseNum(r['المبلغ']),0);
+    const catOf=r=>(r['التصنيف']||'غير مصنف').trim()||'غير مصنف';
+    const o={};exp.forEach(r=>{const k=catOf(r);(o[k]??={sum:0,rows:[]});o[k].sum+=parseNum(r['المبلغ']);o[k].rows.push(r);});
+    const ents=Object.entries(o).sort((a,b)=>b[1].sum-a[1].sum);
+    const shown=ents.filter(([k])=>!ctx.expCat||k===ctx.expCat);
+    const count=n=>Number(n||0).toLocaleString('en-US');
+    const contents=[];
+    contents.push(`<div class="amc-report-cover amc-mf-cover amc-mf-weekly-cover"><img class="amc-report-cover-logo" src="${logoSrc()}" alt=""><h1>تقرير المصروفات</h1><div class="en">Expenses Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong></div><div class="amc-report-info-row"><b>الفترة</b><strong class="amc-mf-date amc-mf-week-current">${escHtml(ctx.period||'—')}</strong></div><div class="amc-report-info-row"><b>التصنيف</b><strong>${escHtml(ctx.expCat||'كل التصنيفات')}</strong></div><div class="amc-report-info-row"><b>تاريخ الإعداد</b><strong class="amc-mf-date">${formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div><div class="amc-report-info-row"><b>مراجعة</b><strong>أ. أحمد عيد</strong></div></div></div>`);
+    const sumRows=ents.map(([k,v],i)=>`<tr><td>${i+1}</td><td>${escHtml(k)}</td><td class="num">${count(v.rows.length)}</td><td class="num amc-report-red">${money(v.sum)}</td><td class="num">${pct(expenses?v.sum/expenses*100:0)}</td></tr>`);
+    sumRows.push(`<tr class="total"><td></td><td>الإجمالي</td><td class="num">${count(exp.length)}</td><td class="num amc-report-red">${money(expenses)}</td><td class="num">100.0%</td></tr>`);
+    contents.push(`<h1 class="amc-report-title">تقرير المصروفات</h1><p class="amc-report-subtitle">ملخص المصروفات حسب التصنيف، يليه جدول تفصيلي لحركات كل تصنيف</p><div class="amc-report-kpis">${kpi('إجمالي المصروفات',money(expenses)+' ريال','red')}${kpi('عدد الحركات',count(exp.length),'navy')}${kpi('متوسط الحركة',money(exp.length?expenses/exp.length:0)+' ريال','gold')}${kpi('عدد التصنيفات',count(ents.length),'navy')}</div>${table(['#','التصنيف','عدد الحركات','المبلغ','النسبة'],sumRows)}`);
+    /* توزيع التصنيفات على الصفحات حسب الارتفاع التقديري (مقاس على صفحة A4):
+       صف بسطر واحد 30px وكل سطر إضافي للبيان 18px؛ بداية تصنيف (عنوان + سطر الإجمالي + رأس الجدول) 124px؛
+       بداية صفحة "تابع" 85px؛ المساحة المتاحة 946px. إذا انتهى تصنيف وشغلت الصفحة أقل من 70% يبدأ التالي في نفس الصفحة. */
+    const CPL=85,ROW_PX=30,LINE_PX=18,CAP_PX=946,START_PX=124,CONT_PX=85,GAP_PX=16,FILL_LIMIT=.7,MIN_ROWS=3;
+    const rowPx=r=>{const lines=Math.max(1,Math.ceil(String(r['البيان']||'—').trim().length/CPL));return ROW_PX+LINE_PX*(lines-1);};
+    const pages=[];let cur=null,used=0;
+    const newPage=()=>{cur=[];pages.push(cur);used=0;};
+    shown.forEach(([k,v])=>{
+      const list=v.rows.slice().sort((a,b)=>(parseDate(a['التاريخ'])?.getTime()||0)-(parseDate(b['التاريخ'])?.getTime()||0));
+      const firstRows=list.slice(0,MIN_ROWS).reduce((a,r)=>a+rowPx(r),0)+(list.length<=MIN_ROWS?ROW_PX:0);
+      if(!cur||!cur.length)newPage();
+      else if(!(used<CAP_PX*FILL_LIMIT&&used+GAP_PX+START_PX+firstRows<=CAP_PX))newPage();
+      let seg={k,v,cont:false,rows:[],total:false,start:0};
+      used+=(cur.length?GAP_PX:0)+START_PX;cur.push(seg);
+      list.forEach((r,i)=>{
+        const h=rowPx(r),last=i===list.length-1,need=h+(last?ROW_PX:0);
+        if(used+need>CAP_PX&&seg.rows.length){newPage();seg={k,v,cont:true,rows:[],total:false,start:seg.start+seg.rows.length};used=CONT_PX;cur.push(seg);}
+        seg.rows.push(r);used+=h;
+      });
+      seg.total=true;used+=ROW_PX;
+    });
+    pages.forEach(pg=>{
+      contents.push(pg.map((seg,si)=>{
+        const rows=seg.rows.map((r,i)=>`<tr><td class="nw">${seg.start+i+1}</td><td class="nw amc-mf-date">${escHtml(fmtDate(r['التاريخ']))}</td><td class="desc">${escHtml(r['البيان']||'—')}</td><td class="nw num amc-report-red">${money(parseNum(r['المبلغ']))}</td></tr>`);
+        if(seg.total)rows.push(`<tr class="total"><td class="nw"></td><td class="nw"></td><td>إجمالي التصنيف</td><td class="nw num amc-report-red">${money(seg.v.sum)}</td></tr>`);
+        const head=!seg.cont
+          ?`<h1 class="amc-report-title">تصنيف: ${escHtml(seg.k)}</h1><p class="amc-report-subtitle">الإجمالي ${money(seg.v.sum)} ريال • ${pct(expenses?seg.v.sum/expenses*100:0)} من المصروفات • ${count(seg.v.rows.length)} حركة</p>`
+          :`<h1 class="amc-report-title">تصنيف: ${escHtml(seg.k)} — تابع</h1>`;
+        return `<div class="amc-exp-cat-seg${si?' amc-exp-cat-next':''}">${head}<div class="amc-exp-cat-table">${table(['م','التاريخ','البيان','المبلغ (ريال)'],rows)}</div></div>`;
+      }).join(''));
+    });
+    return contents.map((c,i)=>page(c,title,ctx.period,i+1,contents.length)).join('');
+  }
   const Templates={
     /* Aggregator: the executive report is ONLY a composition of reusable Sections. */
     FinancialQuarterlyTemplate(ctx){
@@ -3691,6 +3758,7 @@ function executiveReceivablesSection(ctx){
       return composeReport(ctx,[ReportSections.RevenueSection,ReportSections.CustomerRevenueSection,ReportSections.LoadingTypesSection],ctx.title||'تقرير الإيرادات');
     },
     ExpenseTemplate(ctx){
+      if(ctx.expenseDetail)return expenseCategoryPages(ctx);
       return composeReport(ctx,[ReportSections.ExpenseSection,ReportSections.ExpenseTopSection],ctx.title||'تقرير المصروفات');
     },
     ProfitabilityTemplate(ctx){
@@ -3803,7 +3871,7 @@ function executiveReceivablesSection(ctx){
     const base={from:p.from,to:p.to,period:reportDateLabel(p.from,p.to)};
     if(index===0)return ['FinancialQuarterlyTemplate',{...base,title:'التقرير التنفيذي الشامل'}];
     if(index===1)return ['RevenueTemplate',{...base,title:'تقرير الإيرادات'}];
-    if(index===2)return ['ExpenseTemplate',{...base,title:'تقرير المصروفات'}];
+    if(index===2)return ['ExpenseTemplate',{...base,title:'تقرير المصروفات',expenseDetail:true,expCat:document.getElementById('rExpCat')?.value||''}];
     if(index===3)return ['ComparisonTemplate',{...base,title:'تقرير الأرباح والخسائر'}];
     if(index===8)return ['ComparisonTemplate',{...base,title:'تقرير الأداء الشهري'}];
     if(index===4)return ['ProfitabilityTemplate',{...base,title:'تقرير الربحية'}];
@@ -3857,7 +3925,7 @@ function executiveReceivablesSection(ctx){
        }else if(b.classList.contains('weekly-report-item')){
          window.AMC_CURRENT_REPORT_INDEX='weekly';
        }else{
-        window.AMC_CURRENT_REPORT_INDEX=Array.from(document.querySelectorAll('.report-item')).filter(x=>!x.classList.contains('daily-report-item')&&!x.classList.contains('comparison-report-item')&&!x.classList.contains('receivables-report-item')).indexOf(b);
+        window.AMC_CURRENT_REPORT_INDEX=(b.dataset.legacyIndex!=null?Number(b.dataset.legacyIndex):-1);
       }
       setTimeout(bindPrintButton,0);
     }
@@ -4554,7 +4622,7 @@ const style=document.createElement('style');style.textContent=`.comparison-repor
  function detailRows(m){const out=[];m.rev.forEach(r=>out.push({kind:'sales',label:'مبيعات',name:r['اسم العميل']||'—',description:r['نوع التحميل']||'—',qty:r['الكمية'],amount:r['المبلغ']}));m.col.forEach(r=>out.push({kind:'collections',label:'تحصيل',name:r['العميل']||r['اسم العميل']||'—',description:r['البيان']||'—',qty:'',amount:r['المبلغ']}));m.exp.forEach(r=>out.push({kind:'expenses',label:'مصروف',name:r['البيان']||'—',description:r['التصنيف']||'—',qty:'',amount:-Math.abs(val(r['المبلغ']))}));return out}
  function unifiedTemplate(c){const m={rev:c.rev||[],exp:c.exp||[],col:c.col||[]},items=detailRows(m);const total=m=>sumRows(m,'المبلغ');return`<section class="amc-report-page"><div class="amc-report-header"><div class="amc-report-brand"><div><div class="amc-report-brand-name">شركة كسارة العساف للمعادن</div><div class="amc-report-brand-en">ASSAF METALS CRUSHER</div></div></div><div class="amc-report-meta"><strong>الحركة اليومية الموحدة</strong><span>${esc(dateLabel(c.selectedDate||c.to))}</span></div></div><h1 class="amc-report-title">الحركة اليومية الموحدة</h1><p class="amc-report-subtitle">حركة المبيعات والتحصيلات والمصروفات المسجلة في ${esc(dateLabel(c.selectedDate||c.to))}</p><div class="amc-du-kpis"><div class="amc-du-kpi"><span>المبيعات</span><b>${cash(total(m.rev))} ر.س</b></div><div class="amc-du-kpi"><span>التحصيلات</span><b>${cash(total(m.col))} ر.س</b></div><div class="amc-du-kpi"><span>المصروفات</span><b>${cash(total(m.exp))} ر.س</b></div><div class="amc-du-kpi"><span>الكمية المباعة</span><b>${quantity(sumRows(m.rev,'الكمية'))} رد</b></div></div><h2 class="amc-report-section-title">سجل الحركة</h2>${items.length?`<div class="amc-du-table-wrap"><table class="amc-du-table"><thead><tr><th>النوع</th><th>العميل / البيان</th><th>التفصيل</th><th>الكمية</th><th>المبلغ</th></tr></thead><tbody>${items.map(x=>`<tr class="${x.kind}"><td class="type">${x.label}</td><td>${esc(x.name)}</td><td>${esc(x.description)}</td><td class="num">${x.qty===''?'—':quantity(x.qty)}</td><td class="num">${cash(x.amount)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="amc-du-empty">لا توجد حركة مالية مسجلة لهذا اليوم.</div>'}<p class="amc-du-note">الصافي التشغيلي اليومي = المبيعات − المصروفات؛ التحصيلات معروضة كحركة نقدية مستقلة ولا تضاف إلى المبيعات.</p><div class="amc-report-footer"><span>شركة كسارة العساف للمعادن — تقرير تشغيلي</span><span>${esc(dateLabel(c.selectedDate||c.to))}</span></div></section>`}
  function installTemplate(){const e=window.AMCReportEngine;if(e?.Templates&&!e.Templates.AMCUnifiedDailyTemplate)e.Templates.AMCUnifiedDailyTemplate=unifiedTemplate}
- function mountButton(){const nav=document.querySelector('.report-list');if(!nav||nav.querySelector('.daily-unified-report-item'))return;const b=document.createElement('button');b.type='button';b.className='report-item daily-unified-report-item';b.innerHTML='<span class="report-icon">⇄</span><span><strong>الحركة اليومية الموحدة</strong><span>مبيعات وتحصيلات ومصروفات اليوم في كشف واحد</span></span><b class="report-arrow">‹</b>';const brief=nav.querySelector('.daily-brief-report-item');nav.insertBefore(b,brief||nav.lastElementChild)}
+ function mountButton(){/* تقرير الحركة اليومية الموحدة محذوف من القائمة */document.querySelectorAll('.daily-unified-report-item').forEach(x=>x.remove());return;const nav=document.querySelector('.report-list');if(!nav||nav.querySelector('.daily-unified-report-item'))return;const b=document.createElement('button');b.type='button';b.className='report-item daily-unified-report-item';b.innerHTML='<span class="report-icon">⇄</span><span><strong>الحركة اليومية الموحدة</strong><span>مبيعات وتحصيلات ومصروفات اليوم في كشف واحد</span></span><b class="report-arrow">‹</b>';const brief=nav.querySelector('.daily-brief-report-item');nav.insertBefore(b,brief||nav.lastElementChild)}
  function render(day){const m=dailyModel(day),workspace=document.getElementById('reportWorkspace'),title=document.getElementById('reportTitle'),desc=document.getElementById('reportDescription'),toolbar=document.getElementById('reportToolbar'),body=document.getElementById('reportBody');if(!workspace||!body)return;document.querySelectorAll('.dashboard-content > *:not(#reportWorkspace)').forEach(x=>x.style.display='none');workspace.hidden=false;document.querySelectorAll('.report-item').forEach(x=>x.classList.toggle('active',x.classList.contains('daily-unified-report-item')));window.AMC_CURRENT_REPORT_INDEX='dailyunified';if(title)title.textContent='الحركة اليومية الموحدة';if(desc)desc.textContent='كشف واحد للحركة اليومية مع فصل واضح بين المبيعات والتحصيلات والمصروفات.';if(toolbar)toolbar.innerHTML='';const details=detailRows(m);body.innerHTML=`<div class="amc-daily-unified"><div class="amc-du-controls"><label>تاريخ الحركة<input id="amcUnifiedDate" type="date" value="${esc(day)}"></label><button id="amcUnifiedShow" type="button">عرض اليوم</button><button id="amcUnifiedPrint" type="button">طباعة / PDF</button></div><div class="amc-du-kpis"><div class="amc-du-kpi"><span>مبيعات اليوم</span><b>${cash(m.revenue)} ر.س</b></div><div class="amc-du-kpi"><span>تحصيلات اليوم</span><b>${cash(m.collections)} ر.س</b></div><div class="amc-du-kpi"><span>مصروفات اليوم</span><b>${cash(m.expenses)} ر.س</b></div><div class="amc-du-kpi"><span>الكمية المباعة</span><b>${quantity(m.qty)} رد</b></div></div><section class="amc-du-card"><h3>الحركة اليومية — ${dateLabel(day)}</h3>${details.length?`<div class="amc-du-table-wrap"><table class="amc-du-table"><thead><tr><th>النوع</th><th>العميل / البيان</th><th>التفصيل</th><th>الكمية</th><th>المبلغ</th></tr></thead><tbody>${details.map(x=>`<tr class="${x.kind}"><td class="type">${x.label}</td><td>${esc(x.name)}</td><td>${esc(x.description)}</td><td class="num">${x.qty===''?'—':quantity(x.qty)}</td><td class="num">${cash(x.amount)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="amc-du-empty">لا توجد حركة مالية مسجلة لهذا اليوم.</div>'}</section><p class="amc-du-note">التحصيلات معروضة كحركة نقدية مستقلة، ولا تُضاف إلى المبيعات عند حساب الصافي التشغيلي.</p></div>`;document.getElementById('amcUnifiedShow')?.addEventListener('click',()=>render(document.getElementById('amcUnifiedDate')?.value||day));document.getElementById('amcUnifiedPrint')?.addEventListener('click',()=>print(day));}
  function print(day){installTemplate();const engine=window.AMCReportEngine;if(!engine?.build){window.print();return}const ov=engine.build('AMCUnifiedDailyTemplate',{from:day,to:day,selectedDate:day,period:dateLabel(day),title:'الحركة اليومية الموحدة'});if(ov?._amcPrint)ov._amcPrint();else ov?.querySelector('[data-act="print"]')?.click()}
  function open(){render(pickDefault())}
@@ -5054,7 +5122,7 @@ details[open]>.inv-sum{margin-bottom:10px}
   </div>
  </div>
  <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
-  <div style="font-size:30px;font-weight:900;line-height:1.1;color:#fff">فاتورة مبيعات</div>
+  <div style="font-size:27px;font-weight:900;line-height:1.1;color:#fff;white-space:nowrap">فاتورة مبيعات</div>
   <div style="font-size:12px;color:${GOLD};letter-spacing:.8px;font-weight:700">SALES INVOICE</div>
   ${copyBadge}
  </div>
