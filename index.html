@@ -3965,6 +3965,7 @@ function executiveReceivablesSection(ctx){
     const tpl=Templates[templateName]||Templates.FinancialQuarterlyTemplate;const html=tpl(ctx);const ov=ensureOverlay();ov.querySelector('.amc-report-stage').innerHTML=html;ov.classList.add('is-open');window.AMCReportEngine.fileName=`Assaf_Metals_Crusher_${templateName}_${new Date().getFullYear()}`;return ov;}
 
   window.AMCReportEngine={Templates,Sections:ReportSections,compose:composeReport,build,open:(template,options)=>build(template,options),fileName:'Assaf_Metals_Crusher_Report',architecture:'aggregator-v2'};
+  window.AMCReportEngine.ui={page,table,kpi,escHtml,money,qty,pct,logoSrc,formatDate};
 
   function currentPeriod(){
     let from=document.getElementById('rFrom')?.value||'';let to=document.getElementById('rTo')?.value||'';
@@ -4103,18 +4104,16 @@ const metrics={revenue:compare(revenueA,revenueB,'revenue'),expenses:compare(exp
 const rows=[['الإيرادات',metrics.revenue,'money'],['المصروفات',metrics.expenses,'expense'],['صافي الربح / الخسارة',metrics.profit,'money'],['هامش الربح / الخسارة',metrics.profitMargin,'percent'],['نسبة المصروفات إلى الإيرادات',metrics.expenseRatio,'percent'],['عدد عمليات المبيعات',metrics.salesTransactions,'count'],['إجمالي الكمية',metrics.quantity,'quantity'],['متوسط قيمة عملية البيع',metrics.avgLoadValue,'money'],['الإيراد لكل وحدة كمية',metrics.revenuePerQuantity,'money'],['المصروف لكل وحدة كمية',metrics.expensePerQuantity,'expense'],['الربح لكل وحدة كمية',metrics.profitPerQuantity,'profit'],['العملاء النشطون',metrics.activeCustomers,'count'],['أيام نشاط المبيعات',metrics.activeDays,'count'],['متوسط الإيراد اليومي',metrics.avgDailyRevenue,'money'],['متوسط المصروف اليومي',metrics.avgDailyExpenses,'expense']].map(([label,v,type])=>({label,type,...v}));
 const reconciliation={salesA:Math.abs(revenueA-sum(ar,'المبلغ'))<=.01,salesB:Math.abs(revenueB-sum(br,'المبلغ'))<=.01,expensesA:Math.abs(expenseA-sum(ae,'المبلغ'))<=.01,expensesB:Math.abs(expenseB-sum(be,'المبلغ'))<=.01,categoriesA:Math.abs(expenseA-Object.values(catA).reduce((x,y)=>x+y,0))<=.01,categoriesB:Math.abs(expenseB-Object.values(catB).reduce((x,y)=>x+y,0))<=.01,customersA:Math.abs(revenueA-Object.values(custA).reduce((x,y)=>x+y,0))<=.01,customersB:Math.abs(revenueB-Object.values(custB).reduce((x,y)=>x+y,0))<=.01,loadTypesA:Math.abs(revenueA-Object.values(typeA).reduce((x,y)=>x+y,0))<=.01,loadTypesB:Math.abs(revenueB-Object.values(typeB).reduce((x,y)=>x+y,0))<=.01};reconciliation.ok=Object.values(reconciliation).every(Boolean);
 return{labels:labelsOverride||{a:monthLabel2(a),b:monthLabel2(b)},monthA:a,monthB:b,periods:{a:{rev:ar,exp:ae},b:{rev:br,exp:be}},totals:{revenueA,revenueB,expenseA,expenseB,profitA:revenueA-expenseA,profitB:revenueB-expenseB,quantityA:qtyA,quantityB:qtyB,loadsA,loadsB},metrics,metricRows:rows,expenseCategories:unionCompare(catA,catB,expenseA,expenseB,'expense'),customers:unionCompare(custA,custB,revenueA,revenueB,'revenue'),customerQuantities:unionCompare(custQtyA,custQtyB,qtyA,qtyB,'quantity'),loadTypes:unionCompare(typeA,typeB,revenueA,revenueB,'revenue'),loadTypeQuantities:unionCompare(typeQtyA,typeQtyB,qtyA,qtyB,'quantity'),dailyRevenue:{a:dailyMap(ar),b:dailyMap(br)},reconciliation,schema:C.schema,source:raw.source,receivables:{available:false,reason:'لا توجد في المصدر الحالي جداول أو حقول مستقلة للتحصيلات أو أرصدة العملاء أو الفواتير الآجلة؛ لذلك لم يتم إنشاء مديونية افتراضية.'}}}
-const service={async fetch(){const raw=await loadRaw();C.state.schema=raw.rawHeaders;return raw},async buildRange(fromA,toA,labelA,fromB,toB,labelB,keyA=fromA,keyB=fromB){if(!fromA||!toA||!fromB||!toB)throw new Error('يرجى تحديد فترتين صالحيتين للمقارنة.');if(keyA===keyB||fromA===fromB&&toA===toB)throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');const raw=await this.fetch(),ar=raw.rev.filter(r=>inRange(r,fromA,toA)),br=raw.rev.filter(r=>inRange(r,fromB,toB)),ae=raw.exp.filter(r=>inRange(r,fromA,toA)),be=raw.exp.filter(r=>inRange(r,fromB,toB));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${labelA}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${labelB}).`);const data=buildModel(ar,br,ae,be,keyA,keyB,raw,{a:labelA,b:labelB});C.state.data=data;C.state.periodA=keyA;C.state.periodB=keyB;C.state.status='ready';C.state.error='';return data},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');const A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');return this.buildRange(A.from,A.to,monthLabel2(a),B.from,B.to,monthLabel2(b),a,b)},async buildPeriods(type,first,second){const period=key=>{if(type==='year'){if(!/^\d{4}$/.test(key))throw new Error('صيغة السنة غير صحيحة.');return{from:`${key}-01-01`,to:`${key}-12-31`,label:`سنة ${key}`,key:`Y-${key}`}}if(type==='quarter'){const m=String(key||'').match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('صيغة الربع غير صحيحة.');const y=Number(m[1]),q=Number(m[2]),start=(q-1)*3+1,end=q*3,last=new Date(y,end,0).getDate();return{from:`${y}-${String(start).padStart(2,'0')}-01`,to:`${y}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${q} ${y}`,key:`Q-${key}`}}if(type==='custom'){if(!/^\d{4}-\d{2}-\d{2}$/.test(key?.from)||!/^\d{4}-\d{2}-\d{2}$/.test(key?.to)||key.from>key.to)throw new Error('حدد تاريخ بداية ونهاية صالحين لكل فترة.');return{from:key.from,to:key.to,label:`${key.from} إلى ${key.to}`,key:`D-${key.from}_${key.to}`}}throw new Error('نوع الفترة غير مدعوم.');};const A=period(first),B=period(second);return this.buildRange(A.from,A.to,A.label,B.from,B.to,B.label,A.key,B.key)}};
+const service={async fetch(force){const rd=(typeof reportData!=='undefined'&&reportData)?reportData:null;if(!force&&rd&&Array.isArray(rd.rev)&&rd.rev.length&&Array.isArray(rd.exp)){return C.state.raw={rev:rd.rev,exp:rd.exp,col:Array.isArray(rd.col)?rd.col:[],source:'dashboard'}}if(!force&&C.state.raw)return C.state.raw;const raw=await loadRaw();raw.col=raw.col||[];C.state.schema=raw.rawHeaders;return C.state.raw=raw},async buildRange(fromA,toA,labelA,fromB,toB,labelB,keyA=fromA,keyB=fromB){if(!fromA||!toA||!fromB||!toB)throw new Error('يرجى تحديد فترتين صالحيتين للمقارنة.');if(keyA===keyB||fromA===fromB&&toA===toB)throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');const raw=await this.fetch(),ar=raw.rev.filter(r=>inRange(r,fromA,toA)),br=raw.rev.filter(r=>inRange(r,fromB,toB)),ae=raw.exp.filter(r=>inRange(r,fromA,toA)),be=raw.exp.filter(r=>inRange(r,fromB,toB));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${labelA}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${labelB}).`);const data=enrichComparison(buildModel(ar,br,ae,be,keyA,keyB,raw,{a:labelA,b:labelB}),raw,{from:fromA,to:toA},{from:fromB,to:toB});C.state.data=data;C.state.periodA=keyA;C.state.periodB=keyB;C.state.status='ready';C.state.error='';return data},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');const A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');return this.buildRange(A.from,A.to,monthLabel2(a),B.from,B.to,monthLabel2(b),a,b)},async buildPeriods(type,first,second){const period=key=>{if(type==='year'){if(!/^\d{4}$/.test(key))throw new Error('صيغة السنة غير صحيحة.');return{from:`${key}-01-01`,to:`${key}-12-31`,label:`سنة ${key}`,key:`Y-${key}`}}if(type==='quarter'){const m=String(key||'').match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('صيغة الربع غير صحيحة.');const y=Number(m[1]),q=Number(m[2]),start=(q-1)*3+1,end=q*3,last=new Date(y,end,0).getDate();return{from:`${y}-${String(start).padStart(2,'0')}-01`,to:`${y}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${q} ${y}`,key:`Q-${key}`}}if(type==='custom'){if(!/^\d{4}-\d{2}-\d{2}$/.test(key?.from)||!/^\d{4}-\d{2}-\d{2}$/.test(key?.to)||key.from>key.to)throw new Error('حدد تاريخ بداية ونهاية صالحين لكل فترة.');return{from:key.from,to:key.to,label:`${cmpFmtDate(key.from)} إلى ${cmpFmtDate(key.to)}`,key:`D-${key.from}_${key.to}`}}throw new Error('نوع الفترة غير مدعوم.');};const A=period(first),B=period(second);return this.buildRange(A.from,A.to,A.label,B.from,B.to,B.label,A.key,B.key)}};
 function valueCell(v,type){if(type==='percent')return`${Number(v||0).toFixed(2)}%`;if(type==='count'||type==='quantity')return qty2(v);return money2(v)}
 function statusText(x){return x.status==='NEW'?'جديد':x.status==='LOSS_TO_PROFIT'?'تحول من خسارة إلى ربح':x.status==='PROFIT_TO_LOSS'?'تحول من ربح إلى خسارة':x.status==='INCREASE'?'زيادة':x.status==='DECREASE'?'انخفاض':'مستقر'}
 function statusClass(x){return x.status==='LOSS_TO_PROFIT'?'good':x.status==='PROFIT_TO_LOSS'?'bad':x.status==='INCREASE'?'up':x.status==='DECREASE'?'down':'neutral'}
 function compareTable(rows){if(!rows.length)return'<div class="comparison-report-empty">لا توجد بيانات مدعومة في هذا القسم.</div>';return`<div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>البند</th><th>الفترة الأولى</th><th>الفترة الثانية</th><th>الفرق</th><th>% التغير</th><th>الحصة A</th><th>الحصة B</th><th>الحالة</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc2(r.label)}</td><td class="num">${valueCell(r.previous,r.type||r.kind)}</td><td class="num">${valueCell(r.current,r.type||r.kind)}</td><td class="num">${valueCell(r.difference,r.type||r.kind)}</td><td class="num">${pct2(r.percentage)}</td><td class="num">${Number(r.shareA||0).toFixed(2)}%</td><td class="num">${Number(r.shareB||0).toFixed(2)}%</td><td><span class="comparison-report-status ${statusClass(r)}">${statusText(r)}</span>${r.transition?`<small class="comparison-report-transition">${esc2(r.transition)}</small>`:''}</td></tr>`).join('')}</tbody></table></div>`}
-function svgSummary(d){const vals=[d.totals.revenueA,d.totals.expenseA,d.totals.profitA,d.totals.revenueB,d.totals.expenseB,d.totals.profitB],max=Math.max(1,...vals.map(v=>Math.abs(v))),labels=[['الإيرادات',d.totals.revenueA,d.totals.revenueB,'#2c6ba4'],['المصروفات',d.totals.expenseA,d.totals.expenseB,'#c91836'],['الصافي',d.totals.profitA,d.totals.profitB,'#b8871c']],ys=[45,105,165];return`<svg class="comparison-report-chart" viewBox="0 0 760 220"><line x1="150" y1="200" x2="735" y2="200" stroke="#cfd8e3"/><text x="690" y="218" class="chart-axis">الفترة الثانية</text><text x="165" y="218" class="chart-axis">الفترة الأولى</text>${labels.map((x,i)=>{const w1=Math.max(2,Math.abs(x[1])/max*260),w2=Math.max(2,Math.abs(x[2])/max*260),y=ys[i];return`<text x="735" y="${y+6}" text-anchor="end" class="chart-label">${x[0]}</text><rect x="155" y="${y-15}" width="${w1}" height="18" rx="3" fill="${x[3]}" opacity=".55"/><rect x="420" y="${y-15}" width="${w2}" height="18" rx="3" fill="${x[3]}"/><text x="${160+w1}" y="${y-2}" class="chart-value">${money2(x[1])}</text><text x="${425+w2}" y="${y-2}" class="chart-value">${money2(x[2])}</text>`}).join('')}</svg>`}
-function svgDaily(d){const days=Array.from(new Set([...Object.keys(d.dailyRevenue.a),...Object.keys(d.dailyRevenue.b)].map(Number))).sort((x,y)=>x-y);if(!days.length)return'<div class="comparison-report-empty">لا توجد تواريخ مبيعات قابلة للرسم في الفترتين.</div>';const max=Math.max(1,...days.flatMap(day=>[d.dailyRevenue.a[day]||0,d.dailyRevenue.b[day]||0])),width=760,height=260,left=42,right=20,top=20,bottom=45,plotW=width-left-right,plotH=height-top-bottom,step=plotW/Math.max(days.length,1);const pts=days.map((day,i)=>{const x=left+i*step+step/2,va=d.dailyRevenue.a[day]||0,vb=d.dailyRevenue.b[day]||0,ya=top+plotH-(va/max)*plotH,yb=top+plotH-(vb/max)*plotH;return`<line x1="${x}" y1="${top}" x2="${x}" y2="${top+plotH}" stroke="#eef1f5"/><circle cx="${x}" cy="${ya}" r="2.8" fill="#2c6ba4"/><circle cx="${x}" cy="${yb}" r="2.8" fill="#b8871c"/><text x="${x}" y="${height-15}" text-anchor="middle" class="chart-axis">${day}</text>`}).join('');const path=key=>days.map((day,i)=>{const x=left+i*step+step/2,y=top+plotH-((d.dailyRevenue[key][day]||0)/max)*plotH;return`${i?'L':'M'} ${x} ${y}`}).join(' ');return`<svg class="comparison-report-chart" viewBox="0 0 760 260"><line x1="${left}" y1="${top+plotH}" x2="${width-right}" y2="${top+plotH}" stroke="#cfd8e3"/>${pts}<path d="${path('a')}" fill="none" stroke="#2c6ba4" stroke-width="2.5"/><path d="${path('b')}" fill="none" stroke="#b8871c" stroke-width="2.5"/><text x="${width-right}" y="15" text-anchor="end" class="chart-legend">● A ${esc2(d.labels.a)}   ● B ${esc2(d.labels.b)}</text></svg>`}
 function comparisonPeriodInfo(key){
   const value=String(key||'');if(/^\d{4}-\d{2}$/.test(value)){const b=monthBounds2(value);return{to:b.to,label:monthLabel2(value)};}
   let m=value.match(/^Y-(\d{4})$/);if(m)return{to:`${m[1]}-12-31`,label:`سنة ${m[1]}`};
   m=value.match(/^Q-(\d{4})-Q([1-4])$/);if(m){const end=Number(m[2])*3,last=new Date(Number(m[1]),end,0).getDate();return{to:`${m[1]}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${m[2]} ${m[1]}`};}
-  m=value.match(/^D-(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2})$/);if(m)return{to:m[2],label:`${m[1]} إلى ${m[2]}`};
+  m=value.match(/^D-(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2})$/);if(m)return{to:m[2],label:`${cmpFmtDate(m[1])} إلى ${cmpFmtDate(m[2])}`};
   return null;
 }
 function comparisonDebtSummary(periodA,periodB){
@@ -4126,16 +4125,469 @@ function comparisonDebtSection(s){
   if(!s?.first||!s?.second)return '<div class="comparison-report-note">تعذر احتساب المديونية للفترتين المحددتين.</div>';
   const rows=s.rows.map(r=>`<tr><td>${esc2(r.name)}</td><td class="num">${money(r.a)}</td><td class="num">${money(r.b)}</td><td class="num">${money(r.b-r.a)}</td></tr>`).join('');
   return `<section><h3>المديونية حتى نهاية كل فترة</h3><div class="comparison-report-kpis"><div class="comparison-report-card"><label>${esc2(s.labelA)} — إجمالي المديونية</label><div>${money(s.first.total)} ريال · ${s.first.rows.length} عميل</div></div><div class="comparison-report-card"><label>${esc2(s.labelB)} — إجمالي المديونية</label><div>${money(s.second.total)} ريال · ${s.second.rows.length} عميل</div></div></div><div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>العميل</th><th>${esc2(s.labelA)}</th><th>${esc2(s.labelB)}</th><th>التغيّر</th></tr></thead><tbody>${rows||'<tr><td colspan="4">لا توجد مديونية في الفترتين.</td></tr>'}</tbody></table></div><div class="comparison-report-note">الأرصدة محسوبة عند نهاية كل فترة: الرصيد الحالي − المبيعات اللاحقة + التحصيلات اللاحقة. إجمالي المديونية الحالية الآن: ${money(s.second.currentTotal)} ريال. الجدول يعرض أعلى 10 عملاء حسب رصيد أي من الفترتين.</div></section>`;
-}function renderUI(d){const body=document.getElementById('reportBody');if(!body)return;const debtComparison=comparisonDebtSummary(C.state.periodA,C.state.periodB);const schemaMap=`<div class="comparison-report-schema"><b>مصدر البيانات:</b> ${esc2(d.source)}<span>Sales: إيرادات الكسارة</span><span>Expenses: مصروفات الكسارة</span><span>Customers: حقل اسم العميل</span><span>Load Types: حقل نوع التحميل</span><span>Payments/Receivables: محسوبة حتى نهاية الفترة</span></div>`;const rec=Object.entries(d.reconciliation).filter(([k])=>k!=='ok').map(([k,v])=>`<span class="${v?'good':'bad'}">${v?'✓':'✕'} ${k}</span>`).join('');const status=`<div class="comparison-report-recon"><b>Data Reconciliation:</b> ${d.reconciliation.ok?'PASS':'FAIL'} ${rec}</div>`;const kpiRows=[['الإيرادات',d.metrics.revenue,'money'],['المصروفات',d.metrics.expenses,'expense'],['صافي الربح / الخسارة',d.metrics.profit,'money'],['هامش الربح / الخسارة',d.metrics.profitMargin,'percent'],['عدد عمليات المبيعات',d.metrics.salesTransactions,'count'],['إجمالي الكمية',d.metrics.quantity,'quantity'],['متوسط قيمة عملية البيع',d.metrics.avgLoadValue,'money'],['العملاء النشطون',d.metrics.activeCustomers,'count']];body.innerHTML=`<div class="comparison-report comparison-report-ui"><div class="comparison-report-hero"><div><h2>تقرير المقارنات</h2><div>Comparison Report</div></div><span class="comparison-report-route">#/reports/comparison</span></div><div class="comparison-report-kpis">${kpiRows.map(([l,x,t])=>`<div class="comparison-report-card"><label>${l}</label><div class="comparison-report-pair"><span>${valueCell(x.previous,t)}</span><b>→</b><span>${valueCell(x.current,t)}</span></div><small>${esc2(d.labels.a)} → ${esc2(d.labels.b)} · ${pct2(x.percentage)}</small></div>`).join('')}</div>${schemaMap}${status}<section><h3>ملخص المقارنة</h3>${compareTable(d.metricRows)}</section><section><h3>الإيرادات والمصروفات والصافي</h3>${svgSummary(d)}</section><section><h3>الإيرادات اليومية حسب رقم اليوم</h3>${svgDaily(d)}</section><section><h3>تصنيفات المصروفات — UNION</h3>${compareTable(d.expenseCategories)}</section><section><h3>العملاء — الإيرادات</h3>${compareTable(d.customers)}</section><section><h3>العملاء — الكميات</h3>${compareTable(d.customerQuantities)}</section><section><h3>أنواع التحميل — الإيرادات</h3>${compareTable(d.loadTypes)}</section><section><h3>أنواع التحميل — الكميات</h3>${compareTable(d.loadTypeQuantities)}</section>${comparisonDebtSection(debtComparison)}</div>`}
-async function rawMonths(){try{const raw=await service.fetch();const months=uniqSorted([...raw.rev,...raw.exp].map(r=>localDateKey(r['التاريخ']).slice(0,7)).filter(x=>/^\d{4}-\d{2}$/.test(x)));C.state.rawMonths=months;return months}catch(e){return[]}}
+}
+/* ===== Comparison report v2: shared view helpers (screen + print) ===== */
+const CMP_BAD_UP=new Set(['المصروفات','نسبة المصروفات إلى الإيرادات','المصروف لكل وحدة كمية','متوسط المصروف اليومي']);
+const cmpFmtDate=s=>/^\d{4}-\d{2}-\d{2}$/.test(String(s||''))?String(s).split('-').reverse().join('/'):String(s||'');
+function cmpPeriodType(key){const k=String(key||'');return /^\d{4}-\d{2}$/.test(k)?'month':k.startsWith('Q-')?'quarter':k.startsWith('Y-')?'year':k.startsWith('D-')?'custom':'month'}
+const CMP_TYPE_LABEL={mtd:'من بداية الشهر حتى تاريخه مقابل نفس الأيام',yoy:'الشهر مقابل نفس الشهر من العام الماضي',month:'شهر مقابل شهر',quarter:'ربع مقابل ربع',year:'سنة مقابل سنة',custom:'فترة مقابل فترة'};
+function cmpVal(v,type){const t=type==='percent'?`${Number(v||0).toFixed(1)}%`:(type==='count'||type==='quantity')?qty2(v):money2(v);return Number(v)<0?`<span dir="ltr">${t}</span>`:t}
+/* Change badge: green when the move is good for the business, red when bad. Ratios change in points. */
+function cmpDelta(x,badUp,isPct){if(!x)return'<span class="amc-cmp-d flat">—</span>';const diff=Number(x.current||0)-Number(x.previous||0);if(Math.abs(diff)<0.005)return'<span class="amc-cmp-d flat">● دون تغيير</span>';if(!isPct&&!x.previous)return`<span class="amc-cmp-d ${badUp?'bad':'good'}">جديد</span>`;const up=diff>0,good=badUp?!up:up,txt=isPct?`${Math.abs(diff).toFixed(1)} نقطة`:`${Math.abs(diff/Math.abs(x.previous)*100).toFixed(1)}%`;return`<span class="amc-cmp-d ${good?'good':'bad'}">${up?'▲':'▼'} ${txt}</span>`}
+function enrichComparison(d,raw,ra,rb){
+  const col=raw.col||[],ac=col.filter(r=>inRange(r,ra.from,ra.to)),bc=col.filter(r=>inRange(r,rb.from,rb.to));
+  const cA=sum(ac,'المبلغ'),cB=sum(bc,'المبلغ'),rA=d.totals.revenueA,rB=d.totals.revenueB;
+  const mk=(p,c)=>{const diff=c-p;return{previous:p,current:c,difference:diff,percentage:p?diff/Math.abs(p)*100:null,status:Math.abs(diff)<0.005?'STABLE':diff>0?'INCREASE':'DECREASE'}};
+  d.metrics.collections=mk(cA,cB);d.metrics.collectionRate=mk(rA?cA/rA*100:0,rB?cB/rB*100:0);
+  if(!d.metricRows.some(r=>r.label==='التحصيلات'))d.metricRows.push({label:'التحصيلات',type:'money',...d.metrics.collections},{label:'معدل التحصيل إلى المبيعات',type:'percent',...d.metrics.collectionRate});
+  d.totals.collectionsA=cA;d.totals.collectionsB=cB;d.range={a:ra,b:rb};d.periodType=cmpPeriodType(d.monthA);
+  // Trend: by day number for short periods, by month order for quarters/years/long ranges.
+  const span=r=>Math.round((new Date(r.to+'T00:00:00')-new Date(r.from+'T00:00:00'))/86400000)+1,byMonth=Math.max(span(ra),span(rb))>31;
+  const names=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const series=(rows,r)=>{const o={};rows.forEach(x=>{const k=localDateKey(x['التاريخ']);if(!k)return;let i;if(byMonth){i=(+k.slice(0,4)-+r.from.slice(0,4))*12+(+k.slice(5,7)-+r.from.slice(5,7))+1}else i=+k.slice(8,10);o[i]=(o[i]||0)+n2(x['المبلغ'])});return o};
+  const lbl=(r,i)=>{const m=(+r.from.slice(5,7)-1+i-1)%12;return names[m]};
+  d.trend={byMonth,a:series(d.periods.a.rev,ra),b:series(d.periods.b.rev,rb),labelOf:i=>byMonth?`${lbl(ra,i)} / ${lbl(rb,i)}`:String(i)};
+  return d;
+}
+function cmpInsights(d){
+  const M=d.metrics,A=esc2(d.labels.a),B=esc2(d.labels.b),pts=[],pc=x=>x.previous?Math.abs(x.difference/x.previous*100).toFixed(1)+'%':'';
+  const mv=(name,x,badUp)=>{if(Math.abs(x.difference)<0.005)return`${name} دون تغيير عند <b>${money2(x.current)} ريال</b>.`;const up=x.difference>0,good=badUp?!up:up;return`${name} ${up?'ارتفعت':'انخفضت'} <b class="${good?'amc-cmp-good':'amc-cmp-bad'}">${pc(x)||money2(Math.abs(x.difference))+' ريال'}</b> من ${money2(x.previous)} إلى <b>${money2(x.current)} ريال</b>.`};
+  pts.push(mv('الإيرادات',M.revenue,false));pts.push(mv('المصروفات',M.expenses,true));
+  const p=M.profit,mg=M.profitMargin;pts.push(`صافي التشغيل ${p.current>=p.previous?'تحسن':'تراجع'} بمقدار <b class="${p.current>=p.previous?'amc-cmp-good':'amc-cmp-bad'}">${money2(Math.abs(p.difference))} ريال</b> إلى ${money2(p.current)} ريال، والهامش من ${mg.previous.toFixed(1)}% إلى <b>${mg.current.toFixed(1)}%</b>.`);
+  const cs=d.customers.filter(x=>Math.abs(x.difference)>0.005).slice().sort((x,y)=>y.difference-x.difference);
+  if(cs.length){const up=cs[0],dn=cs[cs.length-1];const parts=[];if(up.difference>0)parts.push(`أكبر نمو من العميل <b>${esc2(up.label)}</b> (+${money2(up.difference)} ريال)`);if(dn.difference<0)parts.push(`أكبر تراجع من <b>${esc2(dn.label)}</b> (−${money2(Math.abs(dn.difference))} ريال)`);if(parts.length)pts.push(parts.join('، و')+'.');}
+  const ec=d.expenseCategories.filter(x=>x.difference>0.005).sort((x,y)=>y.difference-x.difference)[0];
+  if(ec)pts.push(`أكبر زيادة في المصروفات من بند <b>${esc2(ec.label)}</b> (+${money2(ec.difference)} ريال${ec.previous?`، ${pc(ec)}`:''}).`);
+  if(M.collectionRate)pts.push(`التحصيل ${money2(M.collections.previous)} ← <b>${money2(M.collections.current)} ريال</b>، ومعدل التحصيل من ${M.collectionRate.previous.toFixed(1)}% إلى <b>${M.collectionRate.current.toFixed(1)}%</b>.`);
+  return pts.slice(0,6);
+}
+/* Grouped bars: A (light) vs B (solid) for revenue / expenses / net, single money axis incl. negatives. */
+function cmpSvgSummary(d){
+  const T=d.totals,g=[['الإيرادات',T.revenueA,T.revenueB],['المصروفات',T.expenseA,T.expenseB],['صافي التشغيل',T.profitA,T.profitB]];
+  const W=700,H=220,L=20,R=20,top=26,bot=36,vals=g.flatMap(x=>[x[1],x[2]]),mx=Math.max(1,...vals),mn=Math.min(0,...vals),y=v=>top+(mx-v)/(mx-mn)*(H-top-bot),slot=(W-L-R)/3,bw=Math.min(70,slot*.28);
+  const bar=(cx,v,c,lab)=>{const y0=y(0),y1=y(v),h=Math.max(1.5,Math.abs(y0-y1));return`<rect x="${(cx-bw/2).toFixed(1)}" y="${Math.min(y0,y1).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="4" fill="${c}"><title>${lab}</title></rect><text x="${cx.toFixed(1)}" y="${(v>=0?Math.min(y0,y1)-5:Math.max(y0,y1)+12).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#26303d" font-weight="700">${money2(v)}</text>`};
+  return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;direction:ltr;font-family:inherit" role="img" aria-label="الإيرادات والمصروفات والصافي للفترتين"><line x1="${L}" x2="${W-R}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#9aa4b2"/>${g.map((x,i)=>{const cx=W-R-slot*i-slot/2;return bar(cx+bw/2+3,x[1],'#9fb3c8',`${esc2(d.labels.a)} — ${x[0]}: ${money2(x[1])}`)+bar(cx-bw/2-3,x[2],'#17294d',`${esc2(d.labels.b)} — ${x[0]}: ${money2(x[2])}`)+`<text x="${cx.toFixed(1)}" y="${H-10}" text-anchor="middle" font-size="12" font-weight="800" fill="#17294d">${x[0]}</text>`}).join('')}</svg>${cmpLegend(d)}`;
+}
+function cmpLegend(d){return`<div class="amc-cmp-legend"><span><i style="background:#9fb3c8"></i>${esc2(d.labels.a)}</span><span><i style="background:#17294d"></i>${esc2(d.labels.b)}</span></div>`}
+function cmpSvgTrend(d){
+  const t=d.trend;if(!t)return'';const keys=[...new Set([...Object.keys(t.a),...Object.keys(t.b)].map(Number))].sort((x,y)=>x-y);if(!keys.length)return'<div class="amc-cmp-note">لا توجد مبيعات مسجلة في الفترتين.</div>';
+  const W=700,H=220,L=48,R=14,top=14,bot=34,mx=Math.max(1,...keys.flatMap(k=>[t.a[k]||0,t.b[k]||0])),n=keys.length,x=i=>n===1?(L+W-R)/2:W-R-(W-L-R)*i/(n-1),y=v=>top+(1-v/mx)*(H-top-bot);
+  const short=v=>v>=1e6?Number((v/1e6).toFixed(2))+'M':v>=1e3?Number((v/1e3).toFixed(1))+'K':v.toFixed(0);
+  const grid=[0,.25,.5,.75,1].map(f=>`<line x1="${L}" x2="${W-R}" y1="${y(mx*f).toFixed(1)}" y2="${y(mx*f).toFixed(1)}" stroke="${f?'#e3e7ee':'#9aa4b2'}"/><text x="${L-6}" y="${(y(mx*f)+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="#6b7686">${short(mx*f)}</text>`).join('');
+  const line=(s,c)=>`<polyline fill="none" stroke="${c}" stroke-width="2" points="${keys.map((k,i)=>`${x(i).toFixed(1)},${y(s[k]||0).toFixed(1)}`).join(' ')}"/>${keys.map((k,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(s[k]||0).toFixed(1)}" r="${n>20?2.5:4}" fill="${c}" stroke="#fff" stroke-width="1.5"><title>${t.labelOf(k)}: ${money2(s[k]||0)}</title></circle>`).join('')}`;
+  const every=Math.ceil(n/16);
+  return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;direction:ltr;font-family:inherit" role="img" aria-label="اتجاه الإيرادات للفترتين">${grid}${line(t.a,'#9fb3c8')}${line(t.b,'#17294d')}${keys.map((k,i)=>i%every?'':`<text x="${x(i).toFixed(1)}" y="${H-12}" text-anchor="middle" font-size="10" fill="#46505e">${esc2(t.labelOf(k))}</text>`).join('')}</svg>${cmpLegend(d)}`;
+}
+function cmpMergedRows(amounts,quantities){const q=new Map(quantities.map(x=>[x.label,x]));return amounts.map(x=>({label:x.label,a:x,q:q.get(x.label)||{previous:0,current:0,difference:0}}))}
+const CMP_CSS=`.amc-cmp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.amc-cmp-chip{display:inline-flex;gap:6px;align-items:center;border:1px solid #e3e7ee;background:#fafbfc;border-radius:999px;padding:5px 11px;font-size:12px}
+.amc-cmp-warn{background:#fff7e6;border:1px solid #f0d9a6;color:#6b4e0e;border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.7;margin:6px 0 10px}.amc-cmp-lead{font-size:13px;line-height:1.8;margin:4px 0 10px;color:#1f2733}.amc-cmp-names{font-size:.92em;line-height:1.6}
+.amc-cmp-d{display:inline-block;font-weight:800;white-space:nowrap;font-size:.92em}.amc-cmp-d.good,.amc-cmp-good{color:#1f9d68}.amc-cmp-d.bad,.amc-cmp-bad{color:#d9434f}.amc-cmp-d.flat{color:#8a94a3;font-weight:600}
+.amc-cmp-legend{display:flex;gap:16px;justify-content:center;font-size:11.5px;color:#46505e;margin-top:4px}.amc-cmp-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-left:5px;vertical-align:-1px}
+.amc-cmp-points{margin:0;padding:0 18px 0 0;display:grid;gap:6px;line-height:1.75;font-size:13px;color:#1f2733}.amc-cmp-points li::marker{color:#c99a2e;font-weight:800}
+.amc-cmp-note{font-size:11.5px;color:#6b7686;margin:6px 0}.amc-cmp-sub{display:block;margin-top:5px;font-size:12px;color:#6b7686}
+.amc-cmp-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.amc-cmp-bars{display:grid;gap:6px;margin:6px 0 10px}.amc-cmp-bar{display:grid;grid-template-columns:minmax(90px,28%) 1fr auto;gap:8px;align-items:center;font-size:12px}.amc-cmp-bar span{font-weight:700;color:#26303d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.amc-cmp-bar i{display:block;height:10px;background:#eef1f5;border-radius:5px;overflow:hidden}.amc-cmp-bar b{display:block;height:100%;border-radius:5px}.amc-cmp-bar em{font-style:normal;color:#46505e;white-space:nowrap}`;
+/* ---- Screen ---- */
+function cmpTile(label,x,type,badUp,cls){const isPct=type==='percent';return`<div class="report-kpi"><label>${label}</label><strong class="${cls||''}">${cmpVal(x.current,type)}</strong><span class="amc-cmp-sub">السابق: ${cmpVal(x.previous,type)} · ${cmpDelta(x,badUp,isPct)}</span></div>`}
+function cmpSummaryRows(d,cls){return d.metricRows.map(r=>{const bad=CMP_BAD_UP.has(r.label),isPct=r.type==='percent';return`<tr><td>${esc2(r.label)}</td><td>${cmpVal(r.previous,r.type)}</td><td>${cmpVal(r.current,r.type)}</td><td>${isPct?(r.difference>=0?'+':'−')+Math.abs(r.difference).toFixed(1)+' نقطة':cmpVal(r.difference,r.type)}</td><td>${cmpDelta(r,bad,isPct)}</td></tr>`})}
+function cmpUnionRows(rows,type,badUp,totA,totB,label){const out=rows.map((r,i)=>`<tr data-k="${esc2(r.label)}"><td>${i+1}</td><td>${esc2(r.label)}</td><td>${cmpVal(r.previous,type)}</td><td>${cmpVal(r.current,type)}</td><td>${cmpVal(r.difference,type)}</td><td>${cmpDelta(r,badUp,false)}</td><td>${Number(r.shareA||0).toFixed(1)}%</td><td>${Number(r.shareB||0).toFixed(1)}%</td></tr>`);if(rows.length)out.push(`<tr class="total"><td></td><td>${label||'الإجمالي'}</td><td>${cmpVal(totA,type)}</td><td>${cmpVal(totB,type)}</td><td>${cmpVal(totB-totA,type)}</td><td>${cmpDelta({previous:totA,current:totB},badUp,false)}</td><td>100.0%</td><td>100.0%</td></tr>`);return out}
+function cmpMergedTableRows(d,amounts,quantities){const T=d.totals,out=cmpMergedRows(amounts,quantities).map((r,i)=>`<tr data-k="${esc2(r.label)}"><td>${i+1}</td><td>${esc2(r.label)}</td><td>${money2(r.a.previous)}</td><td>${money2(r.a.current)}</td><td>${cmpDelta(r.a,false,false)}</td><td>${qty2(r.q.previous)}</td><td>${qty2(r.q.current)}</td><td>${cmpDelta(r.q,false,false)}</td></tr>`);if(out.length)out.push(`<tr class="total"><td></td><td>الإجمالي</td><td>${money2(T.revenueA)}</td><td>${money2(T.revenueB)}</td><td>${cmpDelta({previous:T.revenueA,current:T.revenueB},false,false)}</td><td>${qty2(T.quantityA)}</td><td>${qty2(T.quantityB)}</td><td>${cmpDelta({previous:T.quantityA,current:T.quantityB},false,false)}</td></tr>`);return out}
+function cmpDebtRows(s){const out=s.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc2(r.name)}</td><td>${money2(r.a)}</td><td>${money2(r.b)}</td><td>${cmpDelta({previous:r.a,current:r.b},true,false)}</td></tr>`);out.push(`<tr class="total"><td></td><td>إجمالي مديونية كل العملاء</td><td>${money2(s.first.total)}</td><td>${money2(s.second.total)}</td><td>${cmpDelta({previous:s.first.total,current:s.second.total},true,false)}</td></tr>`);return out}
+function cmpHeads(d){const A=esc2(d.labels.a),B=esc2(d.labels.b);return{sum:['المؤشر',A,B,'الفرق','التغير'],union:n=>['#',n,A,B,'الفرق','التغير',`الحصة ${A}`,`الحصة ${B}`],merged:n=>['#',n,`الإيرادات ${A}`,`الإيرادات ${B}`,'التغير',`الكمية ${A}`,`الكمية ${B}`,'التغير'],debt:['#','العميل',`نهاية ${A}`,`نهاية ${B}`,'التغير']}}
+function cmpRangeText(d){return d.range?`${esc2(d.labels.a)} (${cmpFmtDate(d.range.a.from)} — ${cmpFmtDate(d.range.a.to)}) مقابل ${esc2(d.labels.b)} (${cmpFmtDate(d.range.b.from)} — ${cmpFmtDate(d.range.b.to)})`:`${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}`}
+function renderUI(d){
+  const body=document.getElementById('reportBody');if(!body)return;
+  C.state.view={kind:'periods',d};if(C.state.threshold==null)C.state.threshold=15;
+  const M=d.metrics,H=cmpHeads(d),debt=comparisonDebtSummary(C.state.periodA,C.state.periodB),T=d.totals,p=cmpPVM(d),f=cmpFairness(d),moves=cmpCustMoves(d);
+  const tiles=`<div class="report-kpis">${[cmpTile('الإيرادات',M.revenue,'money',false,'green'),cmpTile('المصروفات',M.expenses,'money',true,'red'),cmpTile('صافي التشغيل',M.profit,'money',false,M.profit.current>=0?'green':'red'),cmpTile('هامش التشغيل',M.profitMargin,'percent',false),cmpTile('إجمالي الكمية',M.quantity,'quantity',false),cmpTile('متوسط قيمة عملية البيع',M.avgLoadValue,'money',false),cmpTile('التحصيلات',M.collections,'money',false,'green'),cmpTile('معدل التحصيل إلى المبيعات',M.collectionRate,'percent',false)].join('')}</div>`;
+  const hl=card('أبرز التغيرات',`<div class="amc-cmp-in"><label class="amc-cmp-th">إظهار التغيرات بنسبة <input type="number" id="cmpThreshold" min="1" max="500" value="${C.state.threshold}">% أو أكثر</label><div id="cmpHighlights">${cmpHighlightsHtml(d,C.state.threshold)}</div></div>`);
+  const pvm=card('أسباب تغير الإيراد',`<div class="amc-cmp-in">${p?`<p class="amc-cmp-lead">${cmpPVMText(p)}</p>${table(['العامل','المعنى','الأثر (ريال)','من التغير'],cmpPVMRows(p))}<h4 style="margin:14px 0 6px">سعر الرد حسب نوع التحميل</h4><div data-dim="type">${table(['#','نوع التحميل',`الكمية ${esc2(d.labels.a)}`,`الكمية ${esc2(d.labels.b)}`,`سعر الرد ${esc2(d.labels.a)}`,`سعر الرد ${esc2(d.labels.b)}`,'تغير السعر','أثر السعر'],cmpPriceRows(p))}</div>`:`<div class="amc-cmp-note">${cmpPVMText(p)}</div>`}</div>`);
+  body.innerHTML=`<style id="amc-cmp-screen-style">${CMP_CSS}${CMP_SCREEN_CSS}${CMP_Q_CSS}</style><div class="amc-cmp-screen">${cmpToolbar(`${cmpRangeText(d)} — ${CMP_TYPE_LABEL[d.periodType]||''}`)}${d.quarter?'':cmpFairnessNote(f,d)}${tiles}${d.quarter?cmpQuarterScreen(d):''}
+    ${hl}
+    ${d.quarter?'':card('خلاصة الفروق',`<div class="amc-cmp-in"><ol class="amc-cmp-points">${cmpInsights(d).map(x=>`<li>${x}</li>`).join('')}</ol></div>`)}
+    ${card('ملخص المقارنة',`<div class="amc-cmp-in">${table(H.sum,cmpSummaryRows(d))}</div>`)}
+    ${f.unequal?card('المقارنة بالمتوسط اليومي',`<div class="amc-cmp-in">${table(['المؤشر',esc2(d.labels.a),esc2(d.labels.b),'التغير'],f.rows)}</div>`):''}
+    ${card('الرسوم البيانية',`<div class="amc-cmp-in amc-cmp-two"><div><h4 style="margin:6px 0">الإيرادات والمصروفات والصافي</h4>${cmpSvgSummary(d)}</div><div><h4 style="margin:6px 0">${d.trend?.byMonth?'الإيرادات حسب ترتيب الشهر':'الإيرادات اليومية حسب رقم اليوم'}</h4>${cmpSvgTrend(d)}</div></div>`)}
+    ${pvm}
+    ${card('جسر صافي التشغيل',`<div class="amc-cmp-in"><p class="amc-cmp-note">كيف تحرك الصافي من ${esc2(d.labels.a)} إلى ${esc2(d.labels.b)}: أثر تغير الإيرادات ثم أثر تغير كل بند مصروفات.</p>${cmpSvgBridge(d)}</div>`)}
+    ${card('حركة العملاء',`<div class="amc-cmp-in">${table(['المجموعة','العدد','أثرها على الإيراد','أبرز العملاء'],cmpMoveRows(moves))}</div>`)}
+    ${card('تصنيفات المصروفات',`<div class="amc-cmp-in" data-dim="cat">${table(H.union('التصنيف'),cmpUnionRows(d.expenseCategories,'money',true,T.expenseA,T.expenseB))}<div class="amc-cmp-note">اضغط على أي تصنيف لعرض حركاته في الفترتين.</div></div>`)}
+    ${card('العملاء — الإيرادات والكميات',`<div class="amc-cmp-in" data-dim="cust">${table(H.merged('العميل'),cmpMergedTableRows(d,d.customers,d.customerQuantities))}<div class="amc-cmp-note">اضغط على أي عميل لعرض حركاته في الفترتين.</div></div>`)}
+    ${card('أنواع التحميل — الإيرادات والكميات',`<div class="amc-cmp-in" data-dim="type">${table(H.merged('نوع التحميل'),cmpMergedTableRows(d,d.loadTypes,d.loadTypeQuantities))}</div>`)}
+    ${card('التحصيل والمديونية',`<div class="amc-cmp-in">${table(['البند',esc2(d.labels.a),esc2(d.labels.b),'التغير'],[`<tr><td>التحصيلات</td><td>${money2(M.collections.previous)}</td><td>${money2(M.collections.current)}</td><td>${cmpDelta(M.collections,false,false)}</td></tr>`,`<tr><td>معدل التحصيل إلى المبيعات</td><td>${M.collectionRate.previous.toFixed(1)}%</td><td>${M.collectionRate.current.toFixed(1)}%</td><td>${cmpDelta(M.collectionRate,false,true)}</td></tr>`,`<tr><td>المديونية في نهاية الفترة</td><td>${money2(debt.first.total)}</td><td>${money2(debt.second.total)}</td><td>${cmpDelta({previous:debt.first.total,current:debt.second.total},true,false)}</td></tr>`])}<h4 style="margin:14px 0 6px">أعلى 10 عملاء مديونية</h4>${table(H.debt,cmpDebtRows(debt))}<div class="amc-cmp-note">المديونية محسوبة عند نهاية كل فترة: الرصيد الحالي − المبيعات اللاحقة + التحصيلات اللاحقة.</div></div>`)}
+  </div>`;
+  cmpBindToolbar();if(d.quarter)cmpBindQuarter(d);
+  document.getElementById('cmpThreshold')?.addEventListener('input',e=>{const v=Number(e.target.value);if(v>0){C.state.threshold=v;const box=document.getElementById('cmpHighlights');if(box)box.innerHTML=cmpHighlightsHtml(d,v)}});
+  body.querySelector('.amc-cmp-screen')?.addEventListener('click',e=>{
+    if(e.target.closest('[data-cmp-close]')){e.target.closest('.amc-cmp-detail')?.remove();return}
+    const tr=e.target.closest('tr[data-k]'),wrap=tr?.closest('[data-dim]');if(!tr||!wrap)return;
+    body.querySelectorAll('.amc-cmp-detail').forEach(x=>x.remove());
+    const host=wrap.closest('.report-card');host.insertAdjacentHTML('afterend',cmpDetailHtml(d,wrap.dataset.dim,tr.dataset.k));
+    host.nextElementSibling?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+}
+/* ---- Print (uses the shared report engine page/header/footer so it matches the other reports) ---- */
+function buildPdf(){
+  const v=C.state.view||(C.state.data?.metrics?.collections?{kind:'periods',d:C.state.data}:null),U=window.AMCReportEngine?.ui;
+  if(!v)throw new Error('لم تكتمل بيانات المقارنة بعد. أنشئ المقارنة ثم اضغط طباعة.');
+  if(!U)throw new Error('محرك الطباعة غير متاح حاليًا.');
+  const title='تقرير المقارنات';let period,coverRows,first,blocks=[],Q=null;
+  const sec=t=>`<h2 class="amc-report-section-title">${t}</h2>`,tbl=(h,rows,cls='')=>`<div class="amc-cmp-tbl ${cls}">${U.table(h,rows)}</div>`;
+  const kp=(label,x,type,badUp,cls)=>`<div class="amc-report-kpi ${cls||'navy'}"><label>${label}</label><strong>${cmpVal(x.current,type)}</strong><small>السابق: ${cmpVal(x.previous,type)} · ${cmpDelta(x,badUp,type==='percent')}</small></div>`;
+  const tableBlock=(heading,head,rows,cls)=>({heading,head,rows,cls});
+  if(v.kind==='periods'){
+    const d=v.d,M=d.metrics,H=cmpHeads(d),T=d.totals,debt=comparisonDebtSummary(C.state.periodA,C.state.periodB);
+    period=`${d.labels.a} مقابل ${d.labels.b}`;
+    coverRows=[['الفترة الأولى',`${d.labels.a}${d.range?` (${cmpFmtDate(d.range.a.from)} — ${cmpFmtDate(d.range.a.to)})`:''}`],['الفترة الثانية',`${d.labels.b}${d.range?` (${cmpFmtDate(d.range.b.from)} — ${cmpFmtDate(d.range.b.to)})`:''}`],['نوع المقارنة',CMP_TYPE_LABEL[d.periodType]||'مقارنة فترات']];
+    first=`<h1 class="amc-report-title">ملخص المقارنة</h1><p class="amc-report-subtitle">${cmpRangeText(d)}</p>
+      <div class="amc-report-kpis">${kp('الإيرادات',M.revenue,'money',false,'green')}${kp('المصروفات',M.expenses,'money',true,'red')}${kp('صافي التشغيل',M.profit,'money',false,M.profit.current>=0?'green':'red')}${kp('هامش التشغيل',M.profitMargin,'percent',false,'gold')}${kp('إجمالي الكمية',M.quantity,'quantity',false,'navy')}${kp('متوسط قيمة عملية البيع',M.avgLoadValue,'money',false,'gold')}${kp('التحصيلات',M.collections,'money',false,'green')}${kp('معدل التحصيل',M.collectionRate,'percent',false,'gold')}</div>
+      ${sec('خلاصة الفروق')}<ol class="amc-cmp-points">${cmpInsights(d).map(x=>`<li>${x}</li>`).join('')}</ol>`;
+    const p=cmpPVM(d),f=cmpFairness(d),th=C.state.threshold||15;
+    blocks.push({heading:`أبرز التغيرات (${th}% أو أكثر)`,html:cmpFairnessNote(f,d)+cmpHighlightsHtml(d,th),h:36});
+    blocks.push(tableBlock('ملخص المؤشرات',H.sum,cmpSummaryRows(d)));
+    if(f.unequal)blocks.push(tableBlock('المقارنة بالمتوسط اليومي',['المؤشر',esc2(d.labels.a),esc2(d.labels.b),'التغير'],f.rows));
+    blocks.push({heading:'الرسوم البيانية',html:`<div class="amc-cmp-two"><div><b class="amc-cmp-ch">الإيرادات والمصروفات والصافي</b>${cmpSvgSummary(d)}</div><div><b class="amc-cmp-ch">${d.trend?.byMonth?'الإيرادات حسب ترتيب الشهر':'الإيرادات اليومية حسب رقم اليوم'}</b>${cmpSvgTrend(d)}</div></div>`,h:80});
+    if(p){blocks.push({heading:'أسباب تغير الإيراد',html:`<p class="amc-cmp-lead">${cmpPVMText(p)}</p>`,h:16});blocks.push(tableBlock('أثر الكمية والسعر والمزيج',['العامل','المعنى','الأثر (ريال)','من التغير'],cmpPVMRows(p)));blocks.push(tableBlock('سعر الرد حسب نوع التحميل',['#','نوع التحميل',`الكمية ${esc2(d.labels.a)}`,`الكمية ${esc2(d.labels.b)}`,`سعر ${esc2(d.labels.a)}`,`سعر ${esc2(d.labels.b)}`,'تغير السعر','أثر السعر'],cmpPriceRows(p)))}
+    blocks.push({heading:'جسر صافي التشغيل',html:cmpSvgBridge(d),h:92});
+    blocks.push(Object.assign(tableBlock('حركة العملاء',['المجموعة','العدد','أثرها على الإيراد','أبرز العملاء'],cmpMoveRows(cmpCustMoves(d)),'moves'),{rowH:10}));
+    blocks.push(tableBlock('تصنيفات المصروفات',H.union('التصنيف'),cmpUnionRows(d.expenseCategories,'money',true,T.expenseA,T.expenseB)));
+    blocks.push(tableBlock('العملاء — الإيرادات والكميات',H.merged('العميل'),cmpMergedTableRows(d,d.customers,d.customerQuantities)));
+    blocks.push(tableBlock('أنواع التحميل — الإيرادات والكميات',H.merged('نوع التحميل'),cmpMergedTableRows(d,d.loadTypes,d.loadTypeQuantities)));
+    blocks.push(tableBlock('التحصيل والمديونية',['البند',esc2(d.labels.a),esc2(d.labels.b),'التغير'],[`<tr><td>التحصيلات</td><td class="num">${money2(M.collections.previous)}</td><td class="num">${money2(M.collections.current)}</td><td>${cmpDelta(M.collections,false,false)}</td></tr>`,`<tr><td>معدل التحصيل إلى المبيعات</td><td class="num">${M.collectionRate.previous.toFixed(1)}%</td><td class="num">${M.collectionRate.current.toFixed(1)}%</td><td>${cmpDelta(M.collectionRate,false,true)}</td></tr>`,`<tr><td>المديونية في نهاية الفترة</td><td class="num">${money2(debt.first.total)}</td><td class="num">${money2(debt.second.total)}</td><td>${cmpDelta({previous:debt.first.total,current:debt.second.total},true,false)}</td></tr>`]));
+    blocks.push(tableBlock('أعلى 10 عملاء مديونية',H.debt,cmpDebtRows(debt)));
+    if(d.quarter){Q=cmpQuarterPrint(d,sec,tableBlock);blocks=Q.blocks.concat(blocks);coverRows[2]=['نوع المقارنة','مقارنة ربع سنوية'+(d.quarter.partial?' (ربع غير مكتمل)':'')];if(d.quarter.sY)coverRows.push(['المقارنة الإضافية',d.quarter.labelY])}
+  }else{
+    period=v.period;coverRows=[['الفترة',v.period],['نوع المقارنة',v.title],...(v.items?[['العناصر',v.items.join('، ')]]:[])];
+    first=`<h1 class="amc-report-title">${esc2(v.title)}</h1><p class="amc-report-subtitle">${esc2(v.period)}</p>${v.chart||''}`;
+    blocks.push(tableBlock(v.title,v.head,v.rows,'wide'));
+  }
+  // Flow blocks into A4 pages (heights in mm, conservative).
+  const CAP=232,ROW=5.9,HEAD=17,pages=[];let cur=first,used=v.kind==='periods'?138:v.chartH?v.chartH+30:(v.chart?40+((v.items||[]).length*7):30);
+  const flush=()=>{pages.push(cur);cur='';used=0};
+  blocks.forEach(b=>{
+    if(b.html){if(used+b.h+9>CAP)flush();cur+=sec(b.heading)+b.html;used+=b.h+9;return}
+    let rows=b.rows.slice(),part=0;
+    const RH=b.rowH||ROW,full=Math.floor((CAP-HEAD)/RH);if(rows.length<=full&&used+HEAD+rows.length*RH>CAP&&used>0)flush();
+    while(rows.length){let room=Math.floor((CAP-used-HEAD)/RH);if(room<Math.min(4,rows.length)){flush();room=Math.floor((CAP-HEAD)/RH)}const take=rows.splice(0,room);cur+=sec(b.heading+(part?' (تابع)':''))+tbl(b.head,take,b.cls);used+=HEAD+take.length*RH;part++;if(rows.length)flush()}
+  });
+  if(cur)pages.push(cur);
+  if(Q)pages.unshift(Q.summary);
+  const total=pages.length+1,style=`<style id="amc-cmp-print-style">${CMP_CSS}${CMP_Q_CSS}
+    .amc-cmp-print .amc-q-ring{width:24mm;height:24mm;border-width:5px}.amc-cmp-print .amc-q-score{margin:0}.amc-cmp-print .amc-q-recs{font-size:11.5px;gap:3px;line-height:1.65}
+    .amc-cmp-print .amc-report-kpi small{display:block}.amc-cmp-print .amc-cmp-points{font-size:11.5px;gap:3px;line-height:1.65}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table th,.amc-cmp-print .amc-cmp-tbl .amc-report-table td{text-align:center!important;white-space:nowrap!important}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table td:nth-child(2){text-align:right!important;white-space:normal!important}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table tr.total td{font-weight:800;background:#f4f6f9}
+    .amc-cmp-print .amc-cmp-tbl.wide .amc-report-table td:first-child{text-align:right!important}
+    .amc-cmp-print .amc-cmp-two{gap:4mm}.amc-cmp-print .amc-cmp-ch{display:block;font-size:10.5px;color:#17294d;margin-bottom:1mm}
+    .amc-cmp-print .amc-report-table tr{break-inside:avoid}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table td{font-size:9.5px!important;padding:1.05mm 1.4mm!important;line-height:1.3!important}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table th{font-size:9px!important;padding:1.1mm 1.2mm!important;line-height:1.3!important}
+    .amc-cmp-print .amc-cmp-tbl .amc-report-table td .amc-cmp-d{font-size:9px}
+    .amc-cmp-print .amc-cmp-tbl.moves .amc-report-table td{white-space:normal!important;text-align:right!important}
+    .amc-cmp-print .amc-cmp-chips{gap:2mm}.amc-cmp-print .amc-cmp-chip{font-size:9.5px;padding:1mm 2.2mm}.amc-cmp-print .amc-cmp-warn,.amc-cmp-print .amc-cmp-lead{font-size:10.5px}
+    .amc-cmp-cover .amc-report-info-row{font-size:15px!important}</style>`;
+  const cover=`<section class="amc-report-page amc-cmp-cover">${style}<div class="amc-report-cover"><img class="amc-report-cover-logo" src="${U.logoSrc()}" alt=""><h1>${title}</h1><div class="en">Comparison Report</div><div class="amc-report-info"><div class="amc-report-info-row"><b>المنشأة / الكسارة</b><strong>كسارة العساف للمعادن</strong></div>${coverRows.map(r=>`<div class="amc-report-info-row"><b>${esc2(r[0])}</b><strong>${esc2(r[1])}</strong></div>`).join('')}<div class="amc-report-info-row"><b>تاريخ الإصدار</b><strong>${U.formatDate(new Date())}</strong></div><div class="amc-report-info-row"><b>إعداد</b><strong>أ. محمد فوزي</strong></div><div class="amc-report-info-row"><b>مراجعة</b><strong>أ. أحمد عيد</strong></div></div></div></section>`;
+  return cover+pages.map((c,i)=>U.page(`<div class="amc-cmp-print">${c}</div>`,title,period,i+2,total)).join('');
+}
+
+/* ---- Stage 2 analysis: price/volume/mix, net bridge, customer movement, alerts, details, Excel ---- */
+function cmpPVM(d){
+  const T=d.totals,QA=T.quantityA,QB=T.quantityB,RA=T.revenueA,RB=T.revenueB;if(!QA||!QB)return null;
+  const q=new Map(d.loadTypeQuantities.map(x=>[x.label,x]));
+  const types=d.loadTypes.map(x=>{const qq=q.get(x.label)||{previous:0,current:0},qa=qq.previous,qb=qq.current,ra=x.previous,rb=x.current,pa=qa?ra/qa:(qb?rb/qb:0),pb=qb?rb/qb:pa;return{label:x.label,qa,qb,ra,rb,pa,pb,priceEff:qa&&qb?qb*(pb-pa):0,isNew:!qa&&qb>0,isLost:qa>0&&!qb}});
+  const avgA=RA/QA,volume=(QB-QA)*avgA,mix=types.reduce((s,t)=>s+(t.qb-QB*t.qa/QA)*t.pa,0),price=types.reduce((s,t)=>s+t.priceEff,0),total=RB-RA;
+  return{volume,mix,price,other:total-volume-mix-price,total,types,avgA,avgB:RB/QB};
+}
+function cmpPVMText(p){if(!p)return'لا يمكن تحليل أسباب التغير لعدم وجود كميات في إحدى الفترتين.';const s=v=>`${v>=0?'+':'−'}${money2(Math.abs(v))}`;return`تغيّر الإيراد <b>${s(p.total)} ريال</b>: منها <b>${s(p.volume)}</b> بسبب تغير الكمية، و<b>${s(p.price)}</b> بسبب تغير الأسعار، و<b>${s(p.mix)}</b> بسبب تغير مزيج أنواع التحميل${Math.abs(p.other)>=0.5?`، و${s(p.other)} فروق أخرى (حركات بلا كمية)`:''}.`}
+function cmpPVMRows(p){const s=v=>`<span class="${v>=0?'amc-cmp-good':'amc-cmp-bad'}" dir="ltr">${v>=0?'+':'−'}${money2(Math.abs(v))}</span>`;const rows=[['أثر الكمية','تغير عدد الردود بسعر الفترة الأولى',p.volume],['أثر السعر','تغير سعر الرد لكل نوع تحميل',p.price],['أثر المزيج','تغير نسب أنواع التحميل المباعة',p.mix]];if(Math.abs(p.other)>=0.5)rows.push(['فروق أخرى','حركات بدون كمية',p.other]);return[...rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${s(r[2])}</td><td>${p.total?(r[2]/Math.abs(p.total)*100).toFixed(1)+'%':'—'}</td></tr>`),`<tr class="total"><td>إجمالي تغير الإيراد</td><td></td><td>${s(p.total)}</td><td>${p.total?'100.0%':'—'}</td></tr>`]}
+function cmpPriceRows(p){return p.types.map((t,i)=>{const ch=t.pa&&t.qa&&t.qb?(t.pb-t.pa)/t.pa*100:null;return`<tr data-k="${esc2(t.label)}"><td>${i+1}</td><td>${esc2(t.label)}${t.isNew?' <small class="amc-cmp-good">(جديد)</small>':t.isLost?' <small class="amc-cmp-bad">(توقف)</small>':''}</td><td>${qty2(t.qa)}</td><td>${qty2(t.qb)}</td><td>${t.qa?money2(t.pa):'—'}</td><td>${t.qb?money2(t.pb):'—'}</td><td>${ch==null?'—':cmpDelta({previous:t.pa,current:t.pb},false,false)}</td><td>${t.priceEff?`<span dir="ltr" class="${t.priceEff>=0?'amc-cmp-good':'amc-cmp-bad'}">${t.priceEff>=0?'+':'−'}${money2(Math.abs(t.priceEff))}</span>`:'—'}</td></tr>`})}
+function cmpCustMoves(d){const g={new:[],lost:[],up:[],down:[],same:[]};d.customers.forEach(c=>{const k=!c.previous&&c.current?'new':c.previous&&!c.current?'lost':c.difference>0.005?'up':c.difference<-0.005?'down':'same';g[k].push(c)});Object.values(g).forEach(a=>a.sort((x,y)=>Math.abs(y.difference)-Math.abs(x.difference)));return g}
+const CMP_MOVE_LABELS=[['new','عملاء جدد','اشتروا في الفترة الثانية فقط'],['lost','عملاء توقفوا','اشتروا في الفترة الأولى فقط'],['up','عملاء نما شراؤهم',''],['down','عملاء تراجع شراؤهم',''],['same','دون تغيير','']];
+function cmpMoveRows(g){return CMP_MOVE_LABELS.filter(([k])=>g[k].length).map(([k,l,hint])=>{const list=g[k],diff=list.reduce((s,c)=>s+c.difference,0),cls=diff>0.005?'amc-cmp-good':diff<-0.005?'amc-cmp-bad':'';return`<tr><td>${l}${hint?`<small style="display:block;color:#8a94a3">${hint}</small>`:''}</td><td>${qty2(list.length)}</td><td><span dir="ltr" class="${cls}">${diff>=0?'+':'−'}${money2(Math.abs(diff))}</span></td><td class="amc-cmp-names">${list.slice(0,4).map(c=>`${esc2(c.label)} (<span dir="ltr">${c.difference>=0?'+':'−'}${money2(Math.abs(c.difference))}</span>)`).join('، ')}${list.length>4?` و${list.length-4} آخرين`:''}</td></tr>`})}
+/* Net bridge (waterfall): net A → revenue change → each expense-category change → net B. */
+function cmpSvgBridge(d){
+  const T=d.totals,cats=d.expenseCategories.filter(c=>Math.abs(c.difference)>0.005).slice().sort((a,b)=>Math.abs(b.difference)-Math.abs(a.difference)),top=cats.slice(0,6),rest=cats.slice(6).reduce((s,c)=>s+c.difference,0);
+  const steps=[{l:`صافي ${d.labels.a}`,v:T.profitA,t:1},{l:'تغير الإيرادات',v:T.revenueB-T.revenueA},...top.map(c=>({l:c.label,v:-c.difference})),...(Math.abs(rest)>0.005?[{l:'مصروفات أخرى',v:-rest}]:[]),{l:`صافي ${d.labels.b}`,v:T.profitB,t:1}];
+  let run=0;const bars=steps.map(s=>{if(s.t){run=s.v;return{...s,y0:0,y1:s.v}}const y0=run;run+=s.v;return{...s,y0,y1:run}});
+  const vals=bars.flatMap(b=>[b.y0,b.y1]),mx=Math.max(1,...vals),mn=Math.min(0,...vals),W=700,H=240,L=14,R=14,top_=24,bot=46,y=v=>top_+(mx-v)/(mx-mn)*(H-top_-bot),n=bars.length,slot=(W-L-R)/n,bw=Math.min(54,slot*.62);
+  const lines=s=>{const w=String(s).split(' '),out=[''];w.forEach(x=>{const c=out[out.length-1];if(c&&(c+' '+x).length>12&&out.length<2)out.push(x);else out[out.length-1]=c?c+' '+x:x});return out.map(l=>l.length>14?l.slice(0,13)+'…':l)};
+  return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;direction:ltr;font-family:inherit" role="img" aria-label="جسر صافي التشغيل"><line x1="${L}" x2="${W-R}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#9aa4b2"/>${bars.map((b,i)=>{const cx=W-R-slot*i-slot/2,ya=y(Math.max(b.y0,b.y1)),yb=y(Math.min(b.y0,b.y1)),h=Math.max(1.5,yb-ya),c=b.t?'#17294d':b.v>=0?'#1f9d68':'#d9434f',lab=b.t?money2(b.v):`${b.v>=0?'+':'−'}${money2(Math.abs(b.v))}`;const nx=i<n-1?`<line x1="${(cx-bw/2).toFixed(1)}" x2="${(cx-slot+bw/2).toFixed(1)}" y1="${y(b.y1).toFixed(1)}" y2="${y(b.y1).toFixed(1)}" stroke="#9aa4b2" stroke-dasharray="3 3"/>`:'';return`<rect x="${(cx-bw/2).toFixed(1)}" y="${ya.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${c}"><title>${esc2(b.l)}: ${lab}</title></rect>${nx}<text x="${cx.toFixed(1)}" y="${(ya-5).toFixed(1)}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#26303d">${lab}</text><text x="${cx.toFixed(1)}" y="${H-30}" text-anchor="middle" font-size="10" fill="#46505e">${lines(b.l).map((l,k)=>`<tspan x="${cx.toFixed(1)}" dy="${k?12:0}">${esc2(l)}</tspan>`).join('')}</text>`}).join('')}</svg><div class="amc-cmp-legend"><span><i style="background:#17294d"></i>صافي الفترة</span><span><i style="background:#1f9d68"></i>رفع الصافي</span><span><i style="background:#d9434f"></i>خفّض الصافي</span></div>`;
+}
+/* 11) biggest moves above a threshold */
+function cmpHighlights(d,th){
+  const out=[];d.metricRows.forEach(r=>{const isPct=r.type==='percent',bad=CMP_BAD_UP.has(r.label);const mag=isPct?Math.abs(r.difference)*5:(r.previous?Math.abs(r.difference/r.previous*100):(r.current?999:0));if(mag>=th&&Math.abs(r.difference)>0.005)out.push({l:r.label,html:cmpDelta(r,bad,isPct),mag})});
+  const big=(list,tot,bad,pref)=>list.forEach(x=>{const share=Math.max(x.shareA||0,x.shareB||0);if(share<5||Math.abs(x.difference)<0.005)return;const mag=x.previous?Math.abs(x.difference/x.previous*100):999;if(mag>=th)out.push({l:`${pref}${x.label}`,html:cmpDelta(x,bad,false),mag:mag-1})});
+  big(d.customers,d.totals.revenueA,false,'العميل ');big(d.expenseCategories,d.totals.expenseA,true,'بند ');
+  return out.sort((a,b)=>b.mag-a.mag).slice(0,10);
+}
+function cmpHighlightsHtml(d,th){const h=cmpHighlights(d,th);return h.length?`<div class="amc-cmp-chips">${h.map(x=>`<span class="amc-cmp-chip"><b>${esc2(x.l)}</b> ${x.html}</span>`).join('')}</div>`:`<div class="amc-cmp-note">لا توجد تغيرات بنسبة ${th}% أو أكثر.</div>`}
+/* 12) unequal periods */
+function cmpFairness(d){
+  const span=r=>r?Math.round((new Date(r.to+'T00:00:00')-new Date(r.from+'T00:00:00'))/86400000)+1:0,sa=span(d.range?.a),sb=span(d.range?.b),da=d.metrics.activeDays.previous,db=d.metrics.activeDays.current;
+  const diff=(x,y)=>Math.max(x,y)?Math.abs(x-y)/Math.max(x,y):0,unequal=diff(sa,sb)>0.1||diff(da,db)>0.15;
+  const T=d.totals,per=(v,n)=>n?v/n:0,mk=(p,c)=>({previous:p,current:c,difference:c-p});
+  const rows=[['متوسط الإيراد لكل يوم تشغيل',mk(per(T.revenueA,da),per(T.revenueB,db)),false],['متوسط الإيراد لكل يوم تقويمي',mk(per(T.revenueA,sa),per(T.revenueB,sb)),false],['متوسط المصروف لكل يوم تقويمي',mk(per(T.expenseA,sa),per(T.expenseB,sb)),true],['متوسط الصافي لكل يوم تقويمي',mk(per(T.profitA,sa),per(T.profitB,sb)),false],['متوسط الكمية لكل يوم تشغيل',mk(per(T.quantityA,da),per(T.quantityB,db)),false,'quantity']];
+  return{unequal,sa,sb,da,db,rows:rows.map(([l,x,bad,t])=>`<tr><td>${l}</td><td>${cmpVal(x.previous,t||'money')}</td><td>${cmpVal(x.current,t||'money')}</td><td>${cmpDelta(x,bad,false)}</td></tr>`)};
+}
+function cmpFairnessNote(f,d){return f.unequal?`<div class="amc-cmp-warn"><b>تنبيه: المقارنة غير متكافئة.</b> ${esc2(d.labels.a)}: ${f.sa} يومًا منها ${f.da} يوم تشغيل، و${esc2(d.labels.b)}: ${f.sb} يومًا منها ${f.db} يوم تشغيل. الأدق مقارنة المتوسط اليومي في الجدول أدناه.</div>`:`<div class="amc-cmp-note">الفترتان متكافئتان: ${f.sa} مقابل ${f.sb} يومًا، و${f.da} مقابل ${f.db} يوم تشغيل.</div>`}
+/* 9) row details */
+function cmpDetailHtml(d,dim,key){
+  const field=dim==='cust'?'اسم العميل':dim==='type'?'نوع التحميل':'التصنيف',src=dim==='cat'?'exp':'rev';
+  const pick=p=>(d.periods[p][src]||[]).filter(r=>(String(r[field]??'').trim()||'غير مصنف')===key).sort((a,b)=>localDateKey(a['التاريخ']).localeCompare(localDateKey(b['التاريخ'])));
+  const head=dim==='cat'?['التاريخ','البيان','المبلغ']:['التاريخ',dim==='cust'?'نوع التحميل':'العميل','الكمية','المبلغ'];
+  const rowsOf=list=>{const r=list.map(x=>dim==='cat'?`<tr><td>${cmpFmtDate(localDateKey(x['التاريخ']))}</td><td>${esc2(x['البيان']||'—')}</td><td>${money2(n2(x['المبلغ']))}</td></tr>`:`<tr><td>${cmpFmtDate(localDateKey(x['التاريخ']))}</td><td>${esc2(x[dim==='cust'?'نوع التحميل':'اسم العميل']||'—')}</td><td>${qty2(n2(x['الكمية']))}</td><td>${money2(n2(x['المبلغ']))}</td></tr>`);r.push(dim==='cat'?`<tr class="total"><td></td><td>الإجمالي (${list.length} حركة)</td><td>${money2(sum(list,'المبلغ'))}</td></tr>`:`<tr class="total"><td></td><td>الإجمالي (${list.length} حركة)</td><td>${qty2(sum(list,'الكمية'))}</td><td>${money2(sum(list,'المبلغ'))}</td></tr>`);return r};
+  const A=pick('a'),B=pick('b');
+  return`<div class="report-card amc-cmp-detail"><h3>تفاصيل: ${esc2(key)} <button type="button" class="comparison-back" data-cmp-close style="margin-inline-start:10px">إغلاق</button></h3><div class="amc-cmp-in amc-cmp-two"><div><h4 style="margin:6px 0">${esc2(d.labels.a)}</h4>${A.length?table(head,rowsOf(A)):'<div class="amc-cmp-note">لا توجد حركات.</div>'}</div><div><h4 style="margin:6px 0">${esc2(d.labels.b)}</h4>${B.length?table(head,rowsOf(B)):'<div class="amc-cmp-note">لا توجد حركات.</div>'}</div></div></div>`;
+}
+/* 10) Excel export of the comparison on screen */
+function cmpExportXlsx(){
+  const X=window.AMCXlsx;if(!X)return;const v=C.state.view;if(!v)return;
+  const N=n=>({n:Number(n)||0,s:2}),P=n=>n==null?'':{n:Math.round(Number(n)*10)/10,s:2},sheets=[];
+  if(v.kind==='periods'){
+    const d=v.d,A=d.labels.a,B=d.labels.b,pc=x=>x.previous?P(x.difference/Math.abs(x.previous)*100):'';
+    sheets.push({name:'ملخص المقارنة',head:['المؤشر',A,B,'الفرق','التغير %'],rows:d.metricRows.map(r=>[r.label,N(r.previous),N(r.current),N(r.difference),r.type==='percent'?'':pc(r)])});
+    const p=cmpPVM(d);if(p)sheets.push({name:'أسباب تغير الإيراد',head:['العامل','القيمة (ريال)'],rows:[['أثر الكمية',N(p.volume)],['أثر السعر',N(p.price)],['أثر المزيج',N(p.mix)],['فروق أخرى',N(p.other)],['الإجمالي',N(p.total)]]});
+    if(p)sheets.push({name:'سعر الرد حسب النوع',head:['نوع التحميل',`الكمية ${A}`,`الكمية ${B}`,`سعر الرد ${A}`,`سعر الرد ${B}`,'أثر السعر'],rows:p.types.map(t=>[t.label,N(t.qa),N(t.qb),N(t.qa?t.pa:0),N(t.qb?t.pb:0),N(t.priceEff)])});
+    const g=cmpCustMoves(d),ml=Object.fromEntries(CMP_MOVE_LABELS.map(x=>[x[0],x[1]]));
+    sheets.push({name:'العملاء',head:['العميل','الحالة',`الإيرادات ${A}`,`الإيرادات ${B}`,'الفرق','التغير %'],rows:Object.entries(g).flatMap(([k,list])=>list.map(c=>[c.label,ml[k],N(c.previous),N(c.current),N(c.difference),pc(c)]))});
+    const q=new Map(d.loadTypeQuantities.map(x=>[x.label,x]));
+    sheets.push({name:'أنواع التحميل',head:['نوع التحميل',`الإيرادات ${A}`,`الإيرادات ${B}`,'الفرق',`الكمية ${A}`,`الكمية ${B}`],rows:d.loadTypes.map(t=>[t.label,N(t.previous),N(t.current),N(t.difference),N(q.get(t.label)?.previous),N(q.get(t.label)?.current)])});
+    sheets.push({name:'تصنيفات المصروفات',head:['التصنيف',A,B,'الفرق','التغير %'],rows:d.expenseCategories.map(c=>[c.label,N(c.previous),N(c.current),N(c.difference),pc(c)])});
+  }else if(v.sheet)sheets.push(v.sheet);
+  if(!sheets.length)return;
+  X.download(X.build(sheets),`comparison-${String(v.kind==='periods'?`${v.d.monthA}_vs_${v.d.monthB}`:v.period).replace(/[^\w؀-ۿ-]+/g,'_')}.xlsx`);
+}
+/* 7) multi-month trend */
+const CMP_METRIC_LABELS={revenue:'الإيرادات',expenses:'المصروفات',profit:'صافي الربح / الخسارة',profitMargin:'هامش الربح / الخسارة',salesTransactions:'عدد عمليات المبيعات',quantity:'إجمالي الكمية',avgLoadValue:'متوسط قيمة العملية',revenuePerQuantity:'الإيراد لكل وحدة كمية',expensePerQuantity:'المصروف لكل وحدة كمية',profitPerQuantity:'الربح لكل وحدة كمية',activeCustomers:'العملاء النشطون',collections:'التحصيلات'};
+function cmpMonthValues(raw,month){const R=monthBounds2(month),ar=raw.rev.filter(r=>inRange(r,R.from,R.to)),ae=raw.exp.filter(r=>inRange(r,R.from,R.to)),ac=(raw.col||[]).filter(r=>inRange(r,R.from,R.to));const revenue=sum(ar,'المبلغ'),expenses=sum(ae,'المبلغ'),quantity=sum(ar,'الكمية'),loads=ar.length;return{period:monthLabel2(month),short:monthLabel2(month).split(' ')[0],empty:!ar.length&&!ae.length,values:{revenue,expenses,profit:revenue-expenses,profitMargin:revenue?(revenue-expenses)/revenue*100:0,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,expensePerQuantity:quantity?expenses/quantity:0,profitPerQuantity:quantity?(revenue-expenses)/quantity:0,activeCustomers:new Set(ar.map(r=>String(r['اسم العميل']??'').trim()).filter(Boolean)).size,collections:sum(ac,'المبلغ')}}}
+function cmpSvgMulti(rows){
+  const S=[['revenue','الإيرادات','#1f9d68'],['expenses','المصروفات','#d9434f'],['profit','صافي التشغيل','#17294d']],n=rows.length;if(n<2)return'';
+  const W=700,H=230,L=52,R=14,top=14,bot=34,vals=rows.flatMap(r=>S.map(s=>r.values[s[0]])),mx=Math.max(1,...vals),mn=Math.min(0,...vals),x=i=>W-R-(W-L-R)*i/(n-1),y=v=>top+(mx-v)/(mx-mn)*(H-top-bot);
+  const short=v=>{const a=Math.abs(v);return(v<0?'-':'')+(a>=1e6?Number((a/1e6).toFixed(2))+'M':a>=1e3?Number((a/1e3).toFixed(1))+'K':a.toFixed(0))};
+  const grid=[0,.25,.5,.75,1].map(f=>{const v=mn+(mx-mn)*f;return`<line x1="${L}" x2="${W-R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#e3e7ee"/><text x="${L-6}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="#6b7686">${short(v)}</text>`}).join('');
+  return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;direction:ltr;font-family:inherit" role="img" aria-label="اتجاه الإيرادات والمصروفات والصافي">${grid}${mn<0?`<line x1="${L}" x2="${W-R}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#9aa4b2"/>`:''}${S.map(s=>`<polyline fill="none" stroke="${s[2]}" stroke-width="2" points="${rows.map((r,i)=>`${x(i).toFixed(1)},${y(r.values[s[0]]).toFixed(1)}`).join(' ')}"/>${rows.map((r,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(r.values[s[0]]).toFixed(1)}" r="3.5" fill="${s[2]}" stroke="#fff" stroke-width="1.5"><title>${r.period} — ${s[1]}: ${money2(r.values[s[0]])}</title></circle>`).join('')}`).join('')}${rows.map((r,i)=>`<text x="${x(i).toFixed(1)}" y="${H-12}" text-anchor="middle" font-size="10" fill="#46505e">${esc2(r.short)}</text>`).join('')}</svg><div class="amc-cmp-legend">${S.map(s=>`<span><i style="background:${s[2]}"></i>${s[1]}</span>`).join('')}</div>`;
+}
+function cmpRenderMetrics(raw,periods,metricsSelected,title){
+  const body=document.getElementById('reportBody');if(!body)return;
+  const rows=periods.map(m=>cmpMonthValues(raw,m)).filter(r=>!r.empty);if(rows.length<2)throw new Error('لا توجد بيانات كافية في الأشهر المختارة.');
+  const mType=k=>k==='profitMargin'?'percent':['salesTransactions','activeCustomers','activeDays'].includes(k)?'count':k==='quantity'?'quantity':'money';
+  const head=['الفترة',...metricsSelected.map(k=>CMP_METRIC_LABELS[k]||k)];
+  const html=rows.map((r,ri)=>`<tr><td>${esc2(r.period)}</td>${metricsSelected.map(k=>{const prev=ri?rows[ri-1].values[k]:null,bad=['expenses','expensePerQuantity'].includes(k);return`<td class="num">${cmpVal(r.values[k],mType(k))}${prev==null?'':' '+cmpDelta({previous:prev,current:r.values[k]},bad,mType(k)==='percent')}</td>`}).join('')}</tr>`);
+  const avg=k=>rows.reduce((s,r)=>s+r.values[k],0)/rows.length;html.push(`<tr class="total"><td>المتوسط الشهري</td>${metricsSelected.map(k=>`<td class="num">${cmpVal(avg(k),mType(k))}</td>`).join('')}</tr>`);
+  const period=`${rows[0].period} — ${rows[rows.length-1].period}`,chart=cmpSvgMulti(rows);
+  C.state.view={kind:'metrics',title:title||'مقارنة المؤشرات',period,head,rows:html,chart:`<h2 class="amc-report-section-title">الاتجاه الشهري</h2>${chart}`,chartH:72,sheet:{name:'مقارنة المؤشرات',head,rows:rows.map(r=>[r.period,...metricsSelected.map(k=>({n:Math.round(r.values[k]*100)/100,s:2}))])}};
+  body.innerHTML=`<style id="amc-cmp-screen-style">${CMP_CSS}${CMP_SCREEN_CSS}</style><div class="amc-cmp-screen">${cmpToolbar(period)}${card(title||'مقارنة المؤشرات',`<div class="amc-cmp-in">${chart}${table(head,html)}<div class="amc-cmp-note">السهم يقارن كل شهر بالشهر الذي قبله.</div></div>`)}</div>`;
+  cmpBindToolbar();
+}
+const CMP_SCREEN_CSS=`.amc-cmp-in{padding:2px 14px 14px}.amc-cmp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}#reportBody .amc-cmp-screen .report-card{margin-bottom:14px}@media(max-width:800px){.amc-cmp-two{grid-template-columns:1fr}}
+.amc-cmp-screen tr[data-k]{cursor:pointer}.amc-cmp-screen tr[data-k]:hover td{background:#f3f7fb}.amc-cmp-th{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#46505e}.amc-cmp-th input{width:62px;padding:4px 6px;border:1px solid #d6dde6;border-radius:8px}`;
+function cmpToolbar(text){return`<div class="amc-cmp-toolbar"><button type="button" class="comparison-back" id="comparisonRestart">مقارنة جديدة</button><button type="button" class="comparison-back" id="comparisonXlsx">تصدير Excel</button><span class="amc-cmp-note">${text}</span></div>`}
+function cmpBindToolbar(){document.getElementById('comparisonRestart')?.addEventListener('click',()=>renderComparison());document.getElementById('comparisonXlsx')?.addEventListener('click',cmpExportXlsx)}
+/* 5/6/7/8) one-click comparisons */
+function cmpBindPresets(raw,months){
+  const msg=t=>{const el=document.getElementById('cmpPresetMsg');if(el){el.textContent=t||'';el.className='comparison-validation'+(t?' error':'')}};
+  const lastDate=raw.rev.map(r=>localDateKey(r['التاريخ'])).filter(Boolean).sort().pop()||'',lastM=lastDate.slice(0,7);
+  const shiftM=(m,k)=>{let[y,mo]=m.split('-').map(Number);mo+=k;while(mo<1){mo+=12;y--}while(mo>12){mo-=12;y++}return`${y}-${String(mo).padStart(2,'0')}`};
+  const run=async key=>{
+    if(!lastM)throw new Error('لا توجد مبيعات مسجلة.');
+    const y=+lastM.slice(0,4),m=+lastM.slice(5,7);
+    if(key==='mom')return renderUI(await service.build(shiftM(lastM,-1),lastM));
+    if(key==='yoy'){const d=await service.build(shiftM(lastM,-12),lastM);d.periodType='yoy';return renderUI(d)}
+    if(key==='mtd'){const day=+lastDate.slice(8,10),pm=shiftM(lastM,-1),pl=+monthBounds2(pm).to.slice(8,10),da=Math.min(day,pl),pad=n=>String(n).padStart(2,'0'),fa=`${pm}-01`,ta=`${pm}-${pad(da)}`,fb=`${lastM}-01`,tb=lastDate;const d=await service.buildRange(fa,ta,`${monthLabel2(pm)} (1–${da})`,fb,tb,`${monthLabel2(lastM)} (1–${day})`,`D-${fa}_${ta}`,`D-${fb}_${tb}`);d.periodType='mtd';return renderUI(d)}
+    if(key==='qoq')return cmpOpenQuarter(raw,`${y}-Q${Math.ceil(m/3)}`);
+    if(key==='year')return renderUI(await service.buildPeriods('year',String(y-1),String(y)));
+    if(key==='last6'||key==='last12'){const n=key==='last6'?6:12,list=[];for(let i=n-1;i>=0;i--)list.push(shiftM(lastM,-i));return cmpRenderMetrics(raw,list.filter(x=>months.includes(x)),['revenue','expenses','profit','profitMargin','quantity','collections'],`اتجاه آخر ${n===6?'6 أشهر':'12 شهرًا'}`)}
+  };
+  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',async()=>{msg('');try{await run(b.dataset.preset)}catch(e){msg(e.message)}}));
+}
+
+/* ===== Quarterly comparison (stage 3) ===== */
+const cmpISO=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const cmpAddDays=(iso,n)=>{const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return cmpISO(d)};
+const cmpSpan=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000)+1;
+const cmpClamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function cmpQRange(y,q){const s=(q-1)*3+1,e=q*3;return{from:`${y}-${String(s).padStart(2,'0')}-01`,to:`${y}-${String(e).padStart(2,'0')}-${String(new Date(y,e,0).getDate()).padStart(2,'0')}`}}
+const cmpQPrev=(y,q)=>q===1?[y-1,4]:[y,q-1];
+const cmpQLabel=(y,q)=>`الربع ${q} ${y}`;
+function cmpLastDate(raw){return raw.rev.concat(raw.exp).map(r=>localDateKey(r['التاريخ'])).filter(Boolean).sort().pop()||''}
+function cmpStats(raw,from,to){
+  const ar=raw.rev.filter(r=>inRange(r,from,to)),ae=raw.exp.filter(r=>inRange(r,from,to)),ac=(raw.col||[]).filter(r=>inRange(r,from,to));
+  const revenue=sum(ar,'المبلغ'),expenses=sum(ae,'المبلغ'),qty=sum(ar,'الكمية'),collections=sum(ac,'المبلغ'),days=new Set(ar.map(r=>localDateKey(r['التاريخ'])).filter(Boolean)).size;
+  return{from,to,ar,ae,ac,empty:!ar.length&&!ae.length,revenue,expenses,net:revenue-expenses,margin:revenue?(revenue-expenses)/revenue*100:0,qty,avgPrice:qty?revenue/qty:0,costPerUnit:qty?expenses/qty:0,collections,collRate:revenue?collections/revenue*100:0,activeDays:days,customers:new Set(ar.map(r=>String(r['اسم العميل']??'').trim()).filter(Boolean)).size,loads:ar.length};
+}
+/* FIFO aging of each customer's balance at a date (unpaid balance attributed to the latest sales). */
+function cmpAging(raw,asOf){
+  const snap=receivablesAtDate(mfData(),asOf),key=n=>normalizeCustomerKey(String(n??'').trim()).replace(/^ال/,''),sales={};
+  raw.rev.forEach(r=>{const d=localDateKey(r['التاريخ']);if(!d||d>asOf)return;(sales[key(r['اسم العميل'])]??=[]).push({d,a:n2(r['المبلغ'])})});
+  const b={b30:0,b60:0,b90:0};
+  snap.rows.forEach(r=>{if(!(r.debt>0))return;let left=r.debt;(sales[r.key]||[]).sort((x,y)=>y.d.localeCompare(x.d)).forEach(s=>{if(left<=0.005)return;const t=Math.min(left,s.a);if(t<=0)return;const age=cmpSpan(s.d,asOf)-1;b[age<=30?'b30':age<=60?'b60':'b90']+=t;left-=t});if(left>0.005)b.b90+=left});
+  return{total:snap.total,count:snap.rows.length,...b};
+}
+function cmpWeeks(st){
+  const w={};st.ar.forEach(r=>{const k=localDateKey(r['التاريخ']);if(!k)return;const d=new Date(k+'T00:00:00'),start=cmpAddDays(k,-((d.getDay()+1)%7));(w[start]??={start,revenue:0,qty:0}).revenue+=n2(r['المبلغ']);w[start].qty+=n2(r['الكمية'])});
+  const list=Object.values(w).sort((a,b)=>a.start.localeCompare(b.start));list.forEach(x=>{const e=cmpAddDays(x.start,6);x.from=x.start<st.from?st.from:x.start;x.to=e>st.to?st.to:e;x.full=cmpSpan(x.from,x.to)===7});const pool=list.some(x=>x.full)?list.filter(x=>x.full):list;
+  const daily={};st.ar.forEach(r=>{const k=localDateKey(r['التاريخ']);if(k)daily[k]=(daily[k]||0)+n2(r['المبلغ'])});
+  const vals=Object.values(daily),mean=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0,sd=vals.length?Math.sqrt(vals.reduce((a,v)=>a+(v-mean)**2,0)/vals.length):0,top5=vals.slice().sort((a,b)=>b-a).slice(0,5).reduce((a,b)=>a+b,0);
+  const best=pool.slice().sort((a,b)=>b.revenue-a.revenue)[0],worst=pool.slice().sort((a,b)=>a.revenue-b.revenue)[0];
+  return{list,best,worst,cv:mean?sd/mean:0,top5Share:st.revenue?top5/st.revenue*100:0,avgDay:mean};
+}
+function cmpLoyalty(st,qFrom){
+  const m0=+qFrom.slice(5,7),c={};st.ar.forEach(r=>{const k=localDateKey(r['التاريخ']),n=String(r['اسم العميل']??'').trim();if(!k||!n)return;(c[n]??=new Set()).add(+k.slice(5,7)-m0)});
+  const cnt=[0,0,0,0];Object.values(c).forEach(s=>cnt[s.size]++);return{all3:cnt[3],two:cnt[2],one:cnt[1],total:Object.keys(c).length};
+}
+function cmpQuarterExtras(raw,y,q,R,partial,lastDate){
+  const [py,pq]=cmpQPrev(y,q),A=R.a,B=R.b,Y=R.y;
+  const sB=cmpStats(raw,B.from,B.to),sA=cmpStats(raw,A.from,A.to),sY=Y?cmpStats(raw,Y.from,Y.to):null;
+  const qB=cmpQRange(y,q),qA=cmpQRange(py,pq),qDays=cmpSpan(qB.from,qB.to),elapsed=cmpSpan(B.from,B.to);
+  // months 1..3 of each quarter (cut at the compared range end)
+  const monthOf=(qr,cut,i)=>{const m=+qr.from.slice(5,7)+i,yy=qr.from.slice(0,4),mm=`${yy}-${String(m).padStart(2,'0')}`,b=monthBounds2(mm);const to=b.to<cut?b.to:cut;return b.from>cut?null:{label:monthLabel2(mm),...cmpStats(raw,b.from,to)}};
+  const months=[0,1,2].map(i=>({a:monthOf(qA,A.to,i),b:monthOf(qB,B.to,i)}));
+  // trend: last 8 quarters ending at the selected one
+  const trend=[];let ty=y,tq=q;for(let i=0;i<8;i++){const r=cmpQRange(ty,tq),to=r.to>lastDate?lastDate:r.to;if(r.from<=lastDate){const s=cmpStats(raw,r.from,to);if(!s.empty)trend.unshift({period:cmpQLabel(ty,tq)+(to<r.to?' (جزئي)':''),short:`ر${tq} ${String(ty).slice(2)}`,values:{revenue:s.revenue,expenses:s.expenses,profit:s.net,margin:s.margin,qty:s.qty}})}[ty,tq]=cmpQPrev(ty,tq)}
+  // projection for an incomplete quarter
+  const proj=partial?{factor:qDays/elapsed,elapsed,qDays,remaining:qDays-elapsed,full:cmpStats(raw,qA.from,qA.to)}:null;
+  // score (0-100)
+  const g=sA.revenue?(sB.revenue-sA.revenue)/sA.revenue*100:0,u=sA.costPerUnit?(sB.costPerUnit-sA.costPerUnit)/sA.costPerUnit*100:0;
+  const parts=[['نمو الإيراد عن الربع السابق',`${g>=0?'+':''}${g.toFixed(1)}%`,cmpClamp((g+10)/20,0,1)*25],['هامش التشغيل',`${sB.margin.toFixed(1)}%`,cmpClamp(sB.margin/40,0,1)*25],['معدل التحصيل',`${sB.collRate.toFixed(1)}%`,cmpClamp((sB.collRate-50)/45,0,1)*25],['تغير تكلفة الرد',`${u>=0?'+':''}${u.toFixed(1)}%`,cmpClamp((15-u)/20,0,1)*25]];
+  const score=Math.round(parts.reduce((s,p)=>s+p[2],0)),rating=score>=80?'ممتاز':score>=60?'جيد':'يحتاج متابعة';
+  const agingB=cmpAging(raw,B.to),agingA=cmpAging(raw,A.to);
+  const dso=(ag,st)=>{const days=cmpSpan(st.from,st.to);return st.revenue?ag.total/(st.revenue/days):null};
+  return{y,q,key:`${y}-Q${q}`,labelB:cmpQLabel(y,q),labelA:cmpQLabel(py,pq),labelY:cmpQLabel(y-1,q),partial,lastDate,sA,sB,sY:sY&&!sY.empty?sY:null,months,trend,proj,score,rating,parts,wA:cmpWeeks(sA),wB:cmpWeeks(sB),lA:cmpLoyalty(sA,qA.from),lB:cmpLoyalty(sB,qB.from),agingA,agingB,dsoA:dso(agingA,sA),dsoB:dso(agingB,sB),qDays,elapsed};
+}
+async function cmpOpenQuarter(raw,key){
+  const m=String(key).match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('ربع غير صالح.');const y=+m[1],q=+m[2],[py,pq]=cmpQPrev(y,q);
+  const lastDate=cmpLastDate(raw),qB=cmpQRange(y,q);if(!lastDate||qB.from>lastDate)throw new Error('لا توجد بيانات لهذا الربع.');
+  const partial=lastDate<qB.to,n=cmpSpan(qB.from,partial?lastDate:qB.to),cutEnd=(r)=>{const e=cmpAddDays(r.from,n-1);return e<r.to?e:r.to};
+  const qA=cmpQRange(py,pq),qY=cmpQRange(y-1,q),B={from:qB.from,to:partial?lastDate:qB.to},A={from:qA.from,to:partial?cutEnd(qA):qA.to},Y={from:qY.from,to:partial?cutEnd(qY):qY.to};
+  const suffix=partial?` (أول ${n} يومًا)`:'';
+  const d=await service.buildRange(A.from,A.to,cmpQLabel(py,pq)+suffix,B.from,B.to,cmpQLabel(y,q)+suffix,partial?`D-${A.from}_${A.to}`:`Q-${py}-Q${pq}`,partial?`D-${B.from}_${B.to}`:`Q-${y}-Q${q}`);
+  d.periodType='quarter';d.quarter=cmpQuarterExtras(raw,y,q,{a:A,b:B,y:Y},partial,lastDate);
+  renderUI(d);
+}
+/* 12) quarter picker */
+function cmpQuarterPicker(raw){
+  const last=cmpLastDate(raw);if(!last)return'<div class="comparison-validation error">لا توجد بيانات.</div>';
+  const first=raw.rev.concat(raw.exp).map(r=>localDateKey(r['التاريخ'])).filter(Boolean).sort()[0],years=[];for(let y=+first.slice(0,4);y<=+last.slice(0,4);y++)years.push(y);
+  const curQ=`${last.slice(0,4)}-Q${Math.ceil(+last.slice(5,7)/3)}`;
+  return`<div class="comparison-flow-head"><div><span class="comparison-eyebrow">المقارنة الربع سنوية</span><h3>اختر الربع</h3><p>يقارن الربع المختار بالربع السابق وبنفس الربع من العام الماضي، مع تقرير ربعي كامل.</p></div><button type="button" class="comparison-back" id="comparisonBack">تغيير نوع المقارنة</button></div><div class="amc-qpick">${years.reverse().map(y=>`<div class="amc-qrow"><b>${y}</b>${[1,2,3,4].map(q=>{const r=cmpQRange(y,q),k=`${y}-Q${q}`,dis=r.from>last||r.to<first;return`<button type="button" class="amc-qbtn${k===curQ?' cur':''}" data-q="${k}"${dis?' disabled':''}>الربع ${q}${k===curQ?'<small>الحالي</small>':''}</button>`}).join('')}</div>`).join('')}</div><div class="comparison-validation" id="cmpQMsg"></div><style>.amc-qpick{display:grid;gap:10px;margin:10px 0}.amc-qrow{display:grid;grid-template-columns:70px repeat(4,1fr);gap:8px;align-items:center}.amc-qrow b{color:#17294d;font-size:15px}.amc-qbtn{border:1px solid #d6dde6;background:#fff;border-radius:12px;padding:12px 8px;font:inherit;font-weight:800;color:#17294d;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}.amc-qbtn:hover:not([disabled]){border-color:#c99a2e;background:#fffaf0}.amc-qbtn.cur{border-color:#c99a2e;box-shadow:0 0 0 2px rgba(201,154,46,.25)}.amc-qbtn small{font-size:10.5px;color:#c99a2e}.amc-qbtn[disabled]{opacity:.35;cursor:not-allowed}#cmpQMsg:empty{display:none}</style>`;
+}
+function cmpBindQuarterPicker(raw,flow){
+  flow.querySelectorAll('.amc-qbtn[data-q]').forEach(b=>b.addEventListener('click',async()=>{const m=document.getElementById('cmpQMsg');if(m){m.textContent='جاري التحضير…';m.className='comparison-validation'}try{await cmpOpenQuarter(raw,b.dataset.q)}catch(e){if(m){m.textContent=e.message;m.className='comparison-validation error'}}}));
+  document.getElementById('comparisonBack')?.addEventListener('click',()=>{flow.innerHTML='';document.querySelectorAll('.comparison-mode-card').forEach(x=>x.classList.remove('selected'))});
+}
+/* ---- quarterly sections (shared by screen & print) ---- */
+function cmpQTargets(key){try{return JSON.parse(localStorage.getItem('amc_q_target_'+key)||'{}')||{}}catch(e){return{}}}
+function cmpQSaveTargets(key,t){try{localStorage.setItem('amc_q_target_'+key,JSON.stringify(t))}catch(e){}}
+function cmpQ(d){
+  const X=d.quarter,sA=X.sA,sB=X.sB,sY=X.sY,A=esc2(X.labelA),B=esc2(X.labelB),dl=(p,c,bad,pts)=>cmpDelta({previous:p,current:c},bad,pts),out={};
+  // 5) score
+  out.score=`<div class="amc-q-score"><div class="amc-q-ring ${X.score>=80?'good':X.score>=60?'mid':'bad'}"><strong>${X.score}</strong><span>من 100</span></div><div><div class="amc-q-rating">${X.rating}</div><div class="amc-cmp-note">تجمع الدرجة أربعة عناصر، لكل منها 25 درجة.</div></div></div>`;
+  out.scoreRows=X.parts.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td><td>${p[2].toFixed(1)} / 25</td></tr>`).concat(`<tr class="total"><td>الدرجة الكلية</td><td>${X.rating}</td><td>${X.score} / 100</td></tr>`);
+  // 11) quarterly points + recommendations
+  const pc=(p,c)=>p?`${c>=p?'▲':'▼'} ${Math.abs((c-p)/p*100).toFixed(1)}%`:'—',bestM=X.months.map(m=>m.b).filter(Boolean).sort((a,b)=>b.net-a.net)[0];
+  const pts=[`إيرادات ${B} بلغت <b>${money2(sB.revenue)} ريال</b> (${pc(sA.revenue,sB.revenue)} عن ${A}${sY?`، و${pc(sY.revenue,sB.revenue)} عن ${esc2(X.labelY)}`:''}).`,
+    `صافي التشغيل <b>${money2(sB.net)} ريال</b> بهامش <b>${sB.margin.toFixed(1)}%</b> مقابل ${sA.margin.toFixed(1)}% في ${A}.`,
+    bestM?`أفضل شهر في الربع <b>${esc2(bestM.label)}</b> بصافي ${money2(bestM.net)} ريال.`:'',
+    `${X.lB.all3} من ${X.lB.total} عميلًا اشتروا في كل أشهر الربع، و${X.lB.one} اشتروا في شهر واحد فقط.`,
+    `التحصيل ${sB.collRate.toFixed(1)}% من المبيعات، والمديونية في نهاية الفترة ${money2(X.agingB.total)} ريال منها ${money2(X.agingB.b90)} أقدم من 60 يومًا.`].filter(Boolean);
+  const recs=[];
+  if(sB.revenue<sA.revenue)recs.push(`معالجة تراجع الإيراد عن ${A} بالتركيز على العملاء الذين تراجع شراؤهم.`);
+  if(X.agingB.total&&X.agingB.b90/X.agingB.total>0.3)recs.push(`جدولة تحصيل الديون الأقدم من 60 يومًا (${money2(X.agingB.b90)} ريال) خلال الربع القادم.`);
+  if(sB.collRate<90)recs.push(`رفع معدل التحصيل من ${sB.collRate.toFixed(1)}% إلى 90% على الأقل.`);
+  if(sA.costPerUnit&&sB.costPerUnit>sA.costPerUnit*1.05)recs.push(`ضبط تكلفة الرد التي ارتفعت من ${money2(sA.costPerUnit)} إلى ${money2(sB.costPerUnit)} ريال.`);
+  if(X.lB.total&&X.lB.one/X.lB.total>0.4)recs.push(`تحويل العملاء المتقطعين (${X.lB.one} عميلًا) إلى عملاء منتظمين بعروض شهرية.`);
+  if(X.wB.top5Share>40)recs.push(`المبيعات متركزة: أعلى 5 أيام تمثل ${X.wB.top5Share.toFixed(1)}% من إيراد الربع؛ يلزم توزيع أكثر انتظامًا.`);
+  if(recs.length<3)recs.push(`الحفاظ على وتيرة الربع ومتابعة المؤشرات أسبوعيًا مقابل أهداف الربع القادم.`);
+  out.points=pts;out.recs=recs.slice(0,5);
+  // 2) projection
+  if(X.proj){const P=X.proj,f=P.factor,F=P.full;out.projNote=`<div class="amc-cmp-warn"><b>الربع غير مكتمل:</b> مضى ${P.elapsed} يومًا من ${P.qDays} (حتى ${cmpFmtDate(X.lastDate)}). المقارنة أعلاه مع نفس عدد الأيام من ${A}، والتقدير لنهاية الربع محسوب بالمعدل اليومي الحالي.</div>`;
+    out.projRows=[['الإيرادات',sB.revenue,F.revenue,false],['المصروفات',sB.expenses,F.expenses,true],['صافي التشغيل',sB.net,F.net,false],['الكمية (رد)',sB.qty,F.qty,false,'quantity'],['التحصيلات',sB.collections,F.collections,false]].map(([l,v,full,bad,t])=>`<tr><td>${l}</td><td>${cmpVal(v,t||'money')}</td><td><b>${cmpVal(v*f,t||'money')}</b></td><td>${cmpVal(full,t||'money')}</td><td>${dl(full,v*f,bad,false)}</td></tr>`);}
+  // 3) triple
+  const tri=[['الإيرادات','revenue',false],['المصروفات','expenses',true],['صافي التشغيل','net',false],['هامش التشغيل','margin',false,'percent'],['الكمية (رد)','qty',false,'quantity'],['متوسط سعر الرد','avgPrice',false],['تكلفة الرد','costPerUnit',true],['التحصيلات','collections',false],['معدل التحصيل','collRate',false,'percent'],['أيام التشغيل','activeDays',false,'count'],['العملاء النشطون','customers',false,'count']];
+  out.triHead=['المؤشر',esc2(X.labelY),A,B,`التغير عن ${A}`,`التغير عن ${esc2(X.labelY)}`];
+  out.triRows=tri.map(([l,k,bad,t])=>{const pts=t==='percent';return`<tr><td>${l}</td><td>${sY?cmpVal(sY[k],t||'money'):'—'}</td><td>${cmpVal(sA[k],t||'money')}</td><td><b>${cmpVal(sB[k],t||'money')}</b></td><td>${dl(sA[k],sB[k],bad,pts)}</td><td>${sY?dl(sY[k],sB[k],bad,pts):'—'}</td></tr>`});
+  // 1) months
+  out.monHead=['الشهر',`الإيرادات (${A})`,`الإيرادات (${B})`,'التغير',`الصافي (${A})`,`الصافي (${B})`,'التغير'];
+  out.monRows=X.months.map((m,i)=>`<tr><td>الشهر ${['الأول','الثاني','الثالث'][i]}<small style="display:block;color:#8a94a3">${m.a?esc2(m.a.label):'—'} / ${m.b?esc2(m.b.label):'—'}</small></td><td>${m.a?money2(m.a.revenue):'—'}</td><td>${m.b?money2(m.b.revenue):'—'}</td><td>${m.a&&m.b?dl(m.a.revenue,m.b.revenue,false,false):'—'}</td><td>${m.a?money2(m.a.net):'—'}</td><td>${m.b?money2(m.b.net):'—'}</td><td>${m.a&&m.b?dl(m.a.net,m.b.net,false,false):'—'}</td></tr>`).concat(`<tr class="total"><td>الإجمالي</td><td>${money2(sA.revenue)}</td><td>${money2(sB.revenue)}</td><td>${dl(sA.revenue,sB.revenue,false,false)}</td><td>${money2(sA.net)}</td><td>${money2(sB.net)}</td><td>${dl(sA.net,sB.net,false,false)}</td></tr>`);
+  // 4) trend
+  out.trendHead=['الربع','الإيرادات','المصروفات','صافي التشغيل','الهامش','الكمية (رد)','نمو الإيراد'];
+  out.trendRows=X.trend.map((t,i)=>{const p=i?X.trend[i-1].values:null,v=t.values;return`<tr><td>${esc2(t.period)}</td><td>${money2(v.revenue)}</td><td>${money2(v.expenses)}</td><td>${cmpVal(v.profit,'money')}</td><td>${v.margin.toFixed(1)}%</td><td>${qty2(v.qty)}</td><td>${p?dl(p.revenue,v.revenue,false,false):'—'}</td></tr>`});
+  out.trendSvg=X.trend.length>1?cmpSvgMulti(X.trend):'';
+  // 6) targets
+  const T=cmpQTargets(X.key),rem=X.proj?X.proj.remaining:0,tg=[['revenue','الإيرادات (ريال)',sB.revenue,'money'],['qty','الكمية (رد)',sB.qty,'quantity'],['collections','التحصيلات (ريال)',sB.collections,'money']];
+  out.targets=T;out.targetRows=tg.map(([k,l,act,t])=>{const tv=Number(T[k])||0,ach=tv?act/tv*100:null,left=Math.max(0,tv-act);return`<tr><td>${l}</td><td>${tv?cmpVal(tv,t):'—'}</td><td>${cmpVal(act,t)}</td><td>${ach==null?'—':`<b class="${ach>=100?'amc-cmp-good':ach>=80?'':'amc-cmp-bad'}">${ach.toFixed(1)}%</b>`}</td><td>${!tv?'—':left<=0?'<span class="amc-cmp-good">تحقق الهدف</span>':rem?`${cmpVal(left/rem,t)} يوميًا (${rem} يومًا متبقية)`:`<span class="amc-cmp-bad">نقص ${cmpVal(left,t)}</span>`}</td></tr>`});
+  out.targetInputs=`<div class="amc-q-targets">${tg.map(([k,l])=>`<label>${l}<input type="number" min="0" step="any" data-qt="${k}" value="${T[k]||''}" placeholder="هدف الربع"></label>`).join('')}</div>`;
+  // 7) weeks & stability
+  const wk=(w,lab)=>`<tr><td>${lab}</td><td>${w.best?`<span dir="ltr">${cmpFmtDate(w.best.from).slice(0,5)} – ${cmpFmtDate(w.best.to)}</span><small style="display:block;color:#8a94a3">${money2(w.best.revenue)}</small>`:'—'}</td><td>${w.worst?`<span dir="ltr">${cmpFmtDate(w.worst.from).slice(0,5)} – ${cmpFmtDate(w.worst.to)}</span><small style="display:block;color:#8a94a3">${money2(w.worst.revenue)}</small>`:'—'}</td><td>${money2(w.avgDay)}</td><td>${w.top5Share.toFixed(1)}%</td><td>${w.cv<0.5?'<span class="amc-cmp-good">مستقرة</span>':w.cv<1?'متوسطة':'<span class="amc-cmp-bad">متذبذبة</span>'} (${w.cv.toFixed(2)})</td></tr>`;
+  out.weekHead=['الربع','أفضل أسبوع','أضعف أسبوع','متوسط إيراد يوم التشغيل','حصة أعلى 5 أيام','استقرار المبيعات'];
+  out.weekRows=[wk(X.wA,A),wk(X.wB,B)];
+  // 8) cost per رد by category
+  const qa=d.totals.quantityA,qb=d.totals.quantityB;
+  out.cpuHead=['#','التصنيف',`تكلفة الرد ${A}`,`تكلفة الرد ${B}`,'التغير'];
+  out.cpuRows=d.expenseCategories.map((c,i)=>`<tr data-k="${esc2(c.label)}"><td>${i+1}</td><td>${esc2(c.label)}</td><td>${qa?money2(c.previous/qa):'—'}</td><td>${qb?money2(c.current/qb):'—'}</td><td>${qa&&qb?dl(c.previous/qa,c.current/qb,true,false):'—'}</td></tr>`).concat(`<tr class="total"><td></td><td>الإجمالي</td><td>${money2(sA.costPerUnit)}</td><td>${money2(sB.costPerUnit)}</td><td>${dl(sA.costPerUnit,sB.costPerUnit,true,false)}</td></tr>`);
+  // 9) loyalty + top 10 ranking
+  out.loyHead=['المؤشر',A,B];
+  out.loyRows=[['اشتروا في الأشهر الثلاثة','all3'],['اشتروا في شهرين','two'],['اشتروا في شهر واحد فقط','one'],['إجمالي العملاء','total']].map(([l,k])=>`<tr${k==='total'?' class="total"':''}><td>${l}</td><td>${X.lA[k]}</td><td>${X.lB[k]}</td></tr>`);
+  const rankA=new Map(d.customers.slice().sort((a,b)=>b.previous-a.previous).filter(c=>c.previous>0).map((c,i)=>[c.label,i+1])),topB=d.customers.slice().sort((a,b)=>b.current-a.current).filter(c=>c.current>0).slice(0,10);
+  out.topHead=['الترتيب','العميل',`إيراد ${B}`,`الترتيب في ${A}`,'تغير الترتيب','تغير الإيراد'];
+  out.topRows=topB.map((c,i)=>{const ra=rankA.get(c.label),mv=ra?ra-(i+1):null;return`<tr data-k="${esc2(c.label)}"><td>${i+1}</td><td>${esc2(c.label)}</td><td>${money2(c.current)}</td><td>${ra||'جديد'}</td><td>${mv==null?'<span class="amc-cmp-good">جديد</span>':mv>0?`<span class="amc-cmp-good">▲ ${mv}</span>`:mv<0?`<span class="amc-cmp-bad">▼ ${-mv}</span>`:'—'}</td><td>${cmpDelta(c,false,false)}</td></tr>`});
+  // 10) collections, DSO, aging
+  const ag=(g)=>[g.b30,g.b60,g.b90].map(v=>`${money2(v)}<small style="display:block;color:#8a94a3">${g.total?(v/g.total*100).toFixed(1):'0.0'}%</small>`);
+  const aA=ag(X.agingA),aB=ag(X.agingB);
+  out.colHead=['المؤشر',A,B,'التغير'];
+  out.colRows=[`<tr><td>التحصيلات</td><td>${money2(sA.collections)}</td><td>${money2(sB.collections)}</td><td>${dl(sA.collections,sB.collections,false,false)}</td></tr>`,`<tr><td>معدل التحصيل إلى المبيعات</td><td>${sA.collRate.toFixed(1)}%</td><td>${sB.collRate.toFixed(1)}%</td><td>${dl(sA.collRate,sB.collRate,false,true)}</td></tr>`,`<tr><td>متوسط أيام التحصيل (تقديري)</td><td>${X.dsoA==null?'—':Math.round(X.dsoA)+' يوم'}</td><td>${X.dsoB==null?'—':Math.round(X.dsoB)+' يوم'}</td><td>${X.dsoA!=null&&X.dsoB!=null?dl(X.dsoA,X.dsoB,true,false):'—'}</td></tr>`,`<tr><td>المديونية في نهاية الفترة</td><td>${money2(X.agingA.total)}</td><td>${money2(X.agingB.total)}</td><td>${dl(X.agingA.total,X.agingB.total,true,false)}</td></tr>`,`<tr><td>منها 0–30 يوم</td><td>${aA[0]}</td><td>${aB[0]}</td><td>${dl(X.agingA.b30,X.agingB.b30,true,false)}</td></tr>`,`<tr><td>منها 31–60 يوم</td><td>${aA[1]}</td><td>${aB[1]}</td><td>${dl(X.agingA.b60,X.agingB.b60,true,false)}</td></tr>`,`<tr><td>منها أكثر من 60 يوم</td><td>${aA[2]}</td><td>${aB[2]}</td><td>${dl(X.agingA.b90,X.agingB.b90,true,false)}</td></tr>`];
+  return out;
+}
+const CMP_Q_CSS=`.amc-q-score{display:flex;align-items:center;gap:16px;margin:4px 0 10px}.amc-q-ring{width:92px;height:92px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:7px solid #1f9d68;flex:none}.amc-q-ring.mid{border-color:#c99a2e}.amc-q-ring.bad{border-color:#d9434f}.amc-q-ring strong{font-size:26px;color:#17294d;line-height:1}.amc-q-ring span{font-size:10.5px;color:#6b7686}.amc-q-rating{font-size:18px;font-weight:800;color:#17294d}
+.amc-q-targets{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 10px}.amc-q-targets label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#46505e;font-weight:700}.amc-q-targets input{padding:7px 9px;border:1px solid #d6dde6;border-radius:9px;width:170px;font:inherit}
+.amc-q-recs{margin:0;padding:0 18px 0 0;display:grid;gap:5px;line-height:1.75;font-size:13px}`;
+function cmpQuarterScreen(d){
+  const Q=cmpQ(d),X=d.quarter;
+  return`${Q.projNote||''}
+  ${card(`بطاقة أداء ${esc2(X.labelB)}`,`<div class="amc-cmp-in amc-cmp-two"><div>${Q.score}</div><div>${table(['العنصر','القيمة','الدرجة'],Q.scoreRows)}</div></div>`)}
+  ${card('ملخص الربع للإدارة',`<div class="amc-cmp-in"><ol class="amc-cmp-points">${Q.points.map(x=>`<li>${x}</li>`).join('')}</ol><h4 style="margin:12px 0 6px">التوصيات</h4><ol class="amc-q-recs">${Q.recs.map(x=>`<li>${x}</li>`).join('')}</ol></div>`)}
+  ${X.proj?card('تقدير نهاية الربع',`<div class="amc-cmp-in">${table(['المؤشر','الفعلي حتى الآن','التقدير لنهاية الربع',`${esc2(X.labelA)} كاملًا`,'الفرق التقديري'],Q.projRows)}</div>`):''}
+  ${card('مقارنة ثلاثية: السابق والعام الماضي',`<div class="amc-cmp-in">${table(Q.triHead,Q.triRows)}${X.sY?'':`<div class="amc-cmp-note">لا توجد بيانات لـ${esc2(X.labelY)}.</div>`}</div>`)}
+  ${card('تفصيل الأشهر داخل الربعين',`<div class="amc-cmp-in">${table(Q.monHead,Q.monRows)}</div>`)}
+  ${card('مسار الأرباع',`<div class="amc-cmp-in">${Q.trendSvg}${table(Q.trendHead,Q.trendRows)}</div>`)}
+  ${card('الهدف مقابل الفعلي',`<div class="amc-cmp-in">${Q.targetInputs}<div id="cmpQTargets">${table(['المؤشر','الهدف','الفعلي','نسبة الإنجاز','المطلوب'],Q.targetRows)}</div><div class="amc-cmp-note">الأهداف تُحفظ على هذا الجهاز لكل ربع.</div></div>`)}
+  ${card('أفضل وأضعف أسبوع واستقرار المبيعات',`<div class="amc-cmp-in">${table(Q.weekHead,Q.weekRows)}<div class="amc-cmp-note">الأسبوع من السبت إلى الجمعة، وتُستبعد الأسابيع الناقصة عند أطراف الربع من المقارنة. الاستقرار يقيس تذبذب الإيراد اليومي بين أيام التشغيل.</div></div>`)}
+  ${card('تكلفة الرد حسب بند المصروفات',`<div class="amc-cmp-in" data-dim="cat">${table(Q.cpuHead,Q.cpuRows)}</div>`)}
+  ${card('ولاء العملاء وأكبر 10 عملاء',`<div class="amc-cmp-in"><div class="amc-cmp-two"><div>${table(Q.loyHead,Q.loyRows)}</div><div data-dim="cust">${table(Q.topHead,Q.topRows)}</div></div></div>`)}
+  ${card('التحصيل ومتوسط أيام السداد وأعمار الديون',`<div class="amc-cmp-in">${table(Q.colHead,Q.colRows)}<div class="amc-cmp-note">أعمار الديون تقديرية: يُنسب الرصيد غير المسدد إلى أحدث مبيعات العميل. متوسط أيام التحصيل = المديونية ÷ متوسط المبيعات اليومية.</div></div>`)}`;
+}
+function cmpBindQuarter(d){
+  const X=d.quarter;document.querySelectorAll('[data-qt]').forEach(inp=>inp.addEventListener('change',()=>{const t=cmpQTargets(X.key);const v=Number(inp.value);if(v>0)t[inp.dataset.qt]=v;else delete t[inp.dataset.qt];cmpQSaveTargets(X.key,t);const box=document.getElementById('cmpQTargets');if(box)box.innerHTML=table(['المؤشر','الهدف','الفعلي','نسبة الإنجاز','المطلوب'],cmpQ(d).targetRows)}));
+}
+function cmpQuarterPrint(d,sec,tableBlock){
+  const Q=cmpQ(d),X=d.quarter,blocks=[];
+  const summary=`<h1 class="amc-report-title">ملخص ${esc2(X.labelB)} للإدارة</h1><p class="amc-report-subtitle">${cmpRangeText(d)}</p>${Q.projNote||''}<div class="amc-cmp-two">${Q.score}<div class="amc-cmp-tbl">${window.AMCReportEngine.ui.table(['العنصر','القيمة','الدرجة'],Q.scoreRows)}</div></div>${sec('أهم 5 نقاط')}<ol class="amc-cmp-points">${Q.points.map(x=>`<li>${x}</li>`).join('')}</ol>${sec('التوصيات')}<ol class="amc-q-recs">${Q.recs.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  if(X.proj)blocks.push(tableBlock('تقدير نهاية الربع',['المؤشر','الفعلي حتى الآن','التقدير لنهاية الربع',`${esc2(X.labelA)} كاملًا`,'الفرق التقديري'],Q.projRows));
+  blocks.push(tableBlock('مقارنة ثلاثية: السابق والعام الماضي',Q.triHead,Q.triRows));
+  blocks.push(Object.assign(tableBlock('تفصيل الأشهر داخل الربعين',Q.monHead,Q.monRows),{rowH:9}));
+  if(Q.trendSvg)blocks.push({heading:'مسار الأرباع',html:Q.trendSvg,h:78});
+  blocks.push(tableBlock('مسار الأرباع — الأرقام',Q.trendHead,Q.trendRows));
+  if(Object.keys(Q.targets).length)blocks.push(tableBlock('الهدف مقابل الفعلي',['المؤشر','الهدف','الفعلي','نسبة الإنجاز','المطلوب'],Q.targetRows));
+  blocks.push(tableBlock('أفضل وأضعف أسبوع واستقرار المبيعات',Q.weekHead,Q.weekRows));
+  blocks.push(tableBlock('تكلفة الرد حسب بند المصروفات',Q.cpuHead,Q.cpuRows));
+  blocks.push(tableBlock('ولاء العملاء',Q.loyHead,Q.loyRows));
+  blocks.push(tableBlock('أكبر 10 عملاء وتغير ترتيبهم',Q.topHead,Q.topRows));
+  blocks.push(Object.assign(tableBlock('التحصيل ومتوسط أيام السداد وأعمار الديون',Q.colHead,Q.colRows),{rowH:8}));
+  return{summary,blocks};
+}
+
+async function rawMonths(){try{const raw=C.state.raw||await service.fetch();const months=uniqSorted([...raw.rev,...raw.exp].map(r=>localDateKey(r['التاريخ']).slice(0,7)).filter(x=>/^\d{4}-\d{2}$/.test(x)));C.state.rawMonths=months;return months}catch(e){return[]}}
 async function renderComparison(){
  activeReport='comparison';window.AMC_CURRENT_REPORT_INDEX='comparison';
  try{if(location.hash!=='#/reports/comparison')location.hash='#/reports/comparison'}catch(e){}
  document.querySelectorAll('.dashboard-content > *:not(#reportWorkspace)').forEach(x=>x.style.display='none');
  document.querySelectorAll('.report-item').forEach(x=>x.classList.toggle('active',x.classList.contains('comparison-report-item')));
  const title=document.getElementById('reportTitle'),desc=document.getElementById('reportDescription'),toolbar=document.getElementById('reportToolbar'),body=document.getElementById('reportBody');
+ {const ws=document.getElementById('reportWorkspace');if(ws)ws.hidden=false;}
+ C.state.view=null;C.state.raw=null;
  if(title)title.textContent='تقرير المقارنات';
- if(desc)desc.textContent='Comparison Analytics — اختر نوع المقارنة أولًا ثم تظهر لك الخيارات المطلوبة فقط.';
+ if(desc)desc.textContent='اختر نوع المقارنة أولًا ثم تظهر لك الخيارات المطلوبة فقط.';
  if(!toolbar||!body)return;
  body.innerHTML='<div class="comparison-report-loading">جاري قراءة البيانات الفعلية…</div>';
  let raw;
@@ -4152,17 +4604,18 @@ async function renderComparison(){
    const ar=raw.rev.filter(r=>inRange(r,A.from,A.to)),br=raw.rev.filter(r=>inRange(r,B.from,B.to));
    const ae=raw.exp.filter(r=>inRange(r,A.from,A.to)),be=raw.exp.filter(r=>inRange(r,B.from,B.to));
    if((ar.length||ae.length)&&(br.length||be.length)){
-     C.state.data=buildModel(ar,br,ae,be,defaults.a,defaults.b,raw);
+     C.state.data=enrichComparison(buildModel(ar,br,ae,be,defaults.a,defaults.b,raw),raw,A,B);
      C.state.periodA=defaults.a; C.state.periodB=defaults.b; C.state.status='ready';
    }
  }
  const modeMeta={
    periods:{title:'مقارنة الفترات',desc:'قارن فترة بفترة باستخدام نفس المؤشرات المالية والتشغيلية.',icon:'↔'},
+   quarter:{title:'المقارنة الربع سنوية',desc:'اختر الربع مباشرة: مقارنة بالربع السابق ونفس الربع العام الماضي مع تقرير ربعي كامل.',icon:'◫'},
    customers:{title:'مقارنة العملاء',desc:'قارن من 2 إلى 5 عملاء داخل فترة واحدة.',icon:'◉'},
    loadTypes:{title:'مقارنة أنواع التحميل',desc:'قارن من 2 إلى 5 أنواع تحميل داخل فترة واحدة.',icon:'▦'},
    expenseCategories:{title:'مقارنة تصنيفات المصروفات',desc:'قارن من 2 إلى 6 تصنيفات مصروفات داخل فترة واحدة.',icon:'▤'},
    metrics:{title:'مقارنة المؤشرات',desc:'اختر فترة أو أكثر ثم حدد المؤشرات التي تريد رؤيتها.',icon:'⌁'},
-   custom:{title:'مقارنة مخصصة',desc:'اختر Dimension حقيقيًا من البيانات ثم العناصر والمؤشرات.',icon:'⚙'}
+   custom:{title:'مقارنة مخصصة',desc:'اختر نوع العناصر من البيانات ثم العناصر والمؤشرات.',icon:'⚙'}
  };
  const escAttr=x=>esc2(String(x??'')).replace(/"/g,'&quot;');
  const optionList=(items,name,limit)=>items.map((x,i)=>`<label class="comparison-option"><input type="checkbox" name="${name}" value="${escAttr(x)}" data-limit="${limit}"><span>${esc2(x)}</span></label>`).join('');
@@ -4170,26 +4623,29 @@ async function renderComparison(){
  const metricOptions=[
   ['revenue','الإيرادات'],['expenses','المصروفات'],['profit','صافي الربح / الخسارة'],['profitMargin','هامش الربح / الخسارة'],['salesTransactions','عدد عمليات المبيعات'],['quantity','إجمالي الكمية'],['avgLoadValue','متوسط قيمة العملية'],['revenuePerQuantity','الإيراد لكل وحدة كمية'],['expensePerQuantity','المصروف لكل وحدة كمية'],['profitPerQuantity','الربح لكل وحدة كمية'],['activeCustomers','العملاء النشطون']
  ];
- const metricBlock=(id='metricsSelect',selected=['revenue','expenses','profit','salesTransactions','quantity'])=>`<div class="comparison-step"><div class="comparison-step-title">المؤشرات</div><div class="comparison-step-body"><div class="comparison-chip-grid">${metricOptions.map(([v,l])=>`<label class="comparison-option"><input type="checkbox" name="${id}" value="${v}" ${selected.includes(v)?'checked':''}><span>${l}</span></label>`).join('')}</div></div></div>`;
- const shell=`<div class="comparison-report comparison-report-selector"><div class="comparison-report-selector-head"><div><span class="comparison-eyebrow">GENERAL COMPARISON ANALYTICS</span><h2>ماذا تريد أن تقارن؟</h2><p>ابدأ بخيار واحد فقط. ستظهر الفلاتر المناسبة لهذا النوع تلقائيًا.</p></div><div class="comparison-source-pill">Raw Database / API</div></div><div class="comparison-mode-grid">${Object.entries(modeMeta).map(([k,v])=>`<button type="button" class="comparison-mode-card" data-mode="${k}"><span class="comparison-mode-icon">${v.icon}</span><strong>${v.title}</strong><small>${v.desc}</small></button>`).join('')}</div><div id="comparison-flow"></div></div>`;
- toolbar.innerHTML='';body.innerHTML=shell;
+ const dimMetrics={customers:[['revenue','الإيرادات'],['salesTransactions','عدد عمليات البيع'],['quantity','الكمية'],['avgLoadValue','متوسط قيمة العملية'],['revenuePerQuantity','متوسط سعر الرد'],['share','الحصة من الإيرادات'],['collections','التحصيلات']],loadTypes:[['revenue','الإيرادات'],['salesTransactions','عدد عمليات البيع'],['quantity','الكمية'],['avgLoadValue','متوسط قيمة العملية'],['revenuePerQuantity','متوسط سعر الرد'],['share','الحصة من الإيرادات']],expenseCategories:[['expenses','المصروفات'],['expenseCount','عدد الحركات'],['share','الحصة من المصروفات'],['expensePerQuantity','تكلفة الرد']]};
+ const metricBlock=(id='metricsSelect',selected=['revenue','expenses','profit','salesTransactions','quantity'],list=metricOptions)=>`<div class="comparison-step"><div class="comparison-step-title">المؤشرات</div><div class="comparison-step-body"><div class="comparison-chip-grid">${list.map(([v,l])=>`<label class="comparison-option"><input type="checkbox" name="${id}" value="${v}" ${selected.includes(v)?'checked':''}><span>${l}</span></label>`).join('')}</div></div></div>`;
+ const shell=`<div class="comparison-report comparison-report-selector"><div class="comparison-report-selector-head"><div><span class="comparison-eyebrow">مركز المقارنات</span><h2>ماذا تريد أن تقارن؟</h2><p>ابدأ بخيار واحد فقط. ستظهر الفلاتر المناسبة لهذا النوع تلقائيًا.</p></div></div><div class="amc-cmp-presets"><b>مقارنات جاهزة:</b> <button type="button" class="comparison-back" data-preset="mom">آخر شهر مقابل السابق</button><button type="button" class="comparison-back" data-preset="mtd">هذا الشهر حتى تاريخه مقابل نفس الأيام</button><button type="button" class="comparison-back" data-preset="yoy">آخر شهر مقابل نفس الشهر العام الماضي</button><button type="button" class="comparison-back" data-preset="qoq">هذا الربع مقابل السابق</button><button type="button" class="comparison-back" data-preset="year">هذه السنة مقابل الماضية</button><button type="button" class="comparison-back" data-preset="last6">اتجاه آخر 6 أشهر</button><button type="button" class="comparison-back" data-preset="last12">اتجاه آخر 12 شهرًا</button><div class="comparison-validation" id="cmpPresetMsg" style="flex-basis:100%"></div></div><div class="comparison-mode-grid">${Object.entries(modeMeta).map(([k,v])=>`<button type="button" class="comparison-mode-card" data-mode="${k}"><span class="comparison-mode-icon">${v.icon}</span><strong>${v.title}</strong><small>${v.desc}</small></button>`).join('')}</div><div id="comparison-flow"></div></div>`;
+ toolbar.innerHTML='';body.innerHTML=`<style>.amc-cmp-presets{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 16px}.amc-cmp-presets b{font-size:13px;color:#17294d;margin-left:4px}.amc-cmp-presets #cmpPresetMsg:empty{display:none}</style>`+shell;
+ cmpBindPresets(raw,months);
  const flow=document.getElementById('comparison-flow');
  const selectedChips=(items)=>items.map(x=>`<span class="comparison-chip">${esc2(x)} <button type="button" data-remove="${escAttr(x)}" aria-label="حذف">×</button></span>`).join('');
  const renderFlow=(mode)=>{
    const m=modeMeta[mode];
+   if(mode==='quarter'){flow.innerHTML=cmpQuarterPicker(raw);cmpBindQuarterPicker(raw,flow);return}
    let html=`<div class="comparison-flow-head"><div><span class="comparison-eyebrow">${m.title}</span><h3>${m.title}</h3><p>${m.desc}</p></div><button type="button" class="comparison-back" id="comparisonBack">تغيير نوع المقارنة</button></div>`;
    if(mode==='periods'){
      html+=`<div class="comparison-step"><div class="comparison-step-title">نوع الفترة</div><div class="comparison-step-body"><div class="comparison-segment" id="periodType"><button class="active" data-period-type="month">شهر مقابل شهر</button><button data-period-type="quarter">ربع مقابل ربع</button><button data-period-type="year">سنة مقابل سنة</button><button data-period-type="custom">فترة مخصصة</button></div></div></div><div id="periodInputs"></div>${metricBlock('periodMetrics')}`;
    }else if(mode==='customers'){
-     html+=periodBlock('customerPeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار العملاء <span class="comparison-limit">2–5</span></div><div class="comparison-step-body"><input class="comparison-search" id="customerSearch" placeholder="ابحث عن عميل…"><div class="comparison-check-list" id="customerList">${optionList(customers,'customerChoice',5)}</div><div class="comparison-selected" id="customerSelected"></div></div></div>${metricBlock('customerMetrics',['revenue','salesTransactions','quantity','avgLoadValue'])}`;
+     html+=periodBlock('customerPeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار العملاء <span class="comparison-limit">2–5</span></div><div class="comparison-step-body"><input class="comparison-search" id="customerSearch" placeholder="ابحث عن عميل…"><div class="comparison-check-list" id="customerList">${optionList(customers,'customerChoice',5)}</div><div class="comparison-selected" id="customerSelected"></div></div></div>${metricBlock('customerMetrics',['revenue','salesTransactions','quantity','avgLoadValue','share'],dimMetrics.customers)}`;
    }else if(mode==='loadTypes'){
-     html+=periodBlock('loadTypePeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار أنواع التحميل <span class="comparison-limit">2–5</span></div><div class="comparison-step-body"><div class="comparison-check-list">${optionList(loadTypes,'loadTypeChoice',5)}</div><div class="comparison-selected" id="loadTypeSelected"></div></div></div>${metricBlock('loadTypeMetrics',['revenue','salesTransactions','quantity','avgLoadValue'])}`;
+     html+=periodBlock('loadTypePeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار أنواع التحميل <span class="comparison-limit">2–5</span></div><div class="comparison-step-body"><div class="comparison-check-list">${optionList(loadTypes,'loadTypeChoice',5)}</div><div class="comparison-selected" id="loadTypeSelected"></div></div></div>${metricBlock('loadTypeMetrics',['revenue','salesTransactions','quantity','avgLoadValue','share'],dimMetrics.loadTypes)}`;
    }else if(mode==='expenseCategories'){
-     html+=periodBlock('expenseCategoryPeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار تصنيفات المصروفات <span class="comparison-limit">2–6</span></div><div class="comparison-step-body"><input class="comparison-search" id="expenseCategorySearch" placeholder="ابحث عن تصنيف…"><div class="comparison-check-list" id="expenseCategoryList">${optionList(expenseCategories,'expenseCategoryChoice',6)}</div><div class="comparison-selected" id="expenseCategorySelected"></div></div></div>${metricBlock('expenseCategoryMetrics',['expenses'])}`;
+     html+=periodBlock('expenseCategoryPeriod')+`<div class="comparison-step"><div class="comparison-step-title">اختيار تصنيفات المصروفات <span class="comparison-limit">2–6</span></div><div class="comparison-step-body"><input class="comparison-search" id="expenseCategorySearch" placeholder="ابحث عن تصنيف…"><div class="comparison-check-list" id="expenseCategoryList">${optionList(expenseCategories,'expenseCategoryChoice',6)}</div><div class="comparison-selected" id="expenseCategorySelected"></div></div></div>${metricBlock('expenseCategoryMetrics',['expenses','expenseCount','share'],dimMetrics.expenseCategories)}`;
    }else if(mode==='metrics'){
      html+=periodBlock('metricPeriods',true)+metricBlock('metricChoice',['revenue','expenses','profit','profitMargin','salesTransactions','quantity']);
    }else{
-     html+=`<div class="comparison-step"><div class="comparison-step-title">Dimension</div><div class="comparison-step-body"><div class="comparison-segment" id="customDimension"><button class="active" data-dimension="customers">العملاء</button><button data-dimension="loadTypes">أنواع التحميل</button><button data-dimension="expenseCategories">تصنيفات المصروفات</button></div></div></div><div id="customInputs"></div>`;
+     html+=`<div class="comparison-step"><div class="comparison-step-title">نوع العناصر</div><div class="comparison-step-body"><div class="comparison-segment" id="customDimension"><button class="active" data-dimension="customers">العملاء</button><button data-dimension="loadTypes">أنواع التحميل</button><button data-dimension="expenseCategories">تصنيفات المصروفات</button></div></div></div><div id="customInputs"></div>`;
    }
    html+=`<div class="comparison-action-bar"><div class="comparison-validation" id="comparisonValidation">أكمل الخطوات أعلاه.</div><button type="button" class="comparison-primary" id="comparisonCreate">إنشاء المقارنة</button></div>`;
    flow.innerHTML=html;
@@ -4197,7 +4653,7 @@ async function renderComparison(){
  };
  const getChecked=name=>Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(x=>x.value);
  const updateChips=(name,target)=>{const vals=getChecked(name),el=document.getElementById(target);if(el)el.innerHTML=selectedChips(vals)};
- const enforceLimit=(name,limit)=>document.querySelectorAll(`input[name="${name}"]`).forEach(cb=>cb.addEventListener('change',()=>{const checked=getChecked(name);if(checked.length>limit){cb.checked=false;alert(`الحد الأقصى ${limit} عناصر.`)}updateChips(name,name.replace('Choice','Selected'))}));
+ const enforceLimit=(name,limit)=>document.querySelectorAll(`input[name="${name}"]`).forEach(cb=>cb.addEventListener('change',()=>{const checked=getChecked(name);if(checked.length>limit){cb.checked=false;const v=document.getElementById('comparisonValidation');if(v){v.textContent=`الحد الأقصى ${limit} عناصر.`;v.className='comparison-validation error'}}updateChips(name,name.replace('Choice','Selected'))}));
  const bindSearch=(input,list)=>{document.getElementById(input)?.addEventListener('input',e=>{const q=e.target.value.trim().toLocaleLowerCase('ar');document.querySelectorAll(`#${list} .comparison-option`).forEach(x=>x.style.display=x.textContent.toLocaleLowerCase('ar').includes(q)?'flex':'none')})};
  const bindFlow=(mode)=>{
    document.getElementById('comparisonBack')?.addEventListener('click',()=>{flow.innerHTML='';document.querySelectorAll('.comparison-mode-card').forEach(x=>x.classList.remove('selected'));});
@@ -4207,7 +4663,7 @@ async function renderComparison(){
    const renderPeriodInputs=t=>{const box=document.getElementById('periodInputs');if(!box)return;if(t==='month')box.innerHTML=`<div class="comparison-step"><div class="comparison-step-title">الفترة A ثم الفترة B</div><div class="comparison-step-body comparison-two-fields"><div class="comparison-field"><label>الفترة A</label><input id="periodA" type="month" value="${defaults.a}"></div><div class="comparison-field"><label>الفترة B</label><input id="periodB" type="month" value="${defaults.b}"></div></div></div>`;else if(t==='year')box.innerHTML=`<div class="comparison-step"><div class="comparison-step-title">السنة A ثم السنة B</div><div class="comparison-step-body comparison-two-fields"><div class="comparison-field"><label>السنة A</label><select id="yearA">${[...new Set(months.map(x=>x.slice(0,4)))].map(y=>`<option>${y}</option>`).join('')}</select></div><div class="comparison-field"><label>السنة B</label><select id="yearB">${[...new Set(months.map(x=>x.slice(0,4)))].map(y=>`<option>${y}</option>`).join('')}</select></div></div></div>`;else if(t==='quarter')box.innerHTML=`<div class="comparison-step"><div class="comparison-step-title">الربع A ثم الربع B</div><div class="comparison-step-body comparison-two-fields"><div class="comparison-field"><label>الربع A</label><select id="quarterA">${monthsToQuarters(months).map(q=>`<option value="${q.key}">${q.label}</option>`).join('')}</select></div><div class="comparison-field"><label>الربع B</label><select id="quarterB">${monthsToQuarters(months).map(q=>`<option value="${q.key}">${q.label}</option>`).join('')}</select></div></div></div>`;else box.innerHTML=`<div class="comparison-step"><div class="comparison-step-title">فترة A ثم فترة B</div><div class="comparison-step-body comparison-two-fields"><div class="comparison-field"><label>من A</label><input id="customAFrom" type="date"><label>إلى A</label><input id="customATo" type="date"></div><div class="comparison-field"><label>من B</label><input id="customBFrom" type="date"><label>إلى B</label><input id="customBTo" type="date"></div></div></div>`};
    if(mode==='periods'){renderPeriodInputs('month')}
    document.getElementById('customDimension')?.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('#customDimension button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderCustomInputs(btn.dataset.dimension)}));
-   const renderCustomInputs=dimension=>{const box=document.getElementById('customInputs');if(!box)return;const items=dimension==='customers'?customers:dimension==='loadTypes'?loadTypes:expenseCategories;const name=dimension==='customers'?'customCustomerChoice':dimension==='loadTypes'?'customLoadTypeChoice':'customExpenseCategoryChoice';const limit=dimension==='expenseCategories'?6:5;box.innerHTML=periodBlock('customPeriod')+`<div class="comparison-step"><div class="comparison-step-title">العناصر <span class="comparison-limit">2–${limit}</span></div><div class="comparison-step-body"><input class="comparison-search" id="customSearch" placeholder="ابحث…"><div class="comparison-check-list" id="customList">${optionList(items,name,limit)}</div><div class="comparison-selected" id="customSelected"></div></div></div>${metricBlock('customMetrics')}`;enforceLimit(name,limit);bindSearch('customSearch','customList')};
+   const renderCustomInputs=dimension=>{const box=document.getElementById('customInputs');if(!box)return;const items=dimension==='customers'?customers:dimension==='loadTypes'?loadTypes:expenseCategories;const name=dimension==='customers'?'customCustomerChoice':dimension==='loadTypes'?'customLoadTypeChoice':'customExpenseCategoryChoice';const limit=dimension==='expenseCategories'?6:5;box.innerHTML=periodBlock('customPeriod')+`<div class="comparison-step"><div class="comparison-step-title">العناصر <span class="comparison-limit">2–${limit}</span></div><div class="comparison-step-body"><input class="comparison-search" id="customSearch" placeholder="ابحث…"><div class="comparison-check-list" id="customList">${optionList(items,name,limit)}</div><div class="comparison-selected" id="customSelected"></div></div></div>${metricBlock('customMetrics',dimension==='expenseCategories'?['expenses','expenseCount','share']:['revenue','salesTransactions','quantity','share'],dimMetrics[dimension])}`;enforceLimit(name,limit);bindSearch('customSearch','customList')};
    if(mode==='custom')renderCustomInputs('customers');
    document.getElementById('comparisonCreate')?.addEventListener('click',async()=>{
      const v=document.getElementById('comparisonValidation');v.textContent='جاري التحقق…';v.className='comparison-validation';
@@ -4241,7 +4697,7 @@ async function renderComparison(){
          const values={revenue,expenses,profit:revenue-expenses,profitMargin:revenue?(revenue-expenses)/revenue*100:0,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,expensePerQuantity:quantity?expenses/quantity:0,profitPerQuantity:quantity?(revenue-expenses)/quantity:0,activeCustomers:customers,activeDays,avgDailyRevenue:activeDays?revenue/activeDays:0};
          return{period:monthLabel2(month),values};
        }).filter(Boolean);
-       body.innerHTML=`<div class="comparison-report comparison-report-ui"><div class="comparison-report-hero"><div><h2>مقارنة المؤشرات</h2><div>Metrics Comparison</div></div><span class="comparison-report-route">${esc2(periods.map(monthLabel2).join(' ↔ '))}</span></div><section><h3>المؤشرات المختارة</h3><div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>الفترة</th>${metricsSelected.map(k=>`<th>${esc2(metricOptions.find(x=>x[0]===k)?.[1]||k)}</th>`).join('')}</tr></thead><tbody>${metricRows.map(r=>`<tr><td>${esc2(r.period)}</td>${metricsSelected.map(k=>`<td class="num">${valueCell(r.values[k],k==='profitMargin'?'percent':['salesTransactions','activeCustomers','activeDays'].includes(k)?'count':k==='quantity'?'quantity':(k.includes('PerQuantity')||k==='expenses')?'expense':'money')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section></div>`;
+       cmpRenderMetrics(raw,periods,metricsSelected);
      }else{
        const dimension=mode==='customers'?'customers':mode==='loadTypes'?'loadTypes':mode==='expenseCategories'?'expenseCategories':document.querySelector('#customDimension .active')?.dataset.dimension||'customers';
        const periodId=mode==='customers'?'customerPeriod':mode==='loadTypes'?'loadTypePeriod':mode==='expenseCategories'?'expenseCategoryPeriod':'customPeriod';
@@ -4258,55 +4714,44 @@ async function renderComparison(){
        const selectedMetrics=getChecked(metricName);
        if(!selectedMetrics.length)throw new Error('اختر مؤشرًا واحدًا على الأقل.');
        const keyField=dimension==='customers'?'اسم العميل':dimension==='loadTypes'?'نوع التحميل':'التصنيف';
+       const cc=(raw.col||[]).filter(r=>inRange(r,R.from,R.to)),totRev=sum(ar,'المبلغ'),totExp=sum(ae,'المبلغ'),totQty=sum(ar,'الكمية');
        const rows=selected.map(name=>{
-         const rr=ar.filter(r=>String(r[keyField]??'').trim()===name),ee=ae.filter(r=>String(r[keyField]??'').trim()===name);
+         const rr=ar.filter(r=>String(r[keyField]??'').trim()===name),ee=ae.filter(r=>String(r[keyField]??'').trim()===name),col=dimension==='customers'?cc.filter(r=>String(r['العميل']??r['اسم العميل']??'').trim()===name):[];
          const revenue=sum(rr,'المبلغ'),expenses=sum(ee,'المبلغ'),quantity=sum(rr,'الكمية'),loads=rr.length;
-         const values={revenue,expenses,profit:revenue-expenses,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,expensePerQuantity:quantity?expenses/quantity:0,profitPerQuantity:quantity?(revenue-expenses)/quantity:0};
+         const values={revenue,expenses,salesTransactions:loads,quantity,avgLoadValue:loads?revenue/loads:0,revenuePerQuantity:quantity?revenue/quantity:0,share:dimension==='expenseCategories'?(totExp?expenses/totExp*100:0):(totRev?revenue/totRev*100:0),collections:sum(col,'المبلغ'),expenseCount:ee.length,expensePerQuantity:totQty?expenses/totQty:0};
          return{label:name,values};
        });
        const title=mode==='customers'?'مقارنة العملاء':mode==='loadTypes'?'مقارنة أنواع التحميل':mode==='expenseCategories'?'مقارنة تصنيفات المصروفات':'مقارنة مخصصة';
-       const titleEn=mode==='customers'?'Customer Comparison':mode==='loadTypes'?'Load Types Comparison':mode==='expenseCategories'?'Expense Categories Comparison':'Custom Comparison';
-       body.innerHTML=`<div class="comparison-report comparison-report-ui"><div class="comparison-report-hero"><div><h2>${title}</h2><div>${titleEn}</div></div><span class="comparison-report-route">${esc2(monthLabel2(period))}</span></div><section><h3>${esc2(title)} — ${esc2(monthLabel2(period))}</h3><div class="comparison-report-table-wrap"><table class="comparison-report-table"><thead><tr><th>العنصر</th>${selectedMetrics.map(k=>`<th>${esc2(metricOptions.find(x=>x[0]===k)?.[1]||k)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td>${esc2(r.label)}</td>${selectedMetrics.map(k=>`<td class="num">${valueCell(r.values[k],k==='salesTransactions'?'count':k==='quantity'?'quantity':(k==='expenses'||k.includes('PerQuantity'))?'expense':'money')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section></div>`;
+       const opts=dimMetrics[dimension],typeOf=k=>k==='share'?'percent':['salesTransactions','expenseCount'].includes(k)?'count':k==='quantity'?'quantity':'money';
+       const additive=['revenue','expenses','salesTransactions','quantity','share','collections','expenseCount','expensePerQuantity'];
+       const sumOf=k=>rows.reduce((a,r)=>a+r.values[k],0),totals={...Object.fromEntries(additive.map(k=>[k,sumOf(k)]))};totals.avgLoadValue=totals.salesTransactions?totals.revenue/totals.salesTransactions:0;totals.revenuePerQuantity=totals.quantity?totals.revenue/totals.quantity:0;
+       const iHead=['#',dimension==='customers'?'العميل':dimension==='loadTypes'?'نوع التحميل':'التصنيف',...selectedMetrics.map(k=>esc2(opts.find(x=>x[0]===k)?.[1]||k))];
+       const iRows=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc2(r.label)}</td>${selectedMetrics.map(k=>`<td class="num">${cmpVal(r.values[k],typeOf(k))}</td>`).join('')}</tr>`);
+       iRows.push(`<tr class="total"><td></td><td>إجمالي المختار</td>${selectedMetrics.map(k=>`<td class="num">${cmpVal(totals[k],typeOf(k))}</td>`).join('')}</tr>`);
+       const mk=selectedMetrics[0],mmax=Math.max(1,...rows.map(r=>Math.abs(r.values[mk]))),barColor=dimension==='expenseCategories'?'#d9434f':'#1f9d68';
+       const chart=`<div class="amc-cmp-bars">${rows.map(r=>`<div class="amc-cmp-bar"><span>${esc2(r.label)}</span><i><b style="width:${(Math.abs(r.values[mk])/mmax*100).toFixed(1)}%;background:${barColor}"></b></i><em>${cmpVal(r.values[mk],typeOf(mk))}</em></div>`).join('')}</div><div class="amc-cmp-note">الرسم حسب: ${esc2(opts.find(x=>x[0]===mk)?.[1]||mk)}</div>`;
+       C.state.view={kind:'items',title,period:monthLabel2(period),items:selected,head:iHead,rows:iRows,chart,sheet:{name:title,head:iHead.slice(1),rows:rows.map(r=>[r.label,...selectedMetrics.map(k=>({n:Math.round(r.values[k]*100)/100,s:2}))])}};
+       body.innerHTML=`<style id="amc-cmp-screen-style">${CMP_CSS}${CMP_SCREEN_CSS}</style><div class="amc-cmp-screen">${cmpToolbar(esc2(monthLabel2(period)))}${card(`${esc2(title)} — ${esc2(monthLabel2(period))}`,`<div class="amc-cmp-in">${chart}${table(iHead,iRows)}</div>`)}</div>`;cmpBindToolbar();
      }
      }catch(e){v.textContent=e.message;v.className='comparison-validation error'}
    });
  };
  document.querySelectorAll('.comparison-mode-card').forEach(card=>card.addEventListener('click',()=>{document.querySelectorAll('.comparison-mode-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');renderFlow(card.dataset.mode)}));
 }
-function monthsToQuarters(months){const seen=new Map();months.forEach(m=>{const y=Number(m.slice(0,4)),mo=Number(m.slice(5,7)),q=Math.ceil(mo/3),key=`${y}-Q${q}`;if(!seen.has(key))seen.set(key,{key,label:`Q${q} ${y}`})});return[...seen.values()]}
-
-function buildPdf(monthA,monthB){
-  if(!monthA||!monthB) throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');
-  if(monthA===monthB) throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');
-  const d=C.state.data;
-  if(!d||d.monthA!==monthA||d.monthB!==monthB){
-    throw new Error('لم تكتمل بيانات المقارنة للفترتين المحددتين. أعد إنشاء المقارنة ثم حاول الطباعة مرة أخرى.');
-  }
-  const page=(title,content,num,total)=>`<section class="comparison-report-pdf-page amc-report-page"><div class="comparison-report-pdf-head"><div><b>${esc2(title)}</b><span>Comparison Report</span></div><div><b>${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</b><span>Month vs Month</span></div><div class="page-no">${num} / ${total}</div></div>${content}<div class="comparison-report-pdf-foot">كسارة العساف — تقرير المقارنات — ${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}</div></section>`;
-  const cover=`<section class="comparison-report-pdf-page amc-report-page comparison-report-cover-page"><div class="comparison-report-cover"><img src="${document.querySelector('.hero-logo')?.getAttribute('src')||''}" alt=""><h1>تقرير المقارنات</h1><div class="en">Comparison Report</div><div class="comparison-report-cover-grid"><b>المنشأة / الكسارة</b><strong>كسارة العساف</strong><b>الفترة الأولى</b><strong>${esc2(d.labels.a)}</strong><b>الفترة الثانية</b><strong>${esc2(d.labels.b)}</strong><b>نوع المقارنة</b><strong>مقارنة شهرية — Month vs Month</strong><b>إعداد</b><strong>أ. محمد فوزي</strong></div></div></section>`;
-  const total=8;
-  const p2=page('الملخص التنفيذي للمقارنة',`<section><h3>الملخص التنفيذي للمقارنة</h3><div class="comparison-report-kpis">${[['الإيرادات',d.metrics.revenue,'money'],['المصروفات',d.metrics.expenses,'expense'],['صافي الربح / الخسارة',d.metrics.profit,'money'],['هامش الربح / الخسارة',d.metrics.profitMargin,'percent']].map(([l,x,t])=>`<div class="comparison-report-card"><label>${l}</label><div class="comparison-report-pair"><span>${valueCell(x.previous,t)}</span><b>→</b><span>${valueCell(x.current,t)}</span></div><small>${esc2(d.labels.a)} → ${esc2(d.labels.b)} · ${pct2(x.percentage)}</small></div>`).join('')}</div>${compareTable(d.metricRows)}</section>`,2,total);
-  const p3=page('تصنيفات المصروفات',`<section><h3>تصنيفات المصروفات — UNION</h3>${compareTable(d.expenseCategories)}</section>`,3,total);
-  const p4=page('العملاء — الإيرادات',`<section><h3>العملاء — الإيرادات</h3>${compareTable(d.customers)}</section>`,4,total);
-  const p5=page('العملاء — الكميات',`<section><h3>العملاء — الكميات</h3>${compareTable(d.customerQuantities)}</section>`,5,total);
-  const p6=page('أنواع التحميل — الإيرادات',`<section><h3>أنواع التحميل — الإيرادات</h3>${compareTable(d.loadTypes)}</section>`,6,total);
-  const p7=page('أنواع التحميل — الكميات',`<section><h3>أنواع التحميل — الكميات</h3>${compareTable(d.loadTypeQuantities)}</section>`,7,total);
-  const p8=page('الربحية والمديونية',`<section><h3>الربحية والمديونية</h3>${compareTable(d.metricRows.filter(r=>/صافي الربح|هامش الربح|نسبة المصروفات|متوسط قيمة العملية|الإيراد لكل وحدة|المصروف لكل وحدة|الربح لكل وحدة/.test(r.label||'')))}${comparisonDebtSection(comparisonDebtSummary(monthA,monthB))}</section>`,8,total);
-  return cover+p2+p3+p4+p5+p6+p7+p8;
-}
+function monthsToQuarters(months){const seen=new Map();months.forEach(m=>{const y=Number(m.slice(0,4)),mo=Number(m.slice(5,7)),q=Math.ceil(mo/3),key=`${y}-Q${q}`;if(!seen.has(key))seen.set(key,{key,label:`الربع ${q} ${y}`})});return[...seen.values()]}
 
 function printComparison(){
   /* Fully synchronous print path: Chromium keeps transient user activation
      only when window.print() is reached without an async wait. */
-  const d=C.state.data;
-  let a=document.getElementById('rCompA')?.value||C.state.periodA;
-  let b=document.getElementById('rCompB')?.value||C.state.periodB;
+  const d=C.state.view||C.state.data;
+  let a=document.getElementById('rCompA')?.value||C.state.periodA||'A';
+  let b=document.getElementById('rCompB')?.value||C.state.periodB||'B';
   if(!d||!a||!b){
     const pa=document.getElementById('periodA'),pb=document.getElementById('periodB');
     a=a||pa?.value||''; b=b||pb?.value||'';
   }
   if(!d||!a||!b){
-    alert('لم تكتمل بيانات المقارنة بعد. افتح تقرير المقارنات وانتظر تحميل البيانات ثم اضغط طباعة مرة أخرى.');
+    alert('أنشئ المقارنة أولًا ثم اضغط طباعة.');
     return;
   }
   if(window.AMCReportEngine?.Templates){
