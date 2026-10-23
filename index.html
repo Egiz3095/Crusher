@@ -2,7 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#17294d" media="(max-width: 900px)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="كسارة العساف">
+<meta name="format-detection" content="telephone=no">
 <title>شركة كسارة العساف للمعادن | لوحة التشغيل والمالية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" media="screen">
 <style>
@@ -4104,7 +4110,7 @@ const metrics={revenue:compare(revenueA,revenueB,'revenue'),expenses:compare(exp
 const rows=[['الإيرادات',metrics.revenue,'money'],['المصروفات',metrics.expenses,'expense'],['صافي الربح / الخسارة',metrics.profit,'money'],['هامش الربح / الخسارة',metrics.profitMargin,'percent'],['نسبة المصروفات إلى الإيرادات',metrics.expenseRatio,'percent'],['عدد عمليات المبيعات',metrics.salesTransactions,'count'],['إجمالي الكمية',metrics.quantity,'quantity'],['متوسط قيمة عملية البيع',metrics.avgLoadValue,'money'],['الإيراد لكل وحدة كمية',metrics.revenuePerQuantity,'money'],['المصروف لكل وحدة كمية',metrics.expensePerQuantity,'expense'],['الربح لكل وحدة كمية',metrics.profitPerQuantity,'profit'],['العملاء النشطون',metrics.activeCustomers,'count'],['أيام نشاط المبيعات',metrics.activeDays,'count'],['متوسط الإيراد اليومي',metrics.avgDailyRevenue,'money'],['متوسط المصروف اليومي',metrics.avgDailyExpenses,'expense']].map(([label,v,type])=>({label,type,...v}));
 const reconciliation={salesA:Math.abs(revenueA-sum(ar,'المبلغ'))<=.01,salesB:Math.abs(revenueB-sum(br,'المبلغ'))<=.01,expensesA:Math.abs(expenseA-sum(ae,'المبلغ'))<=.01,expensesB:Math.abs(expenseB-sum(be,'المبلغ'))<=.01,categoriesA:Math.abs(expenseA-Object.values(catA).reduce((x,y)=>x+y,0))<=.01,categoriesB:Math.abs(expenseB-Object.values(catB).reduce((x,y)=>x+y,0))<=.01,customersA:Math.abs(revenueA-Object.values(custA).reduce((x,y)=>x+y,0))<=.01,customersB:Math.abs(revenueB-Object.values(custB).reduce((x,y)=>x+y,0))<=.01,loadTypesA:Math.abs(revenueA-Object.values(typeA).reduce((x,y)=>x+y,0))<=.01,loadTypesB:Math.abs(revenueB-Object.values(typeB).reduce((x,y)=>x+y,0))<=.01};reconciliation.ok=Object.values(reconciliation).every(Boolean);
 return{labels:labelsOverride||{a:monthLabel2(a),b:monthLabel2(b)},monthA:a,monthB:b,periods:{a:{rev:ar,exp:ae},b:{rev:br,exp:be}},totals:{revenueA,revenueB,expenseA,expenseB,profitA:revenueA-expenseA,profitB:revenueB-expenseB,quantityA:qtyA,quantityB:qtyB,loadsA,loadsB},metrics,metricRows:rows,expenseCategories:unionCompare(catA,catB,expenseA,expenseB,'expense'),customers:unionCompare(custA,custB,revenueA,revenueB,'revenue'),customerQuantities:unionCompare(custQtyA,custQtyB,qtyA,qtyB,'quantity'),loadTypes:unionCompare(typeA,typeB,revenueA,revenueB,'revenue'),loadTypeQuantities:unionCompare(typeQtyA,typeQtyB,qtyA,qtyB,'quantity'),dailyRevenue:{a:dailyMap(ar),b:dailyMap(br)},reconciliation,schema:C.schema,source:raw.source,receivables:{available:false,reason:'لا توجد في المصدر الحالي جداول أو حقول مستقلة للتحصيلات أو أرصدة العملاء أو الفواتير الآجلة؛ لذلك لم يتم إنشاء مديونية افتراضية.'}}}
-const service={async fetch(force){const rd=(typeof reportData!=='undefined'&&reportData)?reportData:null;if(!force&&rd&&Array.isArray(rd.rev)&&rd.rev.length&&Array.isArray(rd.exp)){return C.state.raw={rev:rd.rev,exp:rd.exp,col:Array.isArray(rd.col)?rd.col:[],source:'dashboard'}}if(!force&&C.state.raw)return C.state.raw;const raw=await loadRaw();raw.col=raw.col||[];C.state.schema=raw.rawHeaders;return C.state.raw=raw},async buildRange(fromA,toA,labelA,fromB,toB,labelB,keyA=fromA,keyB=fromB){if(!fromA||!toA||!fromB||!toB)throw new Error('يرجى تحديد فترتين صالحيتين للمقارنة.');if(keyA===keyB||fromA===fromB&&toA===toB)throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');const raw=await this.fetch(),ar=raw.rev.filter(r=>inRange(r,fromA,toA)),br=raw.rev.filter(r=>inRange(r,fromB,toB)),ae=raw.exp.filter(r=>inRange(r,fromA,toA)),be=raw.exp.filter(r=>inRange(r,fromB,toB));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${labelA}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${labelB}).`);const data=enrichComparison(buildModel(ar,br,ae,be,keyA,keyB,raw,{a:labelA,b:labelB}),raw,{from:fromA,to:toA},{from:fromB,to:toB});C.state.data=data;C.state.periodA=keyA;C.state.periodB=keyB;C.state.status='ready';C.state.error='';return data},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');const A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');return this.buildRange(A.from,A.to,monthLabel2(a),B.from,B.to,monthLabel2(b),a,b)},async buildPeriods(type,first,second){const period=key=>{if(type==='year'){if(!/^\d{4}$/.test(key))throw new Error('صيغة السنة غير صحيحة.');return{from:`${key}-01-01`,to:`${key}-12-31`,label:`سنة ${key}`,key:`Y-${key}`}}if(type==='quarter'){const m=String(key||'').match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('صيغة الربع غير صحيحة.');const y=Number(m[1]),q=Number(m[2]),start=(q-1)*3+1,end=q*3,last=new Date(y,end,0).getDate();return{from:`${y}-${String(start).padStart(2,'0')}-01`,to:`${y}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${q} ${y}`,key:`Q-${key}`}}if(type==='custom'){if(!/^\d{4}-\d{2}-\d{2}$/.test(key?.from)||!/^\d{4}-\d{2}-\d{2}$/.test(key?.to)||key.from>key.to)throw new Error('حدد تاريخ بداية ونهاية صالحين لكل فترة.');return{from:key.from,to:key.to,label:`${cmpFmtDate(key.from)} إلى ${cmpFmtDate(key.to)}`,key:`D-${key.from}_${key.to}`}}throw new Error('نوع الفترة غير مدعوم.');};const A=period(first),B=period(second);return this.buildRange(A.from,A.to,A.label,B.from,B.to,B.label,A.key,B.key)}};
+const service={async fetch(force){const rd=(typeof reportData!=='undefined'&&reportData)?reportData:null;if(!force&&rd&&Array.isArray(rd.rev)&&rd.rev.length&&Array.isArray(rd.exp)){return C.state.raw={rev:rd.rev,exp:rd.exp,col:Array.isArray(rd.col)?rd.col:[],source:'dashboard'}}if(!force&&C.state.raw)return C.state.raw;const raw=await loadRaw();raw.col=raw.col||[];C.state.schema=raw.rawHeaders;return C.state.raw=raw},async buildRange(fromA,toA,labelA,fromB,toB,labelB,keyA=fromA,keyB=fromB){if(!fromA||!toA||!fromB||!toB)throw new Error('يرجى تحديد فترتين صالحيتين للمقارنة.');if(keyA===keyB||fromA===fromB&&toA===toB)throw new Error('يرجى اختيار فترتين مختلفتين للمقارنة.');const raw=await this.fetch(),ar=raw.rev.filter(r=>inRange(r,fromA,toA)),br=raw.rev.filter(r=>inRange(r,fromB,toB)),ae=raw.exp.filter(r=>inRange(r,fromA,toA)),be=raw.exp.filter(r=>inRange(r,fromB,toB));if(!ar.length&&!ae.length)throw new Error(`لا توجد بيانات في الفترة الأولى (${labelA}).`);if(!br.length&&!be.length)throw new Error(`لا توجد بيانات في الفترة الثانية (${labelB}).`);const data=enrichComparison(buildModel(ar,br,ae,be,keyA,keyB,raw,{a:labelA,b:labelB}),raw,{from:fromA,to:toA},{from:fromB,to:toB});C.state.data=data;C.state.periodA=keyA;C.state.periodB=keyB;C.state.status='ready';C.state.error='';return data},async build(a,b){if(!a||!b)throw new Error('يرجى اختيار شهرين صالحين للمقارنة.');const A=monthBounds2(a),B=monthBounds2(b);if(!A||!B)throw new Error('صيغة الشهر غير صحيحة.');return this.buildRange(A.from,A.to,monthLabel2(a),B.from,B.to,monthLabel2(b),a,b)},async buildPeriods(type,first,second){const period=key=>{if(type==='year'){if(!/^\d{4}$/.test(key))throw new Error('صيغة السنة غير صحيحة.');return{from:`${key}-01-01`,to:`${key}-12-31`,label:`سنة ${key}`,key:`Y-${key}`}}if(type==='quarter'){const m=String(key||'').match(/^(\d{4})-Q([1-4])$/);if(!m)throw new Error('صيغة الربع غير صحيحة.');const y=Number(m[1]),q=Number(m[2]),start=(q-1)*3+1,end=q*3,last=new Date(y,end,0).getDate();return{from:`${y}-${String(start).padStart(2,'0')}-01`,to:`${y}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${['','الأول','الثاني','الثالث','الرابع'][+q]} ${y}`,key:`Q-${key}`}}if(type==='custom'){if(!/^\d{4}-\d{2}-\d{2}$/.test(key?.from)||!/^\d{4}-\d{2}-\d{2}$/.test(key?.to)||key.from>key.to)throw new Error('حدد تاريخ بداية ونهاية صالحين لكل فترة.');return{from:key.from,to:key.to,label:`${cmpFmtDate(key.from)} إلى ${cmpFmtDate(key.to)}`,key:`D-${key.from}_${key.to}`}}throw new Error('نوع الفترة غير مدعوم.');};const A=period(first),B=period(second);return this.buildRange(A.from,A.to,A.label,B.from,B.to,B.label,A.key,B.key)}};
 function valueCell(v,type){if(type==='percent')return`${Number(v||0).toFixed(2)}%`;if(type==='count'||type==='quantity')return qty2(v);return money2(v)}
 function statusText(x){return x.status==='NEW'?'جديد':x.status==='LOSS_TO_PROFIT'?'تحول من خسارة إلى ربح':x.status==='PROFIT_TO_LOSS'?'تحول من ربح إلى خسارة':x.status==='INCREASE'?'زيادة':x.status==='DECREASE'?'انخفاض':'مستقر'}
 function statusClass(x){return x.status==='LOSS_TO_PROFIT'?'good':x.status==='PROFIT_TO_LOSS'?'bad':x.status==='INCREASE'?'up':x.status==='DECREASE'?'down':'neutral'}
@@ -4112,7 +4118,7 @@ function compareTable(rows){if(!rows.length)return'<div class="comparison-report
 function comparisonPeriodInfo(key){
   const value=String(key||'');if(/^\d{4}-\d{2}$/.test(value)){const b=monthBounds2(value);return{to:b.to,label:monthLabel2(value)};}
   let m=value.match(/^Y-(\d{4})$/);if(m)return{to:`${m[1]}-12-31`,label:`سنة ${m[1]}`};
-  m=value.match(/^Q-(\d{4})-Q([1-4])$/);if(m){const end=Number(m[2])*3,last=new Date(Number(m[1]),end,0).getDate();return{to:`${m[1]}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${m[2]} ${m[1]}`};}
+  m=value.match(/^Q-(\d{4})-Q([1-4])$/);if(m){const end=Number(m[2])*3,last=new Date(Number(m[1]),end,0).getDate();return{to:`${m[1]}-${String(end).padStart(2,'0')}-${String(last).padStart(2,'0')}`,label:`الربع ${['','الأول','الثاني','الثالث','الرابع'][+m[2]]} ${m[1]}`};}
   m=value.match(/^D-(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2})$/);if(m)return{to:m[2],label:`${cmpFmtDate(m[1])} إلى ${cmpFmtDate(m[2])}`};
   return null;
 }
@@ -4194,7 +4200,7 @@ function cmpUnionRows(rows,type,badUp,totA,totB,label){const out=rows.map((r,i)=
 function cmpMergedTableRows(d,amounts,quantities){const T=d.totals,out=cmpMergedRows(amounts,quantities).map((r,i)=>`<tr data-k="${esc2(r.label)}"><td>${i+1}</td><td>${esc2(r.label)}</td><td>${money2(r.a.previous)}</td><td>${money2(r.a.current)}</td><td>${cmpDelta(r.a,false,false)}</td><td>${qty2(r.q.previous)}</td><td>${qty2(r.q.current)}</td><td>${cmpDelta(r.q,false,false)}</td></tr>`);if(out.length)out.push(`<tr class="total"><td></td><td>الإجمالي</td><td>${money2(T.revenueA)}</td><td>${money2(T.revenueB)}</td><td>${cmpDelta({previous:T.revenueA,current:T.revenueB},false,false)}</td><td>${qty2(T.quantityA)}</td><td>${qty2(T.quantityB)}</td><td>${cmpDelta({previous:T.quantityA,current:T.quantityB},false,false)}</td></tr>`);return out}
 function cmpDebtRows(s){const out=s.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc2(r.name)}</td><td>${money2(r.a)}</td><td>${money2(r.b)}</td><td>${cmpDelta({previous:r.a,current:r.b},true,false)}</td></tr>`);out.push(`<tr class="total"><td></td><td>إجمالي مديونية كل العملاء</td><td>${money2(s.first.total)}</td><td>${money2(s.second.total)}</td><td>${cmpDelta({previous:s.first.total,current:s.second.total},true,false)}</td></tr>`);return out}
 function cmpHeads(d){const A=esc2(d.labels.a),B=esc2(d.labels.b);return{sum:['المؤشر',A,B,'الفرق','التغير'],union:n=>['#',n,A,B,'الفرق','التغير',`الحصة ${A}`,`الحصة ${B}`],merged:n=>['#',n,`الإيرادات ${A}`,`الإيرادات ${B}`,'التغير',`الكمية ${A}`,`الكمية ${B}`,'التغير'],debt:['#','العميل',`نهاية ${A}`,`نهاية ${B}`,'التغير']}}
-function cmpRangeText(d){return d.range?`${esc2(d.labels.a)} (${cmpFmtDate(d.range.a.from)} — ${cmpFmtDate(d.range.a.to)}) مقابل ${esc2(d.labels.b)} (${cmpFmtDate(d.range.b.from)} — ${cmpFmtDate(d.range.b.to)})`:`${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}`}
+function cmpRangeText(d){return`${esc2(d.labels.a)} مقابل ${esc2(d.labels.b)}`}
 function renderUI(d){
   const body=document.getElementById('reportBody');if(!body)return;
   C.state.view={kind:'periods',d};if(C.state.threshold==null)C.state.threshold=15;
@@ -4238,7 +4244,7 @@ function buildPdf(){
   if(v.kind==='periods'){
     const d=v.d,M=d.metrics,H=cmpHeads(d),T=d.totals,debt=comparisonDebtSummary(C.state.periodA,C.state.periodB);
     period=`${d.labels.a} مقابل ${d.labels.b}`;
-    coverRows=[['الفترة الأولى',`${d.labels.a}${d.range?` (${cmpFmtDate(d.range.a.from)} — ${cmpFmtDate(d.range.a.to)})`:''}`],['الفترة الثانية',`${d.labels.b}${d.range?` (${cmpFmtDate(d.range.b.from)} — ${cmpFmtDate(d.range.b.to)})`:''}`],['نوع المقارنة',CMP_TYPE_LABEL[d.periodType]||'مقارنة فترات']];
+    coverRows=[['الفترة الأولى',d.labels.a],['الفترة الثانية',d.labels.b],['نوع المقارنة',CMP_TYPE_LABEL[d.periodType]||'مقارنة فترات']];
     first=`<h1 class="amc-report-title">ملخص المقارنة</h1><p class="amc-report-subtitle">${cmpRangeText(d)}</p>
       <div class="amc-report-kpis">${kp('الإيرادات',M.revenue,'money',false,'green')}${kp('المصروفات',M.expenses,'money',true,'red')}${kp('صافي التشغيل',M.profit,'money',false,M.profit.current>=0?'green':'red')}${kp('هامش التشغيل',M.profitMargin,'percent',false,'gold')}${kp('إجمالي الكمية',M.quantity,'quantity',false,'navy')}${kp('متوسط قيمة عملية البيع',M.avgLoadValue,'money',false,'gold')}${kp('التحصيلات',M.collections,'money',false,'green')}${kp('معدل التحصيل',M.collectionRate,'percent',false,'gold')}</div>
       ${sec('خلاصة الفروق')}<ol class="amc-cmp-points">${cmpInsights(d).map(x=>`<li>${x}</li>`).join('')}</ol>`;
@@ -4409,7 +4415,7 @@ const cmpSpan=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00')
 const cmpClamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function cmpQRange(y,q){const s=(q-1)*3+1,e=q*3;return{from:`${y}-${String(s).padStart(2,'0')}-01`,to:`${y}-${String(e).padStart(2,'0')}-${String(new Date(y,e,0).getDate()).padStart(2,'0')}`}}
 const cmpQPrev=(y,q)=>q===1?[y-1,4]:[y,q-1];
-const cmpQLabel=(y,q)=>`الربع ${q} ${y}`;
+const cmpQLabel=(y,q)=>`الربع ${['','الأول','الثاني','الثالث','الرابع'][+q]} ${y}`;
 function cmpLastDate(raw){return raw.rev.concat(raw.exp).map(r=>localDateKey(r['التاريخ'])).filter(Boolean).sort().pop()||''}
 function cmpStats(raw,from,to){
   const ar=raw.rev.filter(r=>inRange(r,from,to)),ae=raw.exp.filter(r=>inRange(r,from,to)),ac=(raw.col||[]).filter(r=>inRange(r,from,to));
@@ -4470,7 +4476,7 @@ function cmpQuarterPicker(raw){
   const last=cmpLastDate(raw);if(!last)return'<div class="comparison-validation error">لا توجد بيانات.</div>';
   const first=raw.rev.concat(raw.exp).map(r=>localDateKey(r['التاريخ'])).filter(Boolean).sort()[0],years=[];for(let y=+first.slice(0,4);y<=+last.slice(0,4);y++)years.push(y);
   const curQ=`${last.slice(0,4)}-Q${Math.ceil(+last.slice(5,7)/3)}`;
-  return`<div class="comparison-flow-head"><div><span class="comparison-eyebrow">المقارنة الربع سنوية</span><h3>اختر الربع</h3><p>يقارن الربع المختار بالربع السابق وبنفس الربع من العام الماضي، مع تقرير ربعي كامل.</p></div><button type="button" class="comparison-back" id="comparisonBack">تغيير نوع المقارنة</button></div><div class="amc-qpick">${years.reverse().map(y=>`<div class="amc-qrow"><b>${y}</b>${[1,2,3,4].map(q=>{const r=cmpQRange(y,q),k=`${y}-Q${q}`,dis=r.from>last||r.to<first;return`<button type="button" class="amc-qbtn${k===curQ?' cur':''}" data-q="${k}"${dis?' disabled':''}>الربع ${q}${k===curQ?'<small>الحالي</small>':''}</button>`}).join('')}</div>`).join('')}</div><div class="comparison-validation" id="cmpQMsg"></div><style>.amc-qpick{display:grid;gap:10px;margin:10px 0}.amc-qrow{display:grid;grid-template-columns:70px repeat(4,1fr);gap:8px;align-items:center}.amc-qrow b{color:#17294d;font-size:15px}.amc-qbtn{border:1px solid #d6dde6;background:#fff;border-radius:12px;padding:12px 8px;font:inherit;font-weight:800;color:#17294d;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}.amc-qbtn:hover:not([disabled]){border-color:#c99a2e;background:#fffaf0}.amc-qbtn.cur{border-color:#c99a2e;box-shadow:0 0 0 2px rgba(201,154,46,.25)}.amc-qbtn small{font-size:10.5px;color:#c99a2e}.amc-qbtn[disabled]{opacity:.35;cursor:not-allowed}#cmpQMsg:empty{display:none}</style>`;
+  return`<div class="comparison-flow-head"><div><span class="comparison-eyebrow">المقارنة الربع سنوية</span><h3>اختر الربع</h3><p>يقارن الربع المختار بالربع السابق وبنفس الربع من العام الماضي، مع تقرير ربعي كامل.</p></div><button type="button" class="comparison-back" id="comparisonBack">تغيير نوع المقارنة</button></div><div class="amc-qpick">${years.reverse().map(y=>`<div class="amc-qrow"><b>${y}</b>${[1,2,3,4].map(q=>{const r=cmpQRange(y,q),k=`${y}-Q${q}`,dis=r.from>last||r.to<first;return`<button type="button" class="amc-qbtn${k===curQ?' cur':''}" data-q="${k}"${dis?' disabled':''}>الربع ${['','الأول','الثاني','الثالث','الرابع'][+q]}${k===curQ?'<small>الحالي</small>':''}</button>`}).join('')}</div>`).join('')}</div><div class="comparison-validation" id="cmpQMsg"></div><style>.amc-qpick{display:grid;gap:10px;margin:10px 0}.amc-qrow{display:grid;grid-template-columns:70px repeat(4,1fr);gap:8px;align-items:center}.amc-qrow b{color:#17294d;font-size:15px}.amc-qbtn{border:1px solid #d6dde6;background:#fff;border-radius:12px;padding:12px 8px;font:inherit;font-weight:800;color:#17294d;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}.amc-qbtn:hover:not([disabled]){border-color:#c99a2e;background:#fffaf0}.amc-qbtn.cur{border-color:#c99a2e;box-shadow:0 0 0 2px rgba(201,154,46,.25)}.amc-qbtn small{font-size:10.5px;color:#c99a2e}.amc-qbtn[disabled]{opacity:.35;cursor:not-allowed}#cmpQMsg:empty{display:none}</style>`;
 }
 function cmpBindQuarterPicker(raw,flow){
   flow.querySelectorAll('.amc-qbtn[data-q]').forEach(b=>b.addEventListener('click',async()=>{const m=document.getElementById('cmpQMsg');if(m){m.textContent='جاري التحضير…';m.className='comparison-validation'}try{await cmpOpenQuarter(raw,b.dataset.q)}catch(e){if(m){m.textContent=e.message;m.className='comparison-validation error'}}}));
@@ -4738,7 +4744,7 @@ async function renderComparison(){
  };
  document.querySelectorAll('.comparison-mode-card').forEach(card=>card.addEventListener('click',()=>{document.querySelectorAll('.comparison-mode-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');renderFlow(card.dataset.mode)}));
 }
-function monthsToQuarters(months){const seen=new Map();months.forEach(m=>{const y=Number(m.slice(0,4)),mo=Number(m.slice(5,7)),q=Math.ceil(mo/3),key=`${y}-Q${q}`;if(!seen.has(key))seen.set(key,{key,label:`الربع ${q} ${y}`})});return[...seen.values()]}
+function monthsToQuarters(months){const seen=new Map();months.forEach(m=>{const y=Number(m.slice(0,4)),mo=Number(m.slice(5,7)),q=Math.ceil(mo/3),key=`${y}-Q${q}`;if(!seen.has(key))seen.set(key,{key,label:`الربع ${['','الأول','الثاني','الثالث','الرابع'][+q]} ${y}`})});return[...seen.values()]}
 
 function printComparison(){
   /* Fully synchronous print path: Chromium keeps transient user activation
@@ -8842,4 +8848,289 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
   html[data-theme="dark"] .oil-filter-console select,html[data-theme="dark"] .oil-filter-console input:not([type=checkbox]):not([type=radio]){background:#ffffff!important;color:#162230!important;border-color:#cbd7e2!important}
 }
 </style>
+<style id="amc-mobile-v4">
+/* طبقة الجوال (المرحلة 4): كل القواعد داخل شاشات العرض حتى 900px فقط؛ الكمبيوتر والطباعة لا يتأثران. */
+#amc-report-preview.amc-capturing .amc-report-kpis,#amc-report-preview.amc-capturing .amc-daily-kpis{grid-template-columns:repeat(4,1fr)}
+.amc-m-only,.amc-mini-bar,.amc-ptr,.amc-topbar,.amc-sheet-backdrop,.amc-report-toolbar [data-act="share"]{display:none}
+@media screen and (max-width:900px){
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain}
+  button,a,select,summary,[role="button"]{touch-action:manipulation}
+  .top-header-inner{padding-left:max(12px,env(safe-area-inset-left))!important;padding-right:max(12px,env(safe-area-inset-right))!important}
+  .top-header{padding-top:env(safe-area-inset-top)}
+  .main{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+
+  /* 1) الجداول: عرض طبيعي + تمرير أفقي واضح + تثبيت عمود الاسم */
+  .dashboard-content .table-wrap table,#reportBody .report-table-wrap>table{min-width:0!important;width:100%}
+  #reportBody .report-table-wrap>table th,#reportBody .report-table-wrap>table td{white-space:nowrap}
+  #reportBody .report-table-wrap>table td.desc{white-space:normal;min-width:130px}
+  .amc-tbl-scroll{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 28px);mask-image:linear-gradient(to right,transparent 0,#000 28px)}
+  .amc-tbl-scroll.amc-at-end{-webkit-mask-image:none;mask-image:none}
+  #reportBody table.amc-stick1 tr>*:first-child,#reportBody table.amc-stick2 tr>*:first-child,#reportBody table.amc-stick2 tr>*:nth-child(2){position:sticky;z-index:1;background:#fff}
+  #reportBody table.amc-stick1 tr>*:first-child,#reportBody table.amc-stick2 tr>*:first-child{right:0}
+  #reportBody table.amc-stick2 tr>*:nth-child(2){right:var(--amc-c1,32px);box-shadow:-6px 0 8px -8px rgba(15,30,50,.35)}
+  #reportBody table.amc-stick1 tr>*:first-child{box-shadow:-6px 0 8px -8px rgba(15,30,50,.35)}
+  #reportBody table.amc-stick1 thead th:first-child,#reportBody table.amc-stick2 thead th:first-child,#reportBody table.amc-stick2 thead th:nth-child(2){background:inherit;z-index:2}
+  .amc-swipe-hint{display:flex;align-items:center;gap:6px;font-size:12px;color:#6b7686;margin:2px 2px 6px;font-weight:600}
+  .amc-swipe-hint i{font-style:normal;display:inline-block;animation:amcNudge 1.6s ease-in-out 3}
+  @keyframes amcNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-6px)}}
+
+  /* 2) منع تكبير iPhone عند لمس الحقول */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+
+  /* 4) الرئيسية: واجهة مختصرة + مؤشرات في عمودين + فلاتر كلوحة سفلية */
+  .hero{padding:16px!important;min-height:0!important;gap:10px!important}
+  .hero .hero-headline,.hero .hero-values,.hero .hero-copy>p,.hero .hero-identity{display:none!important}
+  .hero h2{font-size:22px!important;margin:4px 0 8px!important}
+  .kpis{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .kpis .card.kpi{padding:12px!important;min-height:0!important}
+  .kpis .card.kpi .label{font-size:12px!important}
+  .kpis .card.kpi .value{font-size:18px!important;line-height:1.25!important;white-space:nowrap}
+  .kpis .card.kpi .value small{font-size:11px!important}
+  .kpis .card.kpi .sub{font-size:12px!important}
+  .kpis .amc-kpi-trend{flex-wrap:wrap;gap:4px 6px!important;margin-top:6px!important}
+  .kpis .amc-spark{display:none!important}
+  .kpis .card.kpi .value.amc-changed{animation:amcFlash 1.4s ease}
+  @keyframes amcFlash{0%{background:rgba(201,154,46,.28)}100%{background:transparent}}
+  .amc-m-only{display:flex}
+  .amc-filter-btn{align-items:center;gap:10px;width:100%;box-sizing:border-box;border:1px solid var(--border,#dbe5ee);background:var(--surface,#fff);color:var(--text,#17294d);border-radius:14px;padding:12px 14px;font:inherit;font-weight:700;font-size:14px;margin:0 0 12px;cursor:pointer;text-align:right}
+  .amc-filter-btn .amc-fb-sum{flex:1;min-width:0;font-weight:500;font-size:12px;color:var(--muted,#6b7686);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .amc-filter-btn .amc-fb-ico{font-size:16px}
+  #dashboardFilters{display:none!important}
+  html.amc-sheet-open #dashboardFilters{display:grid!important;grid-template-columns:1fr!important;position:fixed!important;left:0;right:0;bottom:0;z-index:1102;margin:0!important;max-height:86vh;overflow:auto;border-radius:20px 20px 0 0!important;padding:14px 16px calc(16px + env(safe-area-inset-bottom))!important;box-shadow:0 -14px 40px rgba(10,20,40,.28)!important;background:var(--surface,#fff)!important;animation:amcSheetUp .22s ease}
+  @keyframes amcSheetUp{from{transform:translateY(100%)}to{transform:none}}
+  html.amc-sheet-open .amc-sheet-backdrop{display:block;position:fixed;inset:0;z-index:1101;background:rgba(10,20,40,.45)}
+  html.amc-sheet-open body{overflow:hidden}
+  html.amc-sheet-open .amc-bottom-nav{display:none!important}
+  .amc-sheet-head{align-items:center;justify-content:space-between;font-weight:800;font-size:16px;color:var(--text,#17294d)}
+  .amc-sheet-head::before{content:"";position:absolute;top:7px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:4px;background:#cfd8e3}
+  .amc-sheet-head button{border:0;background:var(--surface-soft,#f1f4f8);color:var(--text,#17294d);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+  #dashboardApplyFilters{min-height:46px;font-size:15px!important}
+
+  #reportBody .report-kpis{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  #reportBody .report-kpi{padding:12px!important;min-width:0}
+  #reportBody .report-kpi strong{font-size:18px!important;line-height:1.3!important;overflow-wrap:anywhere}
+  .panel-head{flex-wrap:wrap;gap:8px!important}
+  .panel-head .panel-meta{white-space:nowrap}
+  @media (max-width:600px){#connectionStatus{display:none!important}.header-actions{gap:8px!important}}
+  /* 6) شريط علوي مختصر داخل التقارير */
+  .amc-mini-bar{position:fixed;top:0;left:0;right:0;z-index:950;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));background:linear-gradient(112deg,#17294d,#213a61);color:#fff;box-shadow:0 6px 18px rgba(10,20,40,.25);border-bottom:2px solid #c79a28;transform:translateY(-110%);transition:transform .2s ease}
+  html.amc-mini-on .amc-mini-bar{display:flex;transform:none}
+  .amc-mini-bar b{flex:1;min-width:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .amc-mini-bar button{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;height:36px;min-width:40px;padding:0 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+  .amc-mini-bar button.gold{background:#c79a28;border-color:#c79a28}
+  .report-workspace-head{padding:16px!important;gap:12px!important}
+  .report-workspace-head h2{font-size:22px!important}
+  .report-head-actions{display:flex;gap:8px;width:100%}
+  .report-head-actions button{flex:1;min-height:44px;font-size:14px!important;padding:8px 10px!important;white-space:nowrap}
+
+  /* 9) الرسوم البيانية أخف على الجوال */
+  #monthlyChart.chart{height:200px!important}
+  #monthlyChart .month span{font-size:10.5px}
+
+  /* 10) مؤشر التحديث + السحب للتحديث */
+  .amc-topbar{display:block;position:fixed;top:0;left:0;right:0;height:3px;z-index:1200;pointer-events:none;opacity:0;transition:opacity .25s}
+  .amc-topbar::after{content:"";position:absolute;top:0;bottom:0;width:35%;background:linear-gradient(90deg,transparent,#c79a28,transparent);animation:amcBar 1.1s linear infinite}
+  html.amc-refreshing .amc-topbar{opacity:1}
+  @keyframes amcBar{from{right:-35%}to{right:100%}}
+  .amc-ptr{display:flex;position:fixed;top:calc(8px + env(safe-area-inset-top));left:50%;z-index:1150;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:#fff;color:#17294d;box-shadow:0 6px 18px rgba(10,20,40,.22);align-items:center;justify-content:center;font-size:20px;font-weight:800;transform:translateY(-70px);opacity:0;pointer-events:none}
+  .amc-ptr.ready{color:#c79a28}
+  .amc-ptr.spin span{display:inline-block;animation:amcSpin .8s linear infinite}
+  @keyframes amcSpin{to{transform:rotate(360deg)}}
+
+  /* 11) زر مشاركة PDF في معاينة الطباعة */
+  .amc-report-toolbar{height:auto!important;min-height:56px;padding:8px 8px calc(8px)!important;flex-wrap:wrap}
+  .amc-report-toolbar .amc-report-actions{flex-wrap:wrap;justify-content:center}
+  .amc-report-toolbar [data-act="share"]{display:inline-flex;align-items:center;gap:5px;background:#1f9d68!important;color:#fff!important;border-color:#1f9d68!important}
+  .amc-report-toolbar button{min-height:42px}
+  .amc-share-msg{position:fixed;left:16px;right:16px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:3000;background:#17294d;color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;text-align:center;box-shadow:0 10px 30px rgba(10,20,40,.35)}
+
+  /* 12) الوضع الليلي */
+  html[data-theme="dark"] .amc-filter-btn{background:var(--surface);border-color:var(--border);color:var(--text)}
+  html[data-theme="dark"] .amc-ptr{background:#1a2738;color:#e6edf5}
+}
+/* 12) الوضع الأفقي على الجوال */
+@media screen and (max-width:900px) and (orientation:landscape) and (max-height:500px){
+  .kpis{grid-template-columns:repeat(4,1fr)!important}
+  .kpis .card.kpi .value{font-size:15px!important}
+  .kpis .card.kpi .value small{font-size:10px!important}
+  .amc-bottom-nav{left:auto!important;right:max(10px,env(safe-area-inset-right))!important;width:min(440px,60vw);bottom:calc(6px + env(safe-area-inset-bottom))!important;padding:3px!important}
+  .amc-bottom-nav button{flex-direction:row!important;gap:5px!important;padding:6px!important}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom))!important}
+  html.amc-sheet-open #dashboardFilters{grid-template-columns:1fr 1fr!important;max-height:92vh}
+  html.amc-sheet-open #dashboardFilters .amc-sheet-head{grid-column:1/-1}
+  #monthlyChart.chart{height:170px!important}
+}
+</style>
+<script id="amc-mobile-v4-script">
+/* طبقة الجوال (المرحلة 4): كل ما يغيّر الصفحة يعمل فقط عندما تكون الشاشة 900px أو أقل. */
+(function(){
+  const mq=window.matchMedia('screen and (max-width:900px)');
+  const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const isM=()=>mq.matches;
+  const deb=(fn,ms)=>{let t=0;return()=>{clearTimeout(t);t=setTimeout(fn,ms)}};
+
+  /* ---------- 7) لون شريط المتصفح حسب الوضع ---------- */
+  function syncThemeColor(){const m=$('meta[name="theme-color"]');if(m)m.setAttribute('content',document.documentElement.getAttribute('data-theme')==='dark'?'#0e1622':'#17294d')}
+
+  /* ---------- 8) أيقونة التطبيق للشاشة الرئيسية ---------- */
+  function mountAppIcon(){
+    const src=$('.hero-logo')?.getAttribute('src')||$('.header-brand img')?.getAttribute('src');if(!src)return;
+    const img=new Image();img.onload=()=>{
+      const make=n=>{const c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');x.fillStyle='#ffffff';x.fillRect(0,0,n,n);const pad=n*.12,w=n-pad*2,s=Math.min(w/img.width,w/img.height),dw=img.width*s,dh=img.height*s;x.drawImage(img,(n-dw)/2,(n-dh)/2,dw,dh);return c.toDataURL('image/png')};
+      try{
+        const i180=make(180);let l=$('link[rel="apple-touch-icon"]');if(!l){l=document.createElement('link');l.rel='apple-touch-icon';document.head.appendChild(l)}l.href=i180;
+        if(/^https?:$/.test(location.protocol)&&!$('link[rel="manifest"]')){
+          const man={name:'لوحة كسارة العساف للمعادن',short_name:'كسارة العساف',lang:'ar',dir:'rtl',start_url:location.href.split('#')[0],scope:location.href.split('#')[0].replace(/[^/]*$/,''),display:'standalone',background_color:'#f4f6f9',theme_color:'#17294d',icons:[{src:make(192),sizes:'192x192',type:'image/png'},{src:make(512),sizes:'512x512',type:'image/png'}]};
+          const ml=document.createElement('link');ml.rel='manifest';ml.href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(man));document.head.appendChild(ml);
+        }
+      }catch(e){}
+    };img.src=src;
+  }
+
+  /* ---------- 1) الجداول ---------- */
+  function setupTables(){
+    if(!isM())return;
+    $$('#reportBody .report-table-wrap, .dashboard-content .table-wrap').forEach(w=>{
+      if(w.closest('.amc-report-page,#amc-report-preview'))return;
+      const t=w.querySelector(':scope>table');if(!t)return;
+      const over=w.scrollWidth>w.clientWidth+4;
+      w.classList.toggle('amc-tbl-scroll',over);
+      if(w.closest('#reportBody')){
+        t.classList.remove('amc-stick1','amc-stick2');
+        if(over){const ths=t.querySelectorAll('thead th'),first=(ths[0]?.textContent||'').trim();
+          if(['#','م'].includes(first)&&ths.length>=4){t.classList.add('amc-stick2');t.style.setProperty('--amc-c1',ths[0].getBoundingClientRect().width+'px')}else t.classList.add('amc-stick1')}
+      }
+      let h=w.previousElementSibling;if(!h||!h.classList.contains('amc-swipe-hint'))h=null;
+      if(over&&!h){h=document.createElement('div');h.className='amc-swipe-hint amc-m-only';h.innerHTML='<i>⇠</i> اسحب الجدول لعرض باقي الأعمدة';w.parentNode.insertBefore(h,w)}
+      if(!over&&h)h.remove();
+      if(!w.__amcScroll){w.__amcScroll=1;w.addEventListener('scroll',()=>{w.classList.toggle('amc-at-end',Math.abs(w.scrollLeft)+w.clientWidth>=w.scrollWidth-3)},{passive:true})}
+    });
+  }
+
+  /* ---------- 3) حد أدنى لحجم الخط 12px ---------- */
+  const SKIP='svg,.amc-report-page,#amc-report-preview,.inv-modal,.stm-modal,.amc-bottom-nav,script,style';
+  function bumpFonts(){
+    if(!isM())return;
+    $$('.top-header *, .dashboard-content *, .report-sidebar *').forEach(e=>{
+      if(e.dataset.amcFs||e.closest(SKIP))return;
+      let txt=false;for(const n of e.childNodes)if(n.nodeType===3&&n.textContent.trim()){txt=true;break}
+      if(!txt)return;const fs=parseFloat(getComputedStyle(e).fontSize);
+      if(fs&&fs<11.5){e.dataset.amcFs=e.style.getPropertyValue('font-size')||'-';e.style.setProperty('font-size','12px','important')}
+    });
+  }
+  function unbumpFonts(){$$('[data-amc-fs]').forEach(e=>{const v=e.dataset.amcFs;if(v==='-')e.style.removeProperty('font-size');else e.style.setProperty('font-size',v);delete e.dataset.amcFs})}
+
+  /* ---------- 4) الفلاتر كلوحة سفلية ---------- */
+  function filterSummary(){
+    const f=$('#dashboardFromDate')?.value,t=$('#dashboardToDate')?.value,fmt=s=>s?s.split('-').reverse().join('/'):'';
+    const parts=[];if(f||t)parts.push(`${fmt(f)||'…'} — ${fmt(t)||'…'}`);
+    [['#dashboardCustomerFilter','جميع العملاء'],['#dashboardLoadingFilter',''],['#dashboardCategoryFilter','']].forEach(([s,def])=>{const el=$(s);if(el&&el.value)parts.push(el.options[el.selectedIndex].text);else if(def)parts.push(def)});
+    return parts.join(' · ')||'كل البيانات';
+  }
+  function mountFilterSheet(){
+    const sec=$('#dashboardFilters');if(!sec||$('.amc-filter-btn'))return;
+    const btn=document.createElement('button');btn.type='button';btn.className='amc-filter-btn amc-m-only';btn.innerHTML='<span class="amc-fb-ico">⚲</span><span>الفلاتر</span><span class="amc-fb-sum"></span><span aria-hidden="true">▾</span>';
+    sec.parentNode.insertBefore(btn,sec);
+    const head=document.createElement('div');head.className='amc-sheet-head amc-m-only';head.innerHTML='<span>تصفية البيانات</span><button type="button" aria-label="إغلاق">×</button>';sec.insertBefore(head,sec.firstChild);
+    const bd=document.createElement('div');bd.className='amc-sheet-backdrop';document.body.appendChild(bd);
+    const open=()=>document.documentElement.classList.add('amc-sheet-open'),close=()=>{document.documentElement.classList.remove('amc-sheet-open');upd()};
+    const upd=()=>{const s=btn.querySelector('.amc-fb-sum');if(s)s.textContent=filterSummary()};
+    btn.addEventListener('click',open);bd.addEventListener('click',close);head.querySelector('button').addEventListener('click',close);
+    $('#dashboardApplyFilters')?.addEventListener('click',()=>setTimeout(close,0));
+    sec.addEventListener('change',upd);upd();setTimeout(upd,1500);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  }
+
+  /* ---------- 5) طي مجموعات التقارير الطويلة ---------- */
+  function collapseGroups(){
+    if(!isM())return;
+    $$('#reportBody details.rev-grp-card, #reportBody details.exp-cat-card').forEach(d=>{if(d.dataset.amcM)return;d.dataset.amcM='1';d.open=false});
+  }
+
+  /* ---------- 6) الشريط العلوي المختصر ---------- */
+  let io=null;
+  function mountMiniBar(){
+    if($('.amc-mini-bar'))return;
+    const bar=document.createElement('div');bar.className='amc-mini-bar';bar.innerHTML='<button type="button" data-a="back" aria-label="رجوع">→</button><b></b><button type="button" class="gold" data-a="print">طباعة</button>';
+    document.body.appendChild(bar);
+    bar.addEventListener('click',e=>{const a=e.target.closest('button')?.dataset.a;if(a==='back'){$('#reportBack')?.click();window.scrollTo({top:0})}if(a==='print')$('#reportPrint')?.click()});
+    const head=$('.report-workspace-head'),ws=$('#reportWorkspace');if(!head||!('IntersectionObserver' in window))return;
+    io=new IntersectionObserver(([en])=>{const on=isM()&&ws&&!ws.hidden&&ws.offsetParent!==null&&!en.isIntersecting&&en.boundingClientRect.top<0;if(on)bar.querySelector('b').textContent=$('#reportTitle')?.textContent||'';document.documentElement.classList.toggle('amc-mini-on',on)});
+    io.observe(head);
+  }
+
+  /* ---------- 10) مؤشر التحديث والسحب للتحديث ---------- */
+  function wrapRefresh(){
+    if(typeof window.refresh!=='function'||window.refresh.__amcWrapped)return;
+    const orig=window.refresh;
+    const w=async function(...a){
+      const before=$$('.kpis .card.kpi .value').map(v=>v.textContent);
+      document.documentElement.classList.add('amc-refreshing');
+      try{return await orig.apply(this,a)}
+      finally{document.documentElement.classList.remove('amc-refreshing');
+        if(isM())$$('.kpis .card.kpi .value').forEach((v,i)=>{if(before[i]!=null&&before[i]!==v.textContent){v.classList.remove('amc-changed');void v.offsetWidth;v.classList.add('amc-changed')}})}
+    };
+    w.__amcWrapped=true;try{window.refresh=w}catch(e){}
+  }
+  function mountPullToRefresh(){
+    const bar=document.createElement('div');bar.className='amc-topbar';document.body.appendChild(bar);
+    const ind=document.createElement('div');ind.className='amc-ptr';ind.innerHTML='<span>↻</span>';document.body.appendChild(ind);
+    let y0=null,dy=0,busy=false;const LIM=80;
+    const blocked=t=>document.documentElement.classList.contains('amc-sheet-open')||t.closest('#amc-report-preview.is-open,.inv-modal,.stm-modal,.amc-bottom-nav,input,select,textarea,.chart,.table-wrap,.report-table-wrap')||$('#amc-report-preview.is-open');
+    document.addEventListener('touchstart',e=>{if(!isM()||busy||window.scrollY>0||e.touches.length!==1||blocked(e.target)){y0=null;return}y0=e.touches[0].clientY;dy=0},{passive:true});
+    document.addEventListener('touchmove',e=>{if(y0==null)return;dy=e.touches[0].clientY-y0;if(dy<=0||window.scrollY>0){ind.style.opacity=0;return}const d=Math.min(dy,LIM*1.4);ind.style.opacity=Math.min(1,d/LIM);ind.style.transform=`translateY(${d*.7-40}px) rotate(${d*3}deg)`;ind.classList.toggle('ready',dy>LIM)},{passive:true});
+    document.addEventListener('touchend',()=>{if(y0==null)return;y0=null;if(dy>LIM){busy=true;ind.classList.add('spin');ind.style.transform='translateY(16px)';ind.style.opacity=1;$('#refreshData')?.click();
+        const done=()=>{busy=false;ind.classList.remove('spin','ready');ind.style.transition='transform .25s,opacity .25s';ind.style.opacity=0;ind.style.transform='translateY(-70px)';setTimeout(()=>ind.style.transition='',300)};
+        const t0=Date.now(),chk=()=>{if(!document.documentElement.classList.contains('amc-refreshing')&&Date.now()-t0>600)done();else if(Date.now()-t0>20000)done();else setTimeout(chk,200)};setTimeout(chk,300)}
+      else{ind.style.opacity=0;ind.style.transform='translateY(-70px)';ind.classList.remove('ready')}dy=0});
+  }
+
+  /* ---------- 11) مشاركة PDF من معاينة الطباعة ---------- */
+  const LIBS=[['htmlToImage',['https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js','https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js']],['jspdf',['https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js']]];
+  const loadScript=src=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=ok;s.onerror=()=>{s.remove();no(new Error('load'))};document.head.appendChild(s)});
+  async function ensureLibs(){for(const [g,urls] of LIBS){if(window[g])continue;let ok=false;for(const u of urls){try{await loadScript(u);if(window[g]){ok=true;break}}catch(e){}}if(!ok)throw new Error('تعذر تحميل أداة PDF. تأكد من الاتصال بالإنترنت.')}}
+  const toast=(t,ms=2600)=>{let m=$('.amc-share-msg');if(!m){m=document.createElement('div');m.className='amc-share-msg';document.body.appendChild(m)}m.textContent=t;m.hidden=false;clearTimeout(m.__t);if(ms)m.__t=setTimeout(()=>m.hidden=true,ms);return m};
+  async function sharePdf(ov,btn){
+    if(btn.disabled)return;btn.disabled=true;const old=btn.innerHTML;btn.textContent='جاري التحضير…';
+    try{
+      await ensureLibs();
+      const pages=$$('.amc-report-stage>*',ov).filter(p=>p.offsetHeight>50);if(!pages.length)throw new Error('لا توجد صفحات للمشاركة.');
+      const {jsPDF}=window.jspdf,pdf=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+      ov.classList.add('amc-capturing');let fontCss;try{fontCss=await window.htmlToImage.getFontEmbedCSS(pages[0])}catch(e){fontCss=''}
+      for(let i=0;i<pages.length;i++){
+        toast(`جاري تجهيز الصفحة ${i+1} من ${pages.length}…`,0);
+        const p=pages[i],opt={fontEmbedCSS:fontCss,pixelRatio:2,backgroundColor:'#ffffff',cacheBust:false,style:{transform:'none',margin:'0',boxShadow:'none'}};
+        let url=await window.htmlToImage.toJpeg(p,{...opt,quality:.92});
+        if(i===0)url=await window.htmlToImage.toJpeg(p,{...opt,quality:.92}); /* Safari: الرسم الثاني يضمن ظهور الصور والخطوط */
+        if(i)pdf.addPage('a4','portrait');pdf.addImage(url,'JPEG',0,0,210,297,undefined,'FAST');
+      }
+      const name=((window.AMCReportEngine&&window.AMCReportEngine.fileName)||'Assaf_Metals_Crusher_Report').replace(/[^\w؀-ۿ-]+/g,'_')+'.pdf';
+      const file=new File([pdf.output('blob')],name,{type:'application/pdf'});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){toast('',1);await navigator.share({files:[file],title:document.querySelector('#reportTitle')?.textContent||'تقرير'})}
+      else{const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('تم تنزيل ملف PDF.')}
+    }catch(e){if(e&&e.name==='AbortError')toast('',1);else toast(e.message||'تعذرت المشاركة، استخدم زر الطباعة.',4000)}
+    finally{ov.classList.remove('amc-capturing');btn.disabled=false;btn.innerHTML=old}
+  }
+  function mountShare(){
+    const ov=$('#amc-report-preview');if(!ov)return;const acts=$('.amc-report-actions',ov);if(!acts||$('[data-act="share"]',acts))return;
+    const b=document.createElement('button');b.type='button';b.dataset.act='share';b.innerHTML='⇪ مشاركة PDF';acts.appendChild(b);
+    b.addEventListener('click',()=>sharePdf(ov,b));
+  }
+
+  /* ---------- تشغيل ---------- */
+  const pass=deb(()=>{wrapRefresh();if(!isM())return;setupTables();bumpFonts();collapseGroups()},250);
+  function onMq(){if(isM())pass();else{unbumpFonts();document.documentElement.classList.remove('amc-mini-on','amc-sheet-open')}}
+  function init(){
+    syncThemeColor();new MutationObserver(syncThemeColor).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+    mountAppIcon();mountFilterSheet();mountMiniBar();mountPullToRefresh();wrapRefresh();
+    const root=$('.page-shell')||document.body;new MutationObserver(m=>{if(m.some(x=>!x.target.closest||!x.target.closest('#amc-report-preview')))pass()}).observe(root,{childList:true,subtree:true});
+    new MutationObserver(()=>mountShare()).observe(document.body,{childList:true});mountShare();
+    (mq.addEventListener?mq.addEventListener('change',onMq):mq.addListener(onMq));
+    window.addEventListener('resize',deb(()=>{if(isM())setupTables()},200));
+    pass();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </html>
