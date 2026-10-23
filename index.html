@@ -8852,7 +8852,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
 /* طبقة الجوال (المرحلة 4): كل القواعد داخل شاشات العرض حتى 900px فقط؛ الكمبيوتر والطباعة لا يتأثران. */
 #amc-report-preview.amc-capturing .amc-report-kpis,#amc-report-preview.amc-capturing .amc-daily-kpis{grid-template-columns:repeat(4,1fr)}
 .amc-m-only,.amc-mini-bar,.amc-ptr,.amc-topbar,.amc-sheet-backdrop,.amc-report-toolbar [data-act="share"]{display:none}
-@media screen and (max-width:900px){
+@media screen and (max-width:900px) and (pointer:coarse){
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain}
   button,a,select,summary,[role="button"]{touch-action:manipulation}
@@ -8950,7 +8950,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
   html[data-theme="dark"] .amc-ptr{background:#1a2738;color:#e6edf5}
 }
 /* 12) الوضع الأفقي على الجوال */
-@media screen and (max-width:900px) and (orientation:landscape) and (max-height:500px){
+@media screen and (max-width:900px) and (pointer:coarse) and (orientation:landscape) and (max-height:500px){
   .kpis{grid-template-columns:repeat(4,1fr)!important}
   .kpis .card.kpi .value{font-size:15px!important}
   .kpis .card.kpi .value small{font-size:10px!important}
@@ -8961,11 +8961,13 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
   html.amc-sheet-open #dashboardFilters .amc-sheet-head{grid-column:1/-1}
   #monthlyChart.chart{height:170px!important}
 }
+/* الكمبيوتر (ماوس) لا يرى واجهة الجوال حتى مع تكبير المتصفح */
+@media screen and (max-width:900px) and (pointer:fine){.amc-bottom-nav{display:none!important}body{padding-bottom:0!important}}
 </style>
 <script id="amc-mobile-v4-script">
 /* طبقة الجوال (المرحلة 4): كل ما يغيّر الصفحة يعمل فقط عندما تكون الشاشة 900px أو أقل. */
 (function(){
-  const mq=window.matchMedia('screen and (max-width:900px)');
+  const mq=window.matchMedia('screen and (max-width:900px) and (pointer:coarse)');
   const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
   const isM=()=>mq.matches;
   const deb=(fn,ms)=>{let t=0;return()=>{clearTimeout(t);t=setTimeout(fn,ms)}};
