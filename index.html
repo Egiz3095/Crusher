@@ -10143,4 +10143,34 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
 })();
 </script>
 
+<script id="amc-autoapply-v11">
+/* EGO 2026-11-11: تطبيق الفلاتر مباشرة عند الاختيار دون الضغط على «تطبيق» */
+(function(){
+  const MAP={
+    rApply:['rFrom','rTo','rExecPreset','rRevenueGroup','rRevItem','rExpCat'],
+    rMonthlyFullApply:['rMonthlyFullMonth','rMonthlyFullCmp'],
+    rWeeklyApply:['rWeeklyWeek','rWeeklyCmp'],
+    rDailyApply:['rDailyDate'],
+    rDailyBriefApply:['rDailyBriefDate'],
+    oilApply:['oilFrom','oilTo','oilCompare','oilCoverDays','oilProduct','oilUnit','oilEquipment','oilSupplier','oilInvoice'],
+    dashboardApplyFilters:['dashboardFromDate','dashboardToDate','dashboardCustomerFilter','dashboardLoadingFilter','dashboardCategoryFilter']
+  };
+  const OF={};Object.keys(MAP).forEach(b=>MAP[b].forEach(id=>OF[id]=b));
+  const timers={};
+  const valid=el=>{if(el.type==='date'||el.type==='month')return !el.value||el.checkValidity();return true};
+  function run(btnId,el){
+    const b=document.getElementById(btnId);if(!b||b.disabled||!(b.offsetParent||b.getClientRects().length))return;
+    if(!valid(el))return;
+    const sheet=btnId==='dashboardApplyFilters'&&document.documentElement.classList.contains('amc-sheet-open');
+    b.click();
+    /* على الجوال: تبقى نافذة الفلاتر مفتوحة لمواصلة الاختيار */
+    if(sheet)setTimeout(()=>document.documentElement.classList.add('amc-sheet-open'),0);
+  }
+  function queue(el,ms){const btn=OF[el.id];if(!btn)return;clearTimeout(timers[btn]);timers[btn]=setTimeout(()=>run(btn,el),ms)}
+  document.addEventListener('change',e=>{const el=e.target;if(el&&el.id&&OF[el.id])queue(el,250)},true);
+  /* الحقول الرقمية والنصية: تطبيق بعد التوقف عن الكتابة */
+  document.addEventListener('input',e=>{const el=e.target;if(el&&el.id&&OF[el.id]&&/^(number|text|search)$/.test(el.type))queue(el,700)},true);
+})();
+</script>
+
 </html>
