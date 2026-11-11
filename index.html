@@ -10143,6 +10143,10 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
 })();
 </script>
 
+<style id="amc-autoapply-v11-css">
+/* EGO 2026-11-11: إخفاء أزرار «تطبيق» بعد التطبيق التلقائي */
+#rApply,#rMonthlyFullApply,#rWeeklyApply,#rDailyApply,#rDailyBriefApply,#oilApply,#dashboardApplyFilters{display:none!important}
+</style>
 <script id="amc-autoapply-v11">
 /* EGO 2026-11-11: تطبيق الفلاتر مباشرة عند الاختيار دون الضغط على «تطبيق» */
 (function(){
@@ -10159,7 +10163,7 @@ ${(qrCardHtml||bankCardsHtml)?`<div style="margin:10px 44px 0;display:grid;grid-
   const timers={};
   const valid=el=>{if(el.type==='date'||el.type==='month')return !el.value||el.checkValidity();return true};
   function run(btnId,el){
-    const b=document.getElementById(btnId);if(!b||b.disabled||!(b.offsetParent||b.getClientRects().length))return;
+    const b=document.getElementById(btnId);if(!b||b.disabled||!(el.offsetParent||el.getClientRects().length))return;
     if(!valid(el))return;
     const sheet=btnId==='dashboardApplyFilters'&&document.documentElement.classList.contains('amc-sheet-open');
     b.click();
